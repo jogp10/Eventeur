@@ -24,6 +24,19 @@ drop table if exists PollOption;
 drop table if exists VOTE;
 drop table if exists REPORT;
 
+DROP TYPE IF EXISTS privacy;
+
+-- Types
+
+CREATE TYPE privacy as ENUM (
+    'Private',
+    'Public'
+    );
+
+
+-- Tables
+
+
 CREATE TABLE ACCOUNT (
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
     email       TEXT NOT NULL,
@@ -79,7 +92,7 @@ CREATE TABLE EVENTS (
     end_date    DATE NOT NULL,
     location    TEXT NOT NULL,
     capacity    INTEGER NOT NULL,
-    privacy     BOOLEAN DEFAULT 0, -- 0 = public, 1 = private
+    privacy     privacy DEFAULT 'Public', 
     CHECK (start_date < end_date),
     CHECK (capacity > 0)
 );
@@ -130,6 +143,8 @@ CREATE TABLE NOTIFICATIONS (
     user_id     INTEGER DEFAULT -1,
     event_id    INTEGER NOT NULL,
     content     TEXT,
+    seen        BOOLEAN DEFAULT 0,
+    sent_date        DATE NOT NULL,
     CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES USER(id),
     CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES EVENTS(id)
 );
@@ -186,7 +201,8 @@ CREATE TABLE POLL (
 CREATE TABLE PollOption (
     id              INTEGER PRIMARY KEY AUTOINCREMENT,
     poll_id         INTEGER NOT NULL,
-    description          TEXT NOT NULL,
+    description     TEXT NOT NULL,
+    votes           INTEGER DEFAULT 0,
     CONSTRAINT fk_poll_id FOREIGN KEY(poll_id) REFERENCES POLL(id),
     UNIQUE(id, poll_id)
 );
