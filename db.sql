@@ -37,7 +37,7 @@ CREATE TYPE privacy as ENUM (
 -- Tables
 
 
-CREATE TABLE ACCOUNT (
+CREATE TABLE ACCOUNT (--f
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
     email       TEXT NOT NULL,
     name        TEXT NOT NULL,
@@ -63,13 +63,13 @@ CREATE TABLE PerfilImage (
     UNIQUE(account_id)
 );
 
-CREATE TABLE USER (
+CREATE TABLE USER (--f
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
     account_id  INTEGER DEFAULT -1,
     CONSTRAINT fk_account_id  FOREIGN KEY(account_id) REFERENCES ACCOUNT(id)
 );
 
-CREATE TABLE ADMINISTRATOR (
+CREATE TABLE ADMINISTRATOR (--f
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
     account_id  INTEGER DEFAULT -1,
     CONSTRAINT fk_account_id  FOREIGN KEY(account_id) REFERENCES ACCOUNT(id)
@@ -84,7 +84,7 @@ CREATE TABLE MANAGER (
     UNIQUE(account_id, event_id)
 );
 
-CREATE TABLE EVENTS (
+CREATE TABLE EVENTS (--f
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
     name        TEXT NOT NULL,
     description TEXT,
@@ -97,13 +97,13 @@ CREATE TABLE EVENTS (
     CHECK (capacity > 0)
 );
 
-CREATE TABLE TAG (
+CREATE TABLE TAG (--f
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
     name        TEXT NOT NULL,
     UNIQUE(name)
 );
 
-CREATE TABLE EventTag (
+CREATE TABLE EventTag (--f
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
     event_id    INTEGER NOT NULL,
     tag_id      INTEGER NOT NULL,
@@ -225,4 +225,6 @@ CREATE TABLE REPORT (
     CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES USER(id),
     CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES EVENTS(id)
 );
+
+
 
