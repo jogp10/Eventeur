@@ -223,3 +223,120 @@ CREATE TABLE REPORT (
     CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES _USER(id),
     CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES EVENTS(id)
 );
+
+--Functions
+
+CREATE OR REPLACE FUNCTION
+    invite_event_notification_function() RETURNS TRIGGER AS $invite_event$
+    BEGIN
+    	INSERT INTO notifications(user_id, event_id, content, sent_date)
+    	VALUES (NEW.user_id, NEW.event_id, 'Invited to Event', NOW()) RETURNING notif_id ;
+    	
+    	INSERT INTO invitenotification(notification_id, invite_id, user_id)
+    	VALUES (notif_id, New.id, New.user_id);
+
+        RETURN NEW;
+    END;
+$invite_event$ LANGUAGE 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION
+    cancel_event_notification_function() RETURNS TRIGGER AS $cancel_event$
+    DECLARE
+        u record;
+    BEGIN
+        FOR 
+            u 
+        IN
+            SELECT DISTINCT user_id
+            FROM (
+                SELECT user_id
+                FROM userticketevent
+                WHERE event_id = OLD.id
+                UNION
+                SELECT account_id
+                FROM managers
+                WHERE event_id = OLD.id
+            ) AS users
+        LOOP
+            INSERT INTO notifications(content, user_id, event_id, sent_date)
+            VALUES ('EventCancellation', u.user_id, OLD.id, NOW());
+        END LOOP;
+
+        RETURN OLD;
+    END;
+$cancel_event$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION create_invite_notification() RETURNS TRIGGER AS $BODY$
+   	BEGIN
+    	WITH inserted AS (
+			INSERT into Notifications (content, user_id, event_id, seen, sent_date) values ('You recied an invite...', NEW.user_id, NEW.event_id, '0', CURRENT_DATE)
+			RETURNING id
+		)
+		INSERT into InviteNotification SELECT inserted.id, NEW.id, NEW.user_id FROM inserted;
+		RETURN NEW;
+   	END;
+$BODY$ LANGUAGE plpgsql;
+
+
+CREATE FUNCTION delete_comment() RETURNS TRIGGER AS
+$BODY$
+BEGIN 
+    DELETE FROM content WHERE content.id = OLD.content_id;
+    RETURN OLD;
+END
+$BODY$
+
+LANGUAGE plpgsql;
+
+--Triggers
+DROP TRIGGER IF EXISTS create_invite_notification ON Invite;
+Drop TRIGGER IF EXISTS delete_comment ON Comment;
+Drop TRIGGER IF EXISTS cancel_event_notification ON Event;
+Drop TRIGGER IF EXISTS invite_event_notification ON Invite;
+
+-- Trigger 1
+CREATE TRIGGER invite_event_notification_trigger 
+    AFTER INSERT ON invite
+    FOR EACH ROW 
+    EXECUTE PROCEDURE invite_event_notification_function();
+
+-- Trigger 2
+CREATE TRIGGER cancel_event_notification_trigger 
+    AFTER DELETE ON events
+    FOR EACH ROW 
+    EXECUTE PROCEDURE cancel_event_notification_function();
+
+-- Trigger 3
+CREATE TRIGGER invite_notification
+    After insert on invite
+    FOR EACH ROW 
+    EXECUTE PROCEDURE create_notification();
+
+-- Trigger 4
+CREATE TRIGGER delete_comment
+    AFTER DELETE ON comment
+    FOR EACH ROW
+    EXECUTE PROCEDURE delete_comment();
+
+--Indexes
+Drop INDEX IF EXISTS event_name;
+Drop INDEX IF EXISTS user_name;
+Drop INDEX IF EXISTS search_event;
+Drop INDEX IF EXISTS search_users;
+Drop INDEX IF EXISTS search_comment;
+
+--Index 1
+CREATE INDEX event_name ON event USING btree (name);
+
+--Index 2
+CREATE INDEX user_name ON user USING btree (name);
+
+--Index 3
+CREATE INDEX search_event ON event USING GIN (search);
+
+--Index 4
+CREATE INDEX search_users ON user USING GIN (search);
+
+--Index 5
+CREATE INDEX search_comment ON comment USING GIN (search);
