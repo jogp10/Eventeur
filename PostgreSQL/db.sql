@@ -286,14 +286,40 @@ BEGIN
     RETURN OLD;
 END
 $BODY$
+LANGUAGE plpgsql;
 
+CREATE FUNCTION check_attendee() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF (SELECT COUNT(*) FROM userticketevent WHERE user_id = NEW.user_id AND event_id = NEW.event_id) = 0 THEN
+        RAISE EXCEPTION 'User is not an attendee of the event';
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE FUNCTION delete_user() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    UPDATE comment SET user_id = 1 WHERE user_id = OLD.id;
+    UPDATE userticketevent SET user_id = 1 WHERE user_id = OLD.id;
+    UPDATE invite SET user_id = 1 WHERE user_id = OLD.id;
+    UPDATE managers SET account_id = 1 WHERE account_id = OLD.id;
+    UPDATE events SET creator_id = 1 WHERE creator_id = OLD.id;
+    UPDATE notifications SET user_id = 1 WHERE user_id = OLD.id;
+    UPDATE content SET user_id = 1 WHERE user_id = OLD.id;
+    RETURN OLD;
+END
+$BODY$
 LANGUAGE plpgsql;
 
 --Triggers
-DROP TRIGGER IF EXISTS create_invite_notification ON Invite;
 Drop TRIGGER IF EXISTS delete_comment ON Comment;
-Drop TRIGGER IF EXISTS cancel_event_notification ON Event;
+Drop TRIGGER IF EXISTS cancel_event_notification ON Events;
 Drop TRIGGER IF EXISTS invite_event_notification ON Invite;
+Drop TRIGGER IF EXISTS check_attendee ON userticketevent;
+Drop TRIGGER IF EXISTS delete_user ON _user;
 
 -- Trigger 1
 CREATE TRIGGER invite_event_notification_trigger 
@@ -308,35 +334,95 @@ CREATE TRIGGER cancel_event_notification_trigger
     EXECUTE PROCEDURE cancel_event_notification_function();
 
 -- Trigger 3
-CREATE TRIGGER invite_notification
-    After insert on invite
-    FOR EACH ROW 
-    EXECUTE PROCEDURE create_notification();
-
--- Trigger 4
 CREATE TRIGGER delete_comment
     AFTER DELETE ON comment
     FOR EACH ROW
     EXECUTE PROCEDURE delete_comment();
 
+-- Trigger 4
+CREATE TRIGGER check_attendee
+    BEFORE INSERT ON comment
+    FOR EACH ROW
+    EXECUTE PROCEDURE check_attendee();
+
+-- Trigger 5
+CREATE TRIGGER delete_user
+    AFTER DELETE ON _user
+    FOR EACH ROW
+    EXECUTE PROCEDURE delete_user();
+
 --Indexes
 Drop INDEX IF EXISTS event_name;
 Drop INDEX IF EXISTS user_name;
+Drop INDEX IF EXISTS event_date;
 Drop INDEX IF EXISTS search_event;
 Drop INDEX IF EXISTS search_users;
 Drop INDEX IF EXISTS search_comment;
 
 --Index 1
-CREATE INDEX event_name ON event USING btree (name);
+CREATE INDEX event_name ON events USING btree (name);
 
 --Index 2
 CREATE INDEX user_name ON user USING btree (name);
 
---Index 3
-CREATE INDEX search_event ON event USING GIN (search);
+-- Index 3
+CREATE INDEX event_date ON events USING btree (start_date);
 
---Index 4
+-- Index 11
+ALTER TABLE events
+ADD COLUMN searchs TSVECTOR;
+
+CREATE FUNCTION event_search_update() RETURNS TRIGGER AS $$
+BEGIN
+ IF TG_OP = 'INSERT' THEN
+        NEW.search = (
+         setweight(to_tsvector('english', NEW.name), 'A') ||
+         setweight(to_tsvector('english', NEW.description), 'B') ||
+         setweight(to_tsvector('english', NEW.location), 'C')
+        );
+ END IF;
+ IF TG_OP = 'UPDATE' THEN
+         IF (NEW.title <> OLD.title OR NEW.obs <> OLD.obs OR NEW.location <> OLD.location) THEN
+           NEW.tsvectors = (
+             setweight(to_tsvector('english', NEW.title), 'A') ||
+             setweight(to_tsvector('english', NEW.obs), 'B') ||
+             setweight(to_tsvector('english', NEW.location), 'C')
+           );
+         END IF;
+ END IF;
+ RETURN NEW;
+END $$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER event_search_update
+ BEFORE INSERT OR UPDATE ON events
+ FOR EACH ROW
+ EXECUTE PROCEDURE event_search_update();
+
+ CREATE INDEX search_event ON events USING GIN (searchs);
+
+--Index 12
 CREATE INDEX search_users ON user USING GIN (search);
 
---Index 5
+--Index 13
 CREATE INDEX search_comment ON comment USING GIN (search);
+
+-- Transactions
+
+-- Transaction 1
+BEGIN TRANSACTION;
+
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+
+Create Poll
+INSERT INTO poll (event_id, question)
+ VALUES ($event_id, $question);
+ 
+Create at least two options
+INSERT INTO polloption (poll_id, description)
+ VALUES (currval('poll_id_seq'), $description1);
+ 
+INSERT INTO polloption (poll_id, description)
+ VALUES (currval('poll_id_seq'), $description2);
+
+END TRANSACTION;
