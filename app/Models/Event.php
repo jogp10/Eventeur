@@ -10,13 +10,32 @@ class Event extends Model {
     
     protected $table = "EVENTS"
 
+    public PRIVACY = [
+        'public', 'private'
+    ]
+
+    public $timestamps = false;
+
+    protected $fillable = [
+        'name', 'num_tickets', 'description'
+    ]
+
+    protected $casts = [
+        'start_date' => 'datetime',
+        'end_date' => 'datetime'
+    ]
+
     public function users(){return $this->belongsToMany('App\Models\User');}
 
     public function tags(){return $this->belongsToMany('App/Models/Tag');}
 
-    public function reports() {return $this->belongsToMany('App/Models/Report');}
+    public function reports() {return $this->hasMany('App/Models/Report');}
 
-    public function polls() {return $this->belongsToMany('App/Models/Poll');}
+    public function polls() {return $this->hasMany('App/Models/Poll');}
 
-    public function comments() {return $this->belongsToMany('App/Models/Comment');}
+    public function comments() {return $this->hasMany('App/Models/Comment');}
+
+    public function invites() {return $this->belongsToMany('App/Models/User')->withPivot('content');}
+
+    public function tickets() {return $this->hasMany('App/Models/Ticket')}
 }

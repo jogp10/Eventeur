@@ -10,5 +10,11 @@ class PollOption extends Model {
 
     protected $table = "PollOption"
 
-    
+    public $timestamps = false
+
+    public $fillable = [
+        'description', 'votes'
+    ]
+
+    public function users() {return $this->belongsToMany('App/Models/User')}
 }

@@ -10,6 +10,13 @@ class Comment extends Model {
 
     protected $table = "COMMENT"
 
+    public $timestamps = false
+
+    protected $fillable = [
+        'content', 'date', 'edited'
+    ]
+
     public function replies() {return $this->belongsToMany('App/Models/Comment');}
     
+    public function notification() {return $this->hasOne('App/Models/CommentNotification');}
 }

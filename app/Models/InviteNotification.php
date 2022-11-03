@@ -5,7 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class InviteNotification extends Model
-{
+class InviteNotification extends Model {
     use HasFactory;
+
+    protected $table = "InviteNotification"
+
+    public $timestamps = false;
+
+    public function user() {return $this->belongsTo('App/Models/User')}
 }

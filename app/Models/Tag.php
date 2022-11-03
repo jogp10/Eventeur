@@ -10,5 +10,11 @@ class Tag extends Model {
 
     protected $table = "TAG"
 
+    public $timestamps = false
+
+    public $fillable = [
+        'name'
+    ]
+
     public function events() {return $this->belongsToMany("App/Models/Event")}
 }

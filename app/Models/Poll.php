@@ -10,6 +10,12 @@ class Poll extends Model {
 
     protected $table = "POLL"
 
+    public $timestamps = false
+
+    public $fillable = [
+        'question'
+    ]
+
     public function options() {return $this->belongsToMany('App/Models/PollOption');}
 
     
