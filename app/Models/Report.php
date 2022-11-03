@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Report extends Model {
     use HasFactory;
     
-    protected $table = "REPORT"
+    protected $table = "report"
     
     public $casts = [
         'date' => 'datetime'

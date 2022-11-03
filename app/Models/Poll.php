@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Poll extends Model {
     use HasFactory;
 
-    protected $table = "POLL"
+    protected $table = "poll"
 
     public $timestamps = false
 

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Administrator extends Model {
     use HasFactory;
 
-    protected $table = "ADMINISTRATOR"
+    protected $table = "administrator"
 
     public $timestamps = false
 

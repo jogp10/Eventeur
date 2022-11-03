@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Tag extends Model {
     use HasFactory;
 
-    protected $table = "TAG"
+    protected $table = "tag"
 
     public $timestamps = false
 
