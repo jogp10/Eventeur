@@ -24,18 +24,13 @@
   </head>
   <body>
     <main>
-      <header>
-        <h1><a href="{{ url('/') }}">Thingy!</a></h1>
-        <a class="button" href="{{ url('/login') }}"> sign-in </a>
-        <a class="button" href="{{ url('/register') }}"> sign-up </a>
-        @if (Auth::check())
-        <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
-        @endif
-      </header>
+      @include("partials.header")
       <section id="content">
         @yield('content')
       </section>
     </main>
+
+    
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" 
     integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" 
