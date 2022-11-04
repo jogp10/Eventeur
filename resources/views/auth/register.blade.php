@@ -1,25 +1,25 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row row-cols-1 row-cols-md-2 mt-5">
+<div class="container-sm">
+    <div class="row row-cols-1 row-cols-lg-2 mt-5">
        <div class="col border border-dark p-5">
            <h2>Sign Up</h2>
            <p>By continuing you agree to our user Agreement and Privacy Policy.</p>
            <form method="POST" action="{{ route('register') }}">
                 {{ csrf_field() }}
                 <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Username</label>
-                    <input type="username" class="form-control" id="username" aria-describedby="usernameHelp" value="{{ old('name') }}">
-                    @if ($errors->has('username'))
+                    <label for="name" class="form-label">Name</label>
+                    <input type="name" class="form-control" id="name" name="name" required>
+                    @if ($errors->has('name'))
                         <span class="error">
-                            {{ $errors->first('username') }}
+                            {{ $errors->first('name') }}
                         </span>
                     @endif
                </div>
                <div class="mb-3">
                     <label for="email" class="form-label">Email Address</label>
-                    <input type="email" class="form-control" id="email" value="{{ old('email') }}">
+                    <input type="email" class="form-control" id="email" name="email" required>
                     @if ($errors->has('email'))
                         <span class="error">
                             {{ $errors->first('email') }}
@@ -27,8 +27,8 @@
                     @endif
                </div>
                <div class="mb-3">
-                   <label for="exampleInputPassword1" class="form-label">Password</label>
-                   <input type="password" class="form-control" id="password">
+                   <label for="password" class="form-label">Password</label>
+                   <input type="password" class="form-control" id="password" name="password" required>
                    @if ($errors->has('password'))
                         <span class="error">
                             {{ $errors->first('password') }}
@@ -36,11 +36,11 @@
                     @endif
                </div>
                <div class="mb-3">
-                    <label for="exampleInputPasswordConfirmation" class="form-label">Confirm Password</label>
-                    <input type="password" class="form-control" id="password">
-                    @if ($errors->has('password'))
+                    <label for="Password-confirmation" class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control" id="password-confirm" name="password_confirmation" required>
+                    @if ($errors->has('password_confirmation'))
                         <span class="error">
-                            {{ $errors->first('password') }}
+                            {{ $errors->first('password_confirmation') }}
                         </span>
                     @endif
                </div>
@@ -57,7 +57,7 @@
                <img src="images/logo.png" class="img-fluid mb-3" width="400" height="300" alt="...">
                <h3>Welcome to Eventeur!</h3>
                <p class="fs-4 text-black-50"><small>The newest platform where you can find all the events you're looking for.</small></p>
-               <p>Have an account already?<a class="ms-2" href="#">Sign in</a></p>
+               <p>Have an account already?<a class="ms-2" href="{{ url('/login') }}">log In</a></p>
                
            </div>
        </div>
