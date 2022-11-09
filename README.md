@@ -133,7 +133,7 @@ To stop the server just hit Ctrl-C.
 
 ## Laravel code structure
 
-Before you start, you should make yourself familiar with [Laravel's documentation](https://laravel.com/docs/8.x).
+Before you start, you should make yourself familiar with [Laravel's documentation](https://laravel.com/docs/9.x).
 
 In Laravel, a typical web request will touch the following concepts and files.
 
