@@ -290,7 +290,7 @@ Once your Docker is authenticated, configure the `upload_image.sh` script with y
 Example configuration:
 
 ```bash
-IMAGE_NAME=git.fe.up.pt:5050/lbaw/lbaw2122/lbaw21XX # Replace with your group's image name
+IMAGE_NAME=git.fe.up.pt:5050/lbaw/lbaw2223/lbaw2224
 ```
 
 You can now build and upload the docker image by executing that script from the project root folder:
@@ -327,4 +327,4 @@ root@2804d54698c0:/# tail -f /var/log/nginx/access.log   # follow the accesses
 ```
 
 You can stop the container with `ctrl+c` on the terminal running it, or with `docker stop lbaw21XX` on another terminal.
--- LBAW, 2021
+-- LBAW, 2022
