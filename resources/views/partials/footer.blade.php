@@ -11,7 +11,7 @@
                         <a href="/">Home</a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="#">Help</a>
+                        <a href="/">Help</a>
                     </li>
                     <li class="list-inline-item">
                         <a href="#">Services</a>
