@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class HomepageController extends Controller {
 
@@ -13,7 +14,6 @@ class HomepageController extends Controller {
                 ->inRandomOrder()
                 ->limit(8)
                 ->get();
-        
         
         return view('pages.home', ['events' => $events]);
     }

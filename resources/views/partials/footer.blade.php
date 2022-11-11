@@ -1,12 +1,11 @@
 <footer class="main-footer">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-6 text-left">
+        <div class="d-flex flex-column flex-md-row justify-content-md-between text-center">
+            <div class="mx-5 px-5 order-1 order-md-0">
                 <p>{{ config('app.name', 'Laravel') }} Inc &copy; 2022. All rights reserved.</p>
             </div>
 
-            <div class="col-sm-6 text-right">
-                <ul class="list-inline text-right">
+            <div class="mx-5 px-5 order-0 order-md-1">
+                <ul class="list-inline">
                     <li class="list-inline-item">
                         <a href="/">Home</a>
                     </li>

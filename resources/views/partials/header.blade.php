@@ -2,7 +2,7 @@
     <nav class="navbar navbar-expand-lg bg-light">
         <div class="container-fluid d-flex flex-row justify-content-around align-items-center">
             <a class="navbar-brand" href="{{ url('/') }}">
-                <img src="{{ asset('images/blogo.png') }}" alt="Logo" width="40" height="40" class="d-inline-block">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" width="40" height="40" class="d-inline-block">
                 <span class="align-middle fs-5">{{ config('app.name', 'Laravel') }} </span>
             </a>
             <div class="d-none d-sm-flex w-50 input-group align-self-center">
