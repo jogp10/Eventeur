@@ -1,3 +1,8 @@
+.weekdays div {
+  word-spacing: 2em;
+}
+
+
 /*
 body {
   background-color: #ffffff;
