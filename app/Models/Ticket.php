@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Ticket extends Model {
     use HasFactory;
 
-    protected $table = "ticket"
+    protected $table = "ticket";
 
-    public $timestamps = false
+    public $timestamps = false;
 
     public $fillable = [
         'price'
-    ]
+    ];
 
-    public function event() {return $this->hasOne('App/Models/Event');}
+    public function event() {return $this->hasOne('App\Models\Event');}
 }

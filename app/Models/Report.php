@@ -8,15 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Report extends Model {
     use HasFactory;
     
-    protected $table = "report"
+    protected $table = "report";
     
     public $casts = [
         'date' => 'datetime'
-    ]
+    ];
 
     public $fillable = [
         'content'
-    ]
+    ];
 
-    public $timestamps = false
+    public $timestamps = false;
 }

@@ -21,13 +21,13 @@ class Account extends Authenticatable {
         'password'
     ];
 
-    public function coverImage() {return $this->hasOne('App/Models/CoverImage');} 
+    public function coverImage() {return $this->hasOne('App\Models\CoverImage');} 
     
-    public function perfilPicture() {return $this->hasOne('App/Models/PerfilPicture');}
+    public function perfilPicture() {return $this->hasOne('App\Models\PerfilPicture');}
 
-    public function user() {return $this->hasOne('App/Models/User');}
+    public function user() {return $this->hasOne('App\Models\User');}
 
-    public function admin() {return $this->hasOne('App/Models/Administrator');}
+    public function admin() {return $this->hasOne('App\Models\Administrator');}
 }
 
 

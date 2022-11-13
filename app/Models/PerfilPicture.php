@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class PerfilPicture extends Model {
     use HasFactory;
 
-    protected $table = "PerfilImage"
+    protected $table = "PerfilImage";
 
-    public $timestamps = false
+    public $timestamps = false;
 
     public $fillable = [
         'path'
-    ]
+    ];
 
-    public function account() {return $this->hasOne('App/Models/Account');}
+    public function account() {return $this->hasOne('App\Models\Account');}
 }
