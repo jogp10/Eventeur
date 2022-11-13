@@ -1,0 +1,1 @@
+@each('partials.comment', $event->comments, 'comment')
