@@ -9,9 +9,14 @@
                 <img src="images/perfil.png" class="img-fluid rounded-circle position-absolute top-100 start-50 translate-middle" width="100" height="230" alt="...">
             </div>
             
-            <h4 class="mt-5 pt-5">Bernardo453</h4>
+            <h4 class="mt-5 pt-5">{{$account->name}}</h4>
             <hr class="px-5 mx-5">
-            <p class="pt-3 px-5 mx-5">Studying Computer Engineering in Universidade do Porto(FEUP);</p>
+            @if($account->description === null)
+                <p class="pt-3 px-5 mx-5">Write your description...</p>
+            @else
+                <p class="pt-3 px-5 mx-5">{{$account->description}}</p>
+            @endif
+            <a href="{{ url('/editProfile') }}" type="button" class="btn btn-primary btn-lg">Edit Profile</a>
         </div>
         <div class="col-8 d-flex flex-column m-5 p-0 w-50">
             <div class="">
