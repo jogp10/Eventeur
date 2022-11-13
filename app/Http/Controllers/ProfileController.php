@@ -45,14 +45,19 @@ class ProfileController extends Controller
      */
     public function show() {
 
-        print_r(Auth::user()->user);
+        #print_r(Auth::user()->user);
 
         return view('pages.profile', ['account' => Auth::user()]);
     }
 
     public function showEditPage() {
 
-        return view('pages.edit_profile', ['account' => Auth::user()]);
+        return view('pages.editProfile', ['account' => Auth::user()]);
+    }
+
+    public function showSettingsPage() {
+
+        return view('pages.securityProfile', ['account' => Auth::user()]);
     }
 
 

@@ -8,10 +8,10 @@
             <nav class="border-bottom border-3" style="--bs-breadcrumb-divider: '';" aria-label="breadcrumb">
                 <ol class="breadcrumb ps-5 mb-2">
                     <li class="breadcrumb-item me-2" aria-current="page"><a
-                            class="link-dark text-decoration-none" href="#">
+                            class="link-dark text-decoration-none" href="{{ url('/editProfile') }}">
                             <p class="m-0 fs-5">Settings</p>
                         </a></li>
-                    <li class="breadcrumb-item active"><a class="link-secondary text-decoration-none" href="#">
+                    <li class="breadcrumb-item active"><a class="link-secondary text-decoration-none" href="{{ url('/settigsProfile') }}">
                             <p class="m-0 fs-5">Security</p>
                         </a></li>
                 </ol>
