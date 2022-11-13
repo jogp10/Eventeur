@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Administrator extends Model {
     use HasFactory;
 
-    protected $table = "administrator"
+    protected $table = "administrator";
 
-    public $timestamps = false
+    public $timestamps = false;
 
-    public function account() {return $this->belongsTo('App/Models/Account')}
+    public function account() {return $this->belongsTo('App\Models\Account');}
 }

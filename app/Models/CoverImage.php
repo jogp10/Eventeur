@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class CoverImage extends Model {
     use HasFactory;
 
-    protected $table = "CoverImage"
+    protected $table = "CoverImage";
 
-    public $timestamps = false
+    public $timestamps = false;
 
     public $fillable = [
         'path'
-    ]
+    ];
 
-    public function account() {return $this->belongsTo('App/Models/Account');} 
+    public function account() {return $this->belongsTo('App\Models\Account');} 
 }

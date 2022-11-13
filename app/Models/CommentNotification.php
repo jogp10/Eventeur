@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class CommentNotification extends Model {
     use HasFactory;
 
-    protected $table = "CommentNotification"
+    protected $table = "CommentNotification";
 
-    public $timestamps = false
+    public $timestamps = false;
 
-    public function comment() {return $this->belongsTo('App/Models/Comment')}
+    public function comment() {return $this->belongsTo('App\Models\Comment');}
 }

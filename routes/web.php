@@ -36,3 +36,4 @@ Route::post('register', 'Auth\RegisterController@register')->name('register');
 Route::get('profile', 'ProfileController@show');
 Route::get('editProfile', 'ProfileController@showEditPage');
 Route::post('editProfile', 'ProfileController@edit')->name('editProfile');
+Route::get('event/{id}', 'EventController@show');
