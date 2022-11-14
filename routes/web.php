@@ -38,3 +38,6 @@ Route::get('editProfile', 'ProfileController@showEditPage');
 Route::post('editProfile', 'ProfileController@edit')->name('editProfile');
 Route::get('event/{id}', 'EventController@show');
 Route::get('settigsProfile', 'ProfileController@showSettingsPage');
+
+// Search Bar
+Route::get('/search','HomepageController@search');
