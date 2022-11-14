@@ -8,13 +8,13 @@
                 <img src="images/placeholder.png" class="img-fluid" width="500" height="250" alt="...">
                 <img src="images/perfil.png" class="img-fluid rounded-circle position-absolute top-100 start-50 translate-middle" width="100" height="230" alt="...">
             </div>
-            
+
             <h4 class="mt-5 pt-5">{{$account->name}}</h4>
             <hr class="px-5 mx-5">
             @if($account->description === null)
-                <p class="pt-3 px-5 mx-5">Write your description...</p>
+            <p class="pt-3 px-5 mx-5">Write your description...</p>
             @else
-                <p class="pt-3 px-5 mx-5">{{$account->description}}</p>
+            <p class="pt-3 px-5 mx-5">{{$account->description}}</p>
             @endif
             <a href="{{ url('/editProfile') }}" type="button" class="btn btn-primary btn-lg">Edit Profile</a>
         </div>
@@ -32,7 +32,7 @@
                         <div>
                             <button class="prev-month btn btn-link link-dark" type="submit">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
-                                <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
+                                    <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z" />
                                 </svg>
                             </button>
                         </div>
@@ -43,13 +43,13 @@
                         <div>
                             <button class="next-month btn btn-link link-dark" type="submit">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
-                                <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                                    <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
                                 </svg>
                             </button>
                         </div>
                     </div>
                     <div class="days d-flex flex-wrap m-0 p-4">
-                        
+
                     </div>
                 </div>
             </div>
