@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Account;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
@@ -41,11 +43,23 @@ class ProfileController extends Controller
      * @param  \App\Models\Account  $account
      * @return \Illuminate\Http\Response
      */
-    public function show(Account $account) {
-        
+    public function show() {
 
-        return view('pages.profile');
+        #print_r(Auth::user()->user);
+
+        return view('pages.profile', ['account' => Auth::user()]);
     }
+
+    public function showEditPage() {
+
+        return view('pages.editProfile', ['account' => Auth::user()]);
+    }
+
+    public function showSettingsPage() {
+
+        return view('pages.securityProfile', ['account' => Auth::user()]);
+    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -53,8 +67,13 @@ class ProfileController extends Controller
      * @param  \App\Models\Account  $account
      * @return \Illuminate\Http\Response
      */
-    public function edit(Account $account) {
+    public function edit(Request $request) {
         
+        Auth::user()->name = $request['name'];
+        Auth::user()->description = $request['description'];
+        Auth::user()->save();
+
+        return view('pages.profile', ['account' => Auth::user()]);
     }
 
     /**
