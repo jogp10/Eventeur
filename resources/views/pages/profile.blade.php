@@ -30,52 +30,26 @@
                 <div class="calendar">
                     <div class="d-flex flex-row justify-content-around align-items-center text-center month">
                         <div>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
-                            <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
-                            </svg>
+                            <button class="prev-month btn btn-link link-dark" type="submit">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
+                                <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
+                                </svg>
+                            </button>
                         </div>
                         <div class="date mt-2">
-                            <h3>May</h3>
-                            <p>Fri May 29, 2020</p>
+                            <h3>November</h3>
+                            <p>Mon Nov 14, 2022</p>
                         </div>
                         <div>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
-                            <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
-                            </svg> 
+                            <button class="next-month btn btn-link link-dark" type="submit">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                                <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                                </svg>
+                            </button>
                         </div>
                     </div>
-                    <div class="d-flex flex-wrap days m-0 p-4">
-                        <div class="border border-grey m-0 p-4">01</div>
-                        <div class="border border-grey m-0 p-4">02</div>
-                        <div class="border border-grey m-0 p-4">03</div>
-                        <div class="border border-grey m-0 p-4">04</div>
-                        <div class="border border-grey m-0 p-4">05</div>
-                        <div class="border border-grey m-0 p-4">06</div>
-                        <div class="border border-grey m-0 p-4">07</div>
-                        <div class="border border-grey m-0 p-4">08</div>
-                        <div class="border border-grey m-0 p-4">09</div>
-                        <div class="border border-grey m-0 p-4">10</div>
-                        <div class="border border-grey m-0 p-4">11</div>
-                        <div class="border border-grey m-0 p-4">12</div>
-                        <div class="border border-grey m-0 p-4">13</div>
-                        <div class="border border-grey m-0 p-4">14</div>
-                        <div class="border border-grey m-0 p-4">15</div>
-                        <div class="border border-grey m-0 p-4">16</div>
-                        <div class="border border-grey m-0 p-4">17</div>
-                        <div class="border border-grey m-0 p-4">18</div>
-                        <div class="border border-grey m-0 p-4">19</div>
-                        <div class="border border-grey m-0 p-4">20</div>
-                        <div class="border border-grey m-0 p-4">21</div>
-                        <div class="border border-grey m-0 p-4">22</div>
-                        <div class="border border-grey m-0 p-4">23</div>
-                        <div class="border border-grey m-0 p-4">24</div>
-                        <div class="border border-grey m-0 p-4">25</div>
-                        <div class="border border-grey m-0 p-4">26</div>
-                        <div class="border border-grey m-0 p-4">27</div>
-                        <div class="border border-grey m-0 p-4">28</div>
-                        <div class="border border-grey m-0 p-4">29</div>
-                        <div class="border border-grey m-0 p-4">30</div>
-                        <div class="border border-grey m-0 p-4">31</div>
+                    <div class="days d-flex flex-wrap m-0 p-4">
+                        
                     </div>
                 </div>
             </div>

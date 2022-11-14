@@ -26,7 +26,7 @@ class Account extends Authenticatable {
     
     public function perfilPicture() {return $this->hasOne('App\Models\PerfilPicture');}
 
-    public function user() {return $this->hasOne('App\Models\User');}
+    public function user() {return $this->hasOne('App\Models\User', "id");}
 
     public function admin() {return $this->hasOne('App\Models\Administrator');}
 }
