@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
-class EventController extends Controller
+class StaticPageController extends Controller
 {
     /**
      * Display About page.

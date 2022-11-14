@@ -10,13 +10,13 @@
                         <a href="/">Home</a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="#">Contact us</a>
+                        <a href="{{ url('/contact')}}">Contact us</a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="#">About</a>
+                        <a href="{{ url('/about')}}">About</a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="#">FAQs</a>
+                        <a href="{{ url('/faq')}}">FAQs</a>
                     </li>
                 </ul>
             </div>
