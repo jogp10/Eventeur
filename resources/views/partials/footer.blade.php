@@ -10,13 +10,7 @@
                         <a href="/">Home</a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="/">Help</a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="#">Services</a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="#">Contacts</a>
+                        <a href="#">Contact us</a>
                     </li>
                     <li class="list-inline-item">
                         <a href="#">About</a>

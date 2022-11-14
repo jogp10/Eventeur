@@ -38,3 +38,8 @@ Route::get('editProfile', 'ProfileController@showEditPage');
 Route::post('editProfile', 'ProfileController@edit')->name('editProfile');
 Route::get('event/{id}', 'EventController@show');
 Route::get('settigsProfile', 'ProfileController@showSettingsPage');
+
+//Static Pages
+Route::get('about', 'StaticPageController@about');
+Route::get('contact', 'StaticPageController@contact');
+Route::get('faq', 'StaticPageController@faq');
