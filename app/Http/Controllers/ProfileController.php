@@ -45,7 +45,7 @@ class ProfileController extends Controller
      */
     public function show() {
 
-        #print_r(Auth::user()->user);
+        print_r(Auth::user()->user);
 
         return view('pages.profile', ['account' => Auth::user()]);
     }
@@ -68,11 +68,20 @@ class ProfileController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request) {
-        
-        Auth::user()->name = $request['name'];
-        Auth::user()->description = $request['description'];
-        Auth::user()->save();
 
+        $validated = $request->validate([
+            'name' => ['unique:account','max:20'],
+            'description' => ['max:200'],
+        ]);
+        
+        if($request['name'] !== null) {
+            Auth::user()->name = $request['name'];
+        }
+        if($request['description'] !== null) {
+            Auth::user()->description = $request['description'];
+        }
+
+        Auth::user()->save();
         return view('pages.profile', ['account' => Auth::user()]);
     }
 
