@@ -1,5 +1,14 @@
-.weekdays div {
-  word-spacing: 2em;
+.days div {
+  transition: background-color 0.2s
+}
+
+.today {
+  background-color: lightgrey;
+}
+
+.days div:hover:not(.today) {
+  background-color: grey;
+  cursor: pointer;
 }
 
 html,

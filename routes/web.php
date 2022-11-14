@@ -43,3 +43,5 @@ Route::get('settigsProfile', 'ProfileController@showSettingsPage');
 Route::get('about', 'StaticPageController@about');
 Route::get('contact', 'StaticPageController@contact');
 Route::get('faq', 'StaticPageController@faq');
+// Search Bar
+Route::get('/search','HomepageController@search');
