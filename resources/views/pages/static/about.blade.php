@@ -4,14 +4,14 @@
 @section('content')
 <div class="container-md ">
     <div class="row align-items-center m-5">
-        <div class="col">
+        <div class="col " style="text-align:center">
             <h1>About Eventeur</h1>
         </div>
         <div class="col">
             <img src="images/logo_big.png" class="img-fluid" height="300" width="400" alt="...">
         </div>
     </div>
-    <div>
+    <div class="fs-4" style="padding:2rem;">
         <p>
             Eventeur is the newest web platform for event management,
             allowing users to smooth their schedules and never miss any good event opportunities.
@@ -26,7 +26,9 @@
         </p>
     </div>
     <div class="row">
-        <h2>The Team</h2>
+        <div style="padding-left: 5rem; margin-top:3rem; margin-bottom:2rem">
+            <h2>The Team</h2>
+        </div>
         <div class="col">
             <div class="row">
                 <div class="col">
