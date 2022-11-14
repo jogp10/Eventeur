@@ -50,7 +50,12 @@ class EventController extends Controller
     //public function show($id) {
         $event = Event::find($id);
         //$this->authorize('show', $event);
-        return view('pages.event', ['event' => $event]);
+        $comments = DB::table('comment')
+                ->where('event_id', $id)
+                ->orderBy('written_date', 'desc')
+                ->get();
+
+        return view('pages.event', ['event' => $event, 'comments' => $comments]);
     }
 
     /**
