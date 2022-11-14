@@ -64,7 +64,7 @@
       </div>
     </div>
   </div>
-  <div id="comments">
+  <div id="comments" style="margin: 3rem; margin-left: 10rem">
     @each('partials.comment', $comments, 'comment')
   </div>
 </div>
