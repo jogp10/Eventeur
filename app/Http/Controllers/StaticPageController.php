@@ -25,7 +25,7 @@ class StaticPageController extends Controller
      */
     public function contact()
     {
-        return view('pages.static.contactus');
+        return view('pages.static.contact');
     }
 
     /**
