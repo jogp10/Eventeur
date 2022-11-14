@@ -14,7 +14,7 @@ class HomepageController extends Controller {
                 ->inRandomOrder()
                 ->limit(8)
                 ->get();
-        
+    
         return view('pages.home', ['events' => $events]);
     }
 }

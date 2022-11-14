@@ -60,7 +60,6 @@ class ProfileController extends Controller
         return view('pages.securityProfile', ['account' => Auth::user()]);
     }
 
-
     /**
      * Show the form for editing the specified resource.
      *
