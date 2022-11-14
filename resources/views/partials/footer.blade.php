@@ -1,4 +1,4 @@
-<footer class="main-footer">
+<footer class="main-footer" style="max-height: 100%">
     <div class="d-flex flex-column flex-md-row justify-content-md-between text-center m-5">
         <div class="mx-5 px-5 order-1 order-md-0">
             <p>{{ config('app.name', 'Laravel') }} Inc &copy; 2022. All rights reserved.</p>
