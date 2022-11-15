@@ -9,5 +9,9 @@ class Tag extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name', 'created_at', 'updated_at'
+   ];
+
     public function events() { return $this->belongsToMany(Event::class); }
 }

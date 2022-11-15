@@ -9,6 +9,10 @@ class CommentNotification extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'notification_id', 'comment_id', 'created_at', 'updated_at'
+    ];
+
     public function notification() { return $this->hasOne(Notification::class); }
 
     public function comment() { return $this->hasOne(Comment::class); }

@@ -9,6 +9,10 @@ class Admin extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'accounts_id', 'created_at', 'updated_at'
+    ];
+
     public function account() { return $this->hasOne(Account::class); }
 
 }

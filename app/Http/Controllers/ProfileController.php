@@ -70,9 +70,8 @@ class ProfileController extends Controller
      */
     public function edit(Request $request)
     {
-        console_log("edit");
         $validated = $request->validate([
-            'name' => ['unique:account', 'max:20'],
+            'name' => ['unique:accounts', 'max:20'],
             'description' => ['max:200'],
         ]);
 

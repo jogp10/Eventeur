@@ -46,18 +46,18 @@ CREATE TABLE accounts (
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    accounts_id  INTEGER DEFAULT -1,
+    account_id  INTEGER DEFAULT -1,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_accounts_id  FOREIGN KEY(accounts_id) REFERENCES accounts(id)
+    CONSTRAINT fk_accounts_id  FOREIGN KEY(account_id) REFERENCES accounts(id)
 );
 
 CREATE TABLE admins (
     id SERIAL PRIMARY KEY,
-    accounts_id  INTEGER DEFAULT -1,
+    account_id  INTEGER DEFAULT -1,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_accounts_id  FOREIGN KEY(accounts_id) REFERENCES accounts(id)
+    CONSTRAINT fk_account_id  FOREIGN KEY(account_id) REFERENCES accounts(id)
 );
 
 CREATE TABLE events (
@@ -82,9 +82,9 @@ CREATE TABLE cover_images (
     id SERIAL PRIMARY KEY,
     event_id   INTEGER NOT NULL,
     path        TEXT NOT NULL,
-    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES events(id),
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES events(id),
     UNIQUE(event_id)
 );
 
@@ -558,7 +558,7 @@ VALUES
   ('quis.lectus@google.com','Sierra Webb','EWD06GOK4JK','nonummy ut, molestie in, tempus eu, ligula. Aenean euismod mauris eu elit. Nulla facilisi. Sed neque. Sed eget lacus. Mauris',25);
 
 
-INSERT INTO admins (id, accounts_id)
+INSERT INTO admins (id, account_id)
 VALUES
   (1,49),
   (2,14),
@@ -572,7 +572,7 @@ VALUES
   (10,51);
 
 
-INSERT INTO users (id, accounts_id)
+INSERT INTO users (id, account_id)
 VALUES
   (1,1),
   (3,3),

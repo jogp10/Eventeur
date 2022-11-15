@@ -10,6 +10,10 @@ class User extends Model
 {
     use Notifiable;
 
+    protected $fillable = [
+        'account_id', 'created_at', 'updated_at'
+    ];
+
     public function account() { return $this->hasOne(Account::class); }
     public function events() { return $this->hasMany(Event::class); }
 

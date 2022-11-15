@@ -9,6 +9,10 @@ class Notification extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'content', 'seen'
+   ];
+
     public function inviteNotification() { return $this->hasOne(InviteNotification::class); }
 
     public function commentNotification() { return $this->hasOne(CommentNotification::class); }

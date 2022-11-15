@@ -9,6 +9,10 @@ class Event extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name', 'description', 'start_date', 'end_date', 'location', 'capacity', 'privacy', 'ticket', 'created_at', 'updated_at'
+    ];
+
     public function manager() { return $this->belongsTo(User::class); }
     public function coverImage() { return $this->belongsTo(CoverImage::class); }
 
