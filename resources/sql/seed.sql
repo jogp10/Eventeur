@@ -668,7 +668,7 @@ VALUES
 
 INSERT INTO events (user_id, name,description,start_date,end_date,location,capacity,privacy)
 VALUES
-  (45,'eu dolor egestas rhoncus. Proin nisl sem, consequat','In lorem. Donec elementum, lorem ut aliquam iaculis, lacus pede sagittis augue, eu tempor erat neque non quam.','2021-10-25', '2021-11-13','P.O. Box 737, 2366 Diam Av.',417,'Private'),
+  (45,'eu dolor egestas rhoncus. Proin nisl sem, consequat','In lorem. Donec elementum, lorem ut aliquam iaculis, lacus pede sagittis augue, eu tempor erat neque non quam.','2021-10-25', '2021-11-13','P.O. Box 737, 2366 Diam Av.',417,'Public'),
   (98,'magnis dis parturient montes, nascetur ridiculus','tellus. Aenean egestas hendrerit neque. In ornare sagittis felis. Donec tempor, est ac mattis semper, dui lectus rutrum urna, nec luctus felis purus ac tellus. Suspendisse sed dolor. Fusce mi lorem, vehicula et, rutrum eu, ultrices sit amet,','2021-10-22','2021-11-20','Ap #415-6093 Eget Street',380,'Public'),
   (16,'senectus et netus et','congue. In scelerisque scelerisque dui. Suspendisse ac metus vitae velit egestas lacinia. Sed congue, elit sed consequat auctor, nunc nulla vulputate dui, nec tempus mauris erat eget ipsum. Suspendisse sagittis. Nullam vitae diam. Proin dolor. Nulla semper tellus id','2021-10-18','2021-11-23','1448 Ac, Av.',204,'Public'),
   (59,'elit sed consequat auctor, nunc','sodales elit erat vitae risus. Duis a mi fringilla mi lacinia mattis. Integer eu lacus. Quisque imperdiet,','2021-10-21','2021-11-08','883-8470 Magna Av.',58,'Public'),

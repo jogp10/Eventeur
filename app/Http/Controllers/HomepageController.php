@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -14,6 +15,10 @@ class HomepageController extends Controller {
         $events = Event::inRandomOrder()
                 ->limit(8)
                 ->get();
+        foreach ($events as $event) {
+            $event['manager'] = Account::find($event->user_id)->name;
+        }
+        
     
         return view('pages.home', ['events' => $events]);
     }

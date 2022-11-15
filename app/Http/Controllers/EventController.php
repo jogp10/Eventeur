@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Answer;
+use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -62,9 +63,11 @@ class EventController extends Controller
     public function show($id)
     {
         $event = Event::find($id);
+        $event['manager'] = Account::find($event->user_id)->name;
         console_log($event->manager);
         if ($event->privacy == "Private") {
-            $tickets = UserEventTicket::where('event_id', $id)->get();
+            $tickets = Ticket::where([['event_id', '=', $id],
+            ['user_id', '=', Auth::id()]])->get();
 
             $this->authorize('view', $event);
         }
@@ -75,26 +78,15 @@ class EventController extends Controller
             ->toArray();
 
 
-        $comments = array_filter($comments, function ($comment) {
-            if (Answer::where('answer_id', $comment['id'])->get()->count() == 0) {
-                return true;
-            }
-            return false;
-        });
-
-
         $combined = [];
         foreach ($comments as $comment) {
-            $ids = Answer::where('comment_id', $comment['id'])->get();
-            $answers = [];
             $comment['author'] = Account::find($comment['user_id'])->name;
-            $comment['edited'] = $comment['edited'] ? "edited" : "";
-            foreach ($ids as $id) {
-                $answer = Comment::find($id->answer_id);
-                $answer['author'] = Account::find($answer->user_id)->name;
-                $answer['edited'] = $answer['edited'] ? "edited" : "";
-                array_push($answers, $answer);
+            $answers = Answer::where('comment_id', $comment['id'])->get();
+
+            foreach ($answers as $answer) {
+                $answer['author'] = Account::find($answer['user_id'])->name;
             }
+
             array_push($combined, [$comment, $answers]);
         }
 
