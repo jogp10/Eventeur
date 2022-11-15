@@ -8,17 +8,9 @@
     <div class="container">
       <div class="row" style="padding-top: 3rem;min-height: 30rem">
         <div class="d-flex flex-column col-1 ps-5">
-          <button type="button" class="btn btn-link ps-0 ms-0">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
-              <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z" />
-            </svg>
-          </button>
+          @include('partials.form', ['action' => 'up', 'id' => $event->id, 'type' => 'event'])
           <p class="pt-3 ps-1 pe-0">{{ $event->votes }}</p>
-          <button type="button" class="btn btn-link ps-0 ms-0">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
-              <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
-            </svg>
-          </button>
+          @include('partials.form', ['action' => 'down', 'id' => $event->id, 'type' => 'event'])
         </div>
         <div class="col-8" style="position:relative">
           <h3>{{ $event->name}}</h3>

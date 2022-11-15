@@ -11,7 +11,7 @@ class User extends Model
     use Notifiable;
 
     protected $fillable = [
-        'account_id', 'created_at', 'updated_at'
+        'id', 'account_id', 'created_at', 'updated_at'
     ];
 
     public function account() { return $this->hasOne(Account::class); }

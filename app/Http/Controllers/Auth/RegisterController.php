@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\Account;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -46,7 +47,6 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        console_log('construct');
         $this->middleware('guest');
     }
 
@@ -57,9 +57,7 @@ class RegisterController extends Controller
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
-    {
-        console_log('Validator');
-        
+    {        
         return Validator::make($data, [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:accounts',
@@ -75,11 +73,15 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        console_log('data');
-        return Account::create([
+        $account = Account::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+        $user = User::create([
+            'id' => $account->id,
+            'account_id' => $account->id,
+        ]);
+        return $account;
     }
 }

@@ -79,8 +79,7 @@ class EventController extends Controller
 
         $comments = Event::find($event->id)
             ->comments()
-            ->get()
-            ->toArray();
+            ->get();
 
         $combined = [];
         foreach ($comments as $comment) {

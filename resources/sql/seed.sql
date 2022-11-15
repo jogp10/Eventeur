@@ -45,7 +45,7 @@ CREATE TABLE accounts (
 );
 
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
+    id          INTEGER PRIMARY KEY,
     account_id  INTEGER DEFAULT -1,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -53,7 +53,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE admins (
-    id SERIAL PRIMARY KEY,
+    id          INTEGER PRIMARY KEY,
     account_id  INTEGER DEFAULT -1,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -226,7 +226,6 @@ CREATE TABLE votes (
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
     CONSTRAINT fk_polloption_id FOREIGN KEY(poll_option_id) REFERENCES poll_options(id),
-    UNIQUE(user_id),
     CHECK (poll_option_id IS NOT NULL OR event_id IS NOT NULL OR comment_id IS NOT NULL OR answer_id IS NOT NULL)
 );
 

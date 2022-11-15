@@ -45,7 +45,10 @@ Route::get('event/{id}', 'EventController@show');
 Route::get('about', 'StaticPageController@about');
 Route::get('contact', 'StaticPageController@contact');
 Route::get('faq', 'StaticPageController@faq');
-Route::get('submitContact', 'StaticPageController@submitContact');
 
-// Search Bar
-Route::get('/search','HomepageController@search');
+
+// Actions
+Route::get('/search', 'HomepageController@search');
+Route::get('submitContact', 'StaticPageController@submitContact');
+Route::get('/vote', 'VoteController@vote');
+

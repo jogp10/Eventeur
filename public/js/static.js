@@ -13,8 +13,3 @@ function toggleDescription(id) {
         y.style.display = "block";
     }
 }
-
-function upVote(id, type) {
-    console.log(id);
-    console.log(type);
-}
