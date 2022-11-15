@@ -24,7 +24,6 @@
                 <div class="border border-grey m-0 my-5 p-0 text-center" style="min">
                     <p class="mt-3 fs-4">There are no invites.</p>
                 </div>
-
             </div>
             <div class="border border-grey m-0 p-0">
                 <div class="calendar">

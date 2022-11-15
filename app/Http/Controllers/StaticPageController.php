@@ -37,4 +37,30 @@ class StaticPageController extends Controller
     {
         return view('pages.static.faq');
     }
+
+    /**
+     * Submit Contact Request.
+     * 
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function submitContact(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'content' => 'required',
+        ]);
+
+        $data = array(
+            'name' => $request->name,
+            'email' => $request->email,
+            'subject' => $request->subject,
+            'message' => $request->message,
+        );
+
+        
+        return redirect()->back()->with('message', 'Your message has been sent successfully!');
+    }
 }

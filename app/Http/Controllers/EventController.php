@@ -50,6 +50,10 @@ class EventController extends Controller
     {
         $event = Event::find($id);
         if ($event->privacy == "Private") {
+            $tickets = DB::table('userticketevent')
+                ->where('event_id', $id)
+                ->get();
+
             $this->authorize('view', $event);
         }
 

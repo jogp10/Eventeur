@@ -5,19 +5,19 @@
 <div class="container-md ">
     <div class="row align-items-center">
         <div class="col">
-            <h1 style="padding:6rem 0rem 3rem 0rem">Contact Us</h1>
-            <form action="/">
+            <h1>Contact Us</h1>
+            <form method="GET" action=" {{ action('StaticPageController@submitContact') }} ">
                 <label for="name">Name</label><br>
-                <input type="text" id="name" name="name" style="width:80%"><br>
+                <input type="text" id="name" name="name"><br>
                 <label for="email">Email</label><br>
-                <input type="email" id="email" name="email" style="width:80%"><br>
+                <input type="text" id="email" name="email"><br>
                 <label for="subject">Subject</label><br>
-                <input type="text" id="subject" name="subject" style="width:80%"><br><br>
+                <input type="text" id="subject" name="subject"><br><br>
                 <textarea id="content" name="content" rows="10" cols="45"></textarea><br><br>
-                <input type="submit" value="Send Request" style="right:0">
+                <input type="submit" value="Send Request">
             </form>
         </div>
-        <div class="col" style="text-align:center;">
+        <div class="col">
             <img src="images/logo_big.png" class="img-fluid" height="600" width="800" alt="...">
         </div>
     </div>

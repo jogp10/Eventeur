@@ -14,23 +14,29 @@
   <!-- Styles -->
   <link href="{{ asset('css/milligram.min.css') }}" rel="stylesheet">
   <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+  <link href="{{ asset('css/static.css') }}" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
   <script>
     // Fix for Firefox autofocus CSS bug
     // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
   </script>
-  <script src={{ asset('js/app.js') }} defer>
-  </script>
+  <script src={{ asset('js/app.js') }} defer></script>
+  <script src={{ asset('js/static.js') }} defer></script>
 </head>
 
 <body>
+  @include("partials.header")
   <main>
-    @include("partials.header")
+    @if( Session::has('message'))
+    <div class="alert alert-success" role="alert">
+      {{ Session::get('message')}}
+    </div>
+    @endif
     <section id="content">
       @yield('content')
     </section>
-    @include("partials.footer")
   </main>
+  @include("partials.footer")
 
 
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>

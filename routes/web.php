@@ -36,12 +36,16 @@ Route::post('register', 'Auth\RegisterController@register')->name('register');
 Route::get('profile', 'ProfileController@show');
 Route::get('editProfile', 'ProfileController@showEditPage');
 Route::post('editProfile', 'ProfileController@edit')->name('editProfile');
-Route::get('event/{id}', 'EventController@show');
 Route::get('settigsProfile', 'ProfileController@showSettingsPage');
+
+//Event
+Route::get('event/{id}', 'EventController@show');
 
 //Static Pages
 Route::get('about', 'StaticPageController@about');
 Route::get('contact', 'StaticPageController@contact');
 Route::get('faq', 'StaticPageController@faq');
+Route::get('submitContact', 'StaticPageController@submitContact');
+
 // Search Bar
 Route::get('/search','HomepageController@search');
