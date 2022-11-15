@@ -16,4 +16,13 @@ class Vote extends Model
     public function user() { return $this->belongsTo(User::class); }
 
     public function pollOptions() { return $this->belongsTo(PollOption::class); }
+
+    public function event() { return $this->belongsTo(Event::class); }
+
+
+    public function comment() { return $this->belongsTo(Comment::class); }
+
+
+    public function answer() { return $this->belongsTo(Answer::class); }
+
 }

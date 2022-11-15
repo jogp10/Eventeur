@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Answer;
 use App\Models\Ticket;
+use App\Models\Vote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -65,6 +66,7 @@ class EventController extends Controller
         $event = Event::find($id);
 
         $event['manager'] = Account::find($event->user_id)->name;
+        $event['votes'] = Vote::where('event_id', $event->id)->count();
 
         if ($event->privacy == "Private") {
             $tickets = Ticket::where([
@@ -84,10 +86,12 @@ class EventController extends Controller
         foreach ($comments as $comment) {
 
             $comment['author'] = Account::find($comment['user_id'])->name;
+            $comment['votes'] = Vote::where('comment_id', $comment['id'])->count();
 
             $answers = Answer::where('comment_id', $comment['id'])->get();
             foreach ($answers as $answer) {
                 $answer['author'] = Account::find($answer['user_id'])->name;
+                $answer['votes'] = Vote::where('answer_id', $answer['id'])->count();
             }
 
             array_push($combined, [$comment, $answers]);

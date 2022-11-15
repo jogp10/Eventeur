@@ -218,12 +218,16 @@ CREATE TABLE poll_options (
 CREATE TABLE votes (
     id              SERIAL PRIMARY KEY,
     user_id         INTEGER DEFAULT -1,
-    poll_option_id  INTEGER NOT NULL,
+    poll_option_id  INTEGER,
+    event_id        INTEGER,
+    comment_id      INTEGER,
+    answer_id      INTEGER,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
     CONSTRAINT fk_polloption_id FOREIGN KEY(poll_option_id) REFERENCES poll_options(id),
-    UNIQUE(user_id)
+    UNIQUE(user_id),
+    CHECK (poll_option_id IS NOT NULL OR event_id IS NOT NULL OR comment_id IS NOT NULL OR answer_id IS NOT NULL)
 );
 
 CREATE TABLE reports (

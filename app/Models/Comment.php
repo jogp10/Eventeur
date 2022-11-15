@@ -19,4 +19,6 @@ class Comment extends Model
     public function Notification() { return $this->hasOne(CommentNotification::class); }
 
     public function answers() { return $this->hasMany(Answer::class); }
+
+    public function votes() { return $this->hasMany(Vote::class); }
 }

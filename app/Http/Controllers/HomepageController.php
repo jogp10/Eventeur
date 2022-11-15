@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Account;
+use App\Models\Vote;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -17,6 +18,7 @@ class HomepageController extends Controller {
                 ->get();
         foreach ($events as $event) {
             $event['manager'] = Account::find($event->user_id)->name;
+            $event['votes'] = Vote::where('event_id', $event->id)->count();
         }
         
     
