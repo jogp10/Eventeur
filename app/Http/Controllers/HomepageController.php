@@ -21,7 +21,30 @@ class HomepageController extends Controller {
     public function search(){
         $search_text = $_GET['query'];
 
-        $events = DB::table('events')->whereFullText('name', $search_text)->get(); //->where('name', $search_text);
+        if(mb_substr($search_text, 0,1) == "\""){
+            $events = DB::table('events')->whereFullText('name', $search_text)->get();
+            $eventsByDescripton = DB::table('events')->whereFullText('description', $search_text)->get();
+            $eventsByLocation = DB::table('events')->whereFullText('location', $search_text)->get();
+            foreach($eventsByDescripton as $value){
+                $events->add($value);
+            }
+            foreach($eventsByLocation as $value){
+                $events->add($value);
+            }
+
+        }
+        else{
+            $events = DB::table('events')->where('name', 'like', '%'.$search_text.'%')->get();
+            $eventsByDescripton = DB::table('events')->where('description', 'like', '%'.$search_text.'%')->get();
+            $eventsByLocation = DB::table('events')->where('location', 'like', '%'.$search_text.'%')->get();
+            foreach($eventsByDescripton as $value){
+                $events->add($value);
+            }
+            foreach($eventsByLocation as $value){
+                $events->add($value);
+            }
+        }
+        
         return view('pages.home', ['events' => $events]);
     }
 }
