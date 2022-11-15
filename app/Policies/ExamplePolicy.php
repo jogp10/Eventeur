@@ -3,24 +3,22 @@
 namespace App\Policies;
 
 use App\Models\Account;
-use App\Models\User;
-use App\Models\Event;
 use App\Models\example;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Auth\Access\Response;
 
-class EventPolicy
+class ExamplePolicy
 {
     use HandlesAuthorization;
 
     /**
      * Determine whether the user can view any models.
      *
-     * @param \App\Models\User  $account
+     * @param  \App\Models\Account  $account
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(Account $account, Event $event)
+    public function view(Account $account)
     {
+        //
         return True;
     }
 

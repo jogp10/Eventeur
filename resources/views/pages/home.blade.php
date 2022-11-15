@@ -1,11 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<section id="events">
-    <div class="container-md">
-      @each('partials.event', $events, 'event')
-    </div>
-<section>
+<div class="container-md">
+  @each('partials.event', $events, 'event')
+</div>
 @endsection
-
- 

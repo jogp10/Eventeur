@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Account;
 
 class HomepageController extends Controller {
 
@@ -14,7 +15,15 @@ class HomepageController extends Controller {
                 ->inRandomOrder()
                 ->limit(8)
                 ->get();
-    
+
+        $users = DB::table('account')
+                ->get();
+
+        
+        
+
+
+
         return view('pages.home', ['events' => $events]);
     }
 

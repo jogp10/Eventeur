@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class User extends Authenticatable {
-    use Notifiable;
+class User extends Model {
+    use HasFactory;
 
     protected $table = "users";
 
@@ -16,7 +18,7 @@ class User extends Authenticatable {
 
     public function events_owned() {return $this->belongsToMany('App\Models\Event');}
 
-    public function account() {return $this->belongsTo('App\Models\Account','id');}
+    public function account() {return $this->belongsTo('App\Models\Account','account_id','id');}
 
     public function invites() {return $this->belongsToMany('App\Models\Event')->withPivot('content');}
 

@@ -737,4 +737,18 @@ VALUES
   (9,8),
   (12,12),
   (20,16);
-    
+
+
+INSERT INTO TICKET (price)
+VALUES
+    (1);
+
+
+INSERT INTO UserTicketEvent (user_id, event_id, ticket_id, num_tickets)
+VALUES
+    (3, 1, 1, 1);
+
+	
+INSERT INTO COMMENT (user_id, event_id, content, written_date)
+VALUES
+   (3, 1, 'Great job the organizer team has done here!', '2021-02-10');
