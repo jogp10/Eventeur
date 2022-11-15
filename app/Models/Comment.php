@@ -5,7 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Comment extends Model {
+class Comment extends Model
+{
     use HasFactory;
 
     protected $table = "comment";
@@ -15,8 +16,12 @@ class Comment extends Model {
     protected $fillable = [
         'content', 'date', 'edited'
     ];
+    var $comment, $answers;
 
-    public function replies() {return $this->belongsToMany('App\Models\Comment');}
     
-    public function notification() {return $this->hasOne('App\Models\CommentNotification');}
+
+    public function notification()
+    {
+        return $this->hasOne('App\Models\CommentNotification');
+    }
 }

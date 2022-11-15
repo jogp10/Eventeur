@@ -291,7 +291,7 @@ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION check_attendee() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF (SELECT COUNT(*) FROM userticketevent WHERE user_id = NEW.user_id AND event_id = NEW.event_id) = 0 THEN
+    IF (SELECT COUNT(*) FROM userticketevent WHERE user_id = NEW.user_id AND event_id = NEW.event_id) = 0 AND (SELECT COUNT(*) FROM MANAGER WHERE account_id = NEW.user_id AND event_id = NEW.event_id) = 0 THEN
         RAISE EXCEPTION 'User is not an attendee of the event';
     END IF;
     RETURN NEW;
@@ -541,14 +541,14 @@ VALUES
   (1,49),
   (2,14),
   (3,86),
-  (4,64),
+  (4,64),   
   (5,96),
   (6,50),
   (7,48),
   (8,2),
   (9,75),
   (10,51);
-  
+
 
 INSERT INTO _USER (id, account_id)
 VALUES
@@ -752,3 +752,12 @@ VALUES
 INSERT INTO COMMENT (user_id, event_id, content, written_date)
 VALUES
    (3, 1, 'Great job the organizer team has done here!', '2021-02-10');
+
+INSERT INTO COMMENT (user_id, event_id, content, written_date)
+VALUES
+   (45, 1, 'Thank you for your answer.', '2021-02-10');
+
+INSERT INTO ANSWER (comment_id, answer_id)
+VALUES
+   (1, 2),
+

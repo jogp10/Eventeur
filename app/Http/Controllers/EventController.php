@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Answer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -9,6 +10,17 @@ use Illuminate\Support\Facades\Gate;
 
 use App\Models\Event;
 use App\Models\Account;
+use App\Models\Comment;
+
+function console_log($output, $with_script_tags = true)
+{
+    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
+        ');';
+    if ($with_script_tags) {
+        $js_code = '<script>' . $js_code . '</script>';
+    }
+    echo $js_code;
+}
 
 class EventController extends Controller
 {
@@ -57,12 +69,33 @@ class EventController extends Controller
             $this->authorize('view', $event);
         }
 
-        $comments = DB::table('comment')
-            ->where('event_id', $id)
-            ->orderBy('written_date', 'desc')
-            ->get();
+        $comments = Event::find($event->id)
+            ->comments()
+            ->get()
+            ->toArray();
 
-        return view('pages.event', ['event' => $event, 'comments' => $comments]);
+
+        $comments = array_filter($comments, function ($comment) {
+            if (Answer::where('answer_id', $comment['id'])->get()->count() == 0) {
+                return true;
+            }
+            return false;
+        });
+
+
+        $replies = [];
+        foreach ($comments as $comment) {
+            $ids = Answer::where('comment_id', $comment['id'])->get();
+            $answers = [];
+            foreach ($ids as $id) {
+                array_push($answers, Comment::find($id->answer_id));
+            }
+            if (count($answers) > 0) {
+                array_push($replies, $answers);
+            }
+        }
+
+        return view('pages.event', ['event' => $event, 'comments' => $comments, 'replies' => $replies]);
     }
 
     /**
