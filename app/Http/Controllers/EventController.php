@@ -83,19 +83,19 @@ class EventController extends Controller
         });
 
 
-        $replies = [];
+        $combined = [];
         foreach ($comments as $comment) {
             $ids = Answer::where('comment_id', $comment['id'])->get();
             $answers = [];
             foreach ($ids as $id) {
                 array_push($answers, Comment::find($id->answer_id));
             }
-            if (count($answers) > 0) {
-                array_push($replies, $answers);
-            }
+            array_push($combined, [$comment, $answers]);
         }
 
-        return view('pages.event', ['event' => $event, 'comments' => $comments, 'replies' => $replies]);
+        console_log($combined);
+
+        return view('pages.event', ['event' => $event, 'comments' => $combined]);
     }
 
     /**
