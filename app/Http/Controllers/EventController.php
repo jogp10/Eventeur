@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Gate;
 use App\Models\Event;
 use App\Models\Account;
 use App\Models\Comment;
+use App\Models\UserEventTicket;
 
 function console_log($output, $with_script_tags = true)
 {
@@ -63,9 +64,7 @@ class EventController extends Controller
         $event = Event::find($id);
         console_log($event->manager);
         if ($event->privacy == "Private") {
-            $tickets = DB::table('userticketevent')
-                ->where('event_id', $id)
-                ->get();
+            $tickets = UserEventTicket::where('event_id', $id)->get();
 
             $this->authorize('view', $event);
         }

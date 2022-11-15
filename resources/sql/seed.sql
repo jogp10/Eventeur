@@ -1,16 +1,15 @@
 drop table if exists accounts CASCADE;
 drop table if exists cover_images CASCADE;
-drop table if exists perfil_images CASCADE;
+drop table if exists profile_images CASCADE;
 drop table if exists users CASCADE;
 drop table if exists admins CASCADE;
 drop table if exists events CASCADE;
 drop table if exists tags CASCADE;
 drop table if exists event_tags CASCADE;
 drop table if exists tickets CASCADE;
-drop table if exists user_event_tickets CASCADE;
 drop table if exists invites CASCADE;
 drop table if exists notifications CASCADE;
-drop table if exists invitesNotification CASCADE;
+drop table if exists invite_notifications CASCADE;
 drop table if exists comments CASCADE;
 drop table if exists comment_notifications CASCADE;
 drop table if exists answers CASCADE;
@@ -18,6 +17,7 @@ drop table if exists polls CASCADE;
 drop table if exists poll_options CASCADE;
 drop table if exists votes CASCADE;
 drop table if exists reports CASCADE;
+drop table if exists bans CASCADE;
 
 DROP TYPE IF EXISTS privacy CASCADE;
 
@@ -44,42 +44,6 @@ CREATE TABLE accounts (
     UNIQUE(email)
 );
 
-CREATE TABLE events (
-    id SERIAL PRIMARY KEY,
-    name        TEXT NOT NULL,
-    description TEXT,
-    start_date  DATE NOT NULL,
-    end_date    DATE NOT NULL,
-    location    TEXT NOT NULL,
-    capacity    INTEGER NOT NULL,
-    privacy     privacy DEFAULT 'Public', 
-    manager_id     INTEGER NOT NULL,
-    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CHECK (start_date < end_date),
-    CHECK (capacity > 0)
-);
-
-CREATE TABLE cover_images (
-    id SERIAL PRIMARY KEY,
-    events_id   INTEGER NOT NULL,
-    path        TEXT NOT NULL,
-    CONSTRAINT fk_events_id FOREIGN KEY(events_id) REFERENCES events(id),
-    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    UNIQUE(events_id)
-);
-
-CREATE TABLE perfil_images (
-    id SERIAL PRIMARY KEY,
-    accounts_id  INTEGER DEFAULT -1,
-    path        TEXT NOT NULL,
-    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_accounts_id FOREIGN KEY(accounts_id) REFERENCES accounts(id),
-    UNIQUE(accounts_id)
-);
-
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     accounts_id  INTEGER DEFAULT -1,
@@ -96,6 +60,43 @@ CREATE TABLE admins (
     CONSTRAINT fk_accounts_id  FOREIGN KEY(accounts_id) REFERENCES accounts(id)
 );
 
+CREATE TABLE events (
+    id SERIAL PRIMARY KEY,
+    name        TEXT NOT NULL,
+    description TEXT NOT NULL,
+    start_date  DATE NOT NULL,
+    end_date    DATE NOT NULL,
+    location    TEXT NOT NULL,
+    capacity    INTEGER NOT NULL,
+    privacy     privacy DEFAULT 'Public', 
+    user_id     INTEGER NOT NULL,
+    ticket     INTEGER NOT NULL DEFAULT 0,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id),
+    CHECK (start_date < end_date),
+    CHECK (capacity > 0)
+);
+
+CREATE TABLE cover_images (
+    id SERIAL PRIMARY KEY,
+    event_id   INTEGER NOT NULL,
+    path        TEXT NOT NULL,
+    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES events(id),
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    UNIQUE(event_id)
+);
+
+CREATE TABLE profile_images (
+    id SERIAL PRIMARY KEY,
+    account_id  INTEGER DEFAULT -1,
+    path        TEXT NOT NULL,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_account_id FOREIGN KEY(account_id) REFERENCES accounts(id),
+    UNIQUE(account_id)
+);
 
 CREATE TABLE tags (
     id          SERIAL PRIMARY KEY,
@@ -108,33 +109,25 @@ CREATE TABLE tags (
 CREATE TABLE event_tags (
     id          SERIAL PRIMARY KEY,
     event_id    INTEGER NOT NULL,
-    tags_id      INTEGER NOT NULL,
+    tag_id      INTEGER NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_event_id  FOREIGN KEY(event_id) REFERENCES events(id),
-    CONSTRAINT fk_tags_id  FOREIGN KEY(tags_id) REFERENCES tags(id),
-    UNIQUE(event_id, tags_id)
+    CONSTRAINT fk_tag_id  FOREIGN KEY(tag_id) REFERENCES tags(id),
+    UNIQUE(event_id, tag_id)
 );
 
 CREATE TABLE tickets (
     id          SERIAL PRIMARY KEY,
+    event_id    INTEGER NOT NULL,
+    user_id     INTEGER NOT NULL,
+    num_of_tickets INTEGER NOT NULL,
     price       REAL DEFAULT 0,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at  TIMESTAMP NOT NULL DEFAULT NOW()
-);
-
-CREATE TABLE user_event_tickets (
-    id          SERIAL PRIMARY KEY,
-    user_id     INTEGER DEFAULT -1,
-    event_id    INTEGER NOT NULL,
-    tickets_id   INTEGER NOT NULL,
-    num_ticketss INTEGER CHECK (num_ticketss > 0),
-    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_user_id  FOREIGN KEY(user_id) REFERENCES users(id),
     CONSTRAINT fk_event_id  FOREIGN KEY(event_id) REFERENCES events(id),
-    CONSTRAINT fk_tickets_id  FOREIGN KEY(tickets_id) REFERENCES tickets(id),
-    UNIQUE(user_id, event_id, tickets_id)
+    CONSTRAINT fk_user_id  FOREIGN KEY(user_id) REFERENCES users(id),
+    UNIQUE(event_id, user_id)
 );
 
 CREATE TABLE invites (
@@ -150,28 +143,21 @@ CREATE TABLE invites (
 
 CREATE TABLE notifications (
     id          SERIAL PRIMARY KEY,
-    user_id     INTEGER DEFAULT -1,
-    event_id    INTEGER NOT NULL,
     content     TEXT,
     seen        BOOLEAN DEFAULT '0',
-    sent_date        DATE NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
-    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES events(id)
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE invitesNotification (
+CREATE TABLE invite_notifications (
     id              SERIAL PRIMARY KEY,
     notification_id INTEGER NOT NULL,
-    invites_id       INTEGER NOT NULL,
-    user_id         INTEGER DEFAULT -1,
+    invite_id       INTEGER NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_notification_id FOREIGN KEY(notification_id) REFERENCES notifications(id),
-    CONSTRAINT fk_invites_id FOREIGN KEY(invites_id) REFERENCES invites(id),
-    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
-    UNIQUE(notification_id, invites_id, user_id)
+    CONSTRAINT fk_invite_id FOREIGN KEY(invite_id) REFERENCES invites(id),
+    UNIQUE(notification_id, invite_id)
 );
 
 CREATE TABLE comments (
@@ -179,7 +165,6 @@ CREATE TABLE comments (
     user_id         INTEGER DEFAULT -1,
     event_id        INTEGER NOT NULL,
     content         TEXT NOT NULL,
-    written_date    DATE NOT NULL CHECK (written_date <= CURRENT_DATE),
     edited          BOOLEAN DEFAULT '0',
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -191,24 +176,23 @@ CREATE TABLE comment_notifications (
     id              SERIAL PRIMARY KEY,
     notification_id INTEGER NOT NULL,
     comment_id      INTEGER NOT NULL,
-    user_id         INTEGER DEFAULT -1,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_notification_id FOREIGN KEY(notification_id) REFERENCES notifications(id),
     CONSTRAINT fk_comment_id FOREIGN KEY(comment_id) REFERENCES comments(id),
-    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
-    UNIQUE(notification_id, comment_id, user_id)
+    UNIQUE(notification_id, comment_id)
 );
 
 CREATE TABLE answers (
     id              SERIAL PRIMARY KEY,
     comment_id      INTEGER NOT NULL,
-    answer_id       INTEGER NOT NULL,
+    user_id         INTEGER DEFAULT -1,
+    content         TEXT NOT NULL,
+    edited          BOOLEAN DEFAULT '0',
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_comment_id FOREIGN KEY(comment_id) REFERENCES comments(id),
-    CONSTRAINT fk_answer_id FOREIGN KEY(answer_id) REFERENCES comments(id),
-    UNIQUE(answer_id)
+    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
+    CONSTRAINT fk_comment_id FOREIGN KEY(comment_id) REFERENCES comments(id)
 );
 
 CREATE TABLE polls (
@@ -247,11 +231,20 @@ CREATE TABLE reports (
     user_id         INTEGER DEFAULT -1,
     event_id        INTEGER NOT NULL,
     content         TEXT NOT NULL,
-    written_date    DATE NOT NULL CHECK (written_date <= CURRENT_DATE),
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
     CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES events(id)
+);
+
+CREATE TABLE bans (
+    id              SERIAL PRIMARY KEY,
+    admin_id        INTEGER NOT NULL,
+    user_id         INTEGER DEFAULT -1,
+    ban_type        INTEGER NOT NULL,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
 --Functions
@@ -262,7 +255,7 @@ CREATE OR REPLACE FUNCTION
     	INSERT INTO notifications(user_id, event_id, content, sent_date)
     	VALUES (NEW.user_id, NEW.event_id, 'invitesd to event', NOW()) RETURNING notif_id ;
     	
-    	INSERT INTO invitesnotification(notification_id, invites_id, user_id)
+    	INSERT INTO invite_notifications(notification_id, invites_id, user_id)
     	VALUES (notif_id, New.id, New.user_id);
 
         RETURN NEW;
@@ -281,10 +274,10 @@ CREATE OR REPLACE FUNCTION
             SELECT DISTINCT user_id
             FROM (
                 SELECT user_id
-                FROM user_event_tickets
+                FROM tickets
                 WHERE event_id = OLD.id
                 UNION
-                SELECT accounts_id
+                SELECT user_id
                 FROM events
                 WHERE event_id = OLD.id
             ) AS users
@@ -303,7 +296,7 @@ CREATE OR REPLACE FUNCTION create_invites_notification() RETURNS TRIGGER AS $BOD
 			INSERT into notifications (content, user_id, event_id, seen, sent_date) values ('You recied an invites...', NEW.user_id, NEW.event_id, '0', CURRENT_DATE)
 			RETURNING id
 		)
-		INSERT into invitesNotification SELECT inserted.id, NEW.id, NEW.user_id FROM inserted;
+		INSERT into invite_notifications SELECT inserted.id, NEW.id, NEW.user_id FROM inserted;
 		RETURN NEW;
    	END;
 $BODY$ LANGUAGE plpgsql;
@@ -321,7 +314,7 @@ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION check_attendee() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF (SELECT COUNT(*) FROM user_event_tickets WHERE user_id = NEW.user_id AND event_id = NEW.event_id) = 0 AND (SELECT COUNT(*) FROM events WHERE manager_id = NEW.user_id AND id = NEW.event_id) = 0 THEN
+    IF (SELECT COUNT(*) FROM tickets WHERE user_id = NEW.user_id AND event_id = NEW.event_id) = 0 AND (SELECT COUNT(*) FROM events WHERE user_id = NEW.user_id AND id = NEW.event_id) = 0 THEN
         RAISE EXCEPTION 'User is not an attendee of the event';
     END IF;
     RETURN NEW;
@@ -333,7 +326,6 @@ CREATE OR REPLACE FUNCTION delete_user() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     UPDATE comments SET user_id = 1 WHERE user_id = OLD.id;
-    UPDATE user_event_tickets SET user_id = 1 WHERE user_id = OLD.id;
     UPDATE invites SET user_id = 1 WHERE user_id = OLD.id;
     UPDATE events SET accounts_id = 1 WHERE accounts_id = OLD.id;
     UPDATE notifications SET user_id = 1 WHERE user_id = OLD.id;
@@ -347,7 +339,7 @@ LANGUAGE plpgsql;
 Drop TRIGGER IF EXISTS delete_comment ON comments;
 Drop TRIGGER IF EXISTS cancel_event_notification ON events;
 Drop TRIGGER IF EXISTS invites_event_notification ON invites;
-Drop TRIGGER IF EXISTS check_attendee ON user_event_tickets;
+Drop TRIGGER IF EXISTS check_attendee ON tickets;
 Drop TRIGGER IF EXISTS delete_user ON users;
 
 -- Trigger 1
@@ -464,7 +456,7 @@ END TRANSACTION;*/
 
 INSERT INTO accounts (email, name, password, description, age)
 VALUES
-  ('id@outlook.edu','Alexander Mccormick','MRS20KYI7ST','aliquet vel, vulputate eu, odio. Phasellus at augue id ante dictum cursus.',38),
+  ('anynomous@anynomous.com','deleted account','MRS20KYI7ST','deleted account',999),
   ('ante.ipsum@icloud.org','Tobias Rodriquez','YEK65KFW7BP','enim diam vel arcu. Curabitur ut odio vel est tempor bibendum. Donec felis orci, adipiscing',18),
   ('purus.ac@aol.org','Clark Franklin','JSZ36EKV3JZ','nascetur ridiculus mus. Aenean eget magna. Suspendisse tristique neque venenatis lacus. Etiam bibendum fermentum metus. Aenean sed pede nec ante',53),
   ('iaculis.lacus@outlook.couk','Inez Hopper','EKI16OVT3BM','Cras sed leo. Cras vehicula aliquet libero. Integer in magna. Phasellus dolor elit, pellentesque a, facilisis non, bibendum sed,',54),
@@ -674,7 +666,7 @@ VALUES
   (100,100);
 
 
-INSERT INTO events (manager_id, name,description,start_date,end_date,location,capacity,privacy)
+INSERT INTO events (user_id, name,description,start_date,end_date,location,capacity,privacy)
 VALUES
   (45,'eu dolor egestas rhoncus. Proin nisl sem, consequat','In lorem. Donec elementum, lorem ut aliquam iaculis, lacus pede sagittis augue, eu tempor erat neque non quam.','2021-10-25', '2021-11-13','P.O. Box 737, 2366 Diam Av.',417,'Private'),
   (98,'magnis dis parturient montes, nascetur ridiculus','tellus. Aenean egestas hendrerit neque. In ornare sagittis felis. Donec tempor, est ac mattis semper, dui lectus rutrum urna, nec luctus felis purus ac tellus. Suspendisse sed dolor. Fusce mi lorem, vehicula et, rutrum eu, ultrices sit amet,','2021-10-22','2021-11-20','Ap #415-6093 Eget Street',380,'Public'),
@@ -685,7 +677,7 @@ VALUES
   (79,'Sed malesuada augue ut','lobortis risus. In mi pede, nonummy ut, molestie in, tempus eu, ligula. Aenean euismod mauris eu elit. Nulla facilisi. Sed neque. Sed eget lacus.','2021-10-28','2021-11-13','249-9537 Eget, Avenue',324,'Public'),
   (19,'vehicula aliquet libero. Integer in magna.','consequat, lectus sit amet luctus vulputate, nisi sem semper erat, in consectetuer ipsum nunc id enim. Curabitur massa. Vestibulum accumsan neque et nunc. Quisque ornare','2021-10-21','2021-11-22','757-8707 Mi. Ave',361,'Public'),
   (45,'arcu. Curabitur ut','euismod ac, fermentum vel, mauris. Integer sem elit, pharetra ut, pharetra sed, hendrerit a, arcu. Sed et libero. Proin mi. Aliquam gravida mauris ut mi. Duis risus odio, auctor vitae, aliquet','2021-10-26','2021-11-17','Ap #257-9182 Sapien. Ave',274,'Public'),
-  (14,'augue scelerisque mollis.','sit amet ornare lectus justo eu arcu. Morbi sit amet massa. Quisque porttitor eros nec tellus. Nunc lectus pede, ultrices a, auctor non, feugiat nec,','2021-10-23','2021-11-13','246-6797 Pharetra, Road',475,'Private'),
+  (15,'augue scelerisque mollis.','sit amet ornare lectus justo eu arcu. Morbi sit amet massa. Quisque porttitor eros nec tellus. Nunc lectus pede, ultrices a, auctor non, feugiat nec,','2021-10-23','2021-11-13','246-6797 Pharetra, Road',475,'Private'),
   (71,'dolor. Quisque tincidunt pede ac','metus vitae velit egestas lacinia. Sed congue, elit sed consequat auctor, nunc nulla vulputate dui, nec tempus mauris erat eget ipsum. Suspendisse sagittis. Nullam vitae','2021-10-23','2021-11-24','5716 Augue St.',364,'Private'),
   (83,'risus. Donec egestas. Aliquam nec enim.','mollis. Duis sit amet diam eu dolor egestas rhoncus. Proin nisl sem, consequat nec, mollis vitae, posuere at, velit. Cras','2021-10-26','2021-11-06','123-8901 Lacus. Av.',73,'Public'),
   (5,'pede, nonummy ut, molestie','Donec vitae erat vel pede blandit congue. In scelerisque scelerisque dui. Suspendisse ac metus vitae velit egestas lacinia. Sed congue,','2021-10-23','2021-11-18','Ap #886-3769 Ligula Av.',493,'Private'),
@@ -722,7 +714,7 @@ VALUES
   ('urna.');
 
 
-INSERT INTO event_tags (event_id,tags_id)
+INSERT INTO event_tags (event_id,tag_id)
 VALUES
   (2,3),
   (18,4),
@@ -745,23 +737,14 @@ VALUES
   (12,12),
   (20,16);
 
-
-INSERT INTO tickets (price)
+INSERT INTO tickets (user_id, event_id, num_of_tickets)
 VALUES
-    (1);
-
-
-INSERT INTO user_event_tickets (user_id, event_id, tickets_id, num_ticketss)
-VALUES
-    (3, 1, 1, 1);
-
+    (3, 1, 5);
 	
-INSERT INTO comments (user_id, event_id, content, written_date)
+INSERT INTO comments (user_id, event_id, content)
 VALUES
-   (3, 1, 'Great job the organizer team has done here!', '2021-02-10'),
-   (45, 1, 'Thank you for your answers.', '2021-02-10');
+   (3, 1, 'Great job the organizer team has done here!');
 
-INSERT INTO answers (comment_id, answer_id)
+INSERT INTO answers (comment_id, user_id, content)
 VALUES
-   (1, 2);
-
+   (1, 45, 'Danke!');

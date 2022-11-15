@@ -7,6 +7,16 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
+function console_log($output, $with_script_tags = true)
+{
+    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
+        ');';
+    if ($with_script_tags) {
+        $js_code = '<script>' . $js_code . '</script>';
+    }
+    echo $js_code;
+}
+
 class RegisterController extends Controller
 {
     /*
@@ -36,6 +46,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
+        console_log('construct');
         $this->middleware('guest');
     }
 
@@ -47,6 +58,7 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+        console_log('Validator');
         
         return Validator::make($data, [
             'name' => 'required|string|max:255',
@@ -63,6 +75,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        console_log('data');
         return Account::create([
             'name' => $data['name'],
             'email' => $data['email'],

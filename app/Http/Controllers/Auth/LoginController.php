@@ -5,6 +5,15 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
+function console_log($output, $with_script_tags = true)
+{
+    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
+        ');';
+    if ($with_script_tags) {
+        $js_code = '<script>' . $js_code . '</script>';
+    }
+    echo $js_code;
+}
 class LoginController extends Controller
 {
     /*
@@ -33,14 +42,20 @@ class LoginController extends Controller
      * @return void
      */
     public function __construct() {
+        console_log('construct login');
+
         $this->middleware('guest')->except('logout');
     }
 
     public function getUser($request){
+        console_log('getuser');
+
         return $request->user();
     }
 
     public function home() {
+        console_log('home');
+
         return redirect('login');
     }
 
