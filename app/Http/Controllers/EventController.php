@@ -63,11 +63,14 @@ class EventController extends Controller
     public function show($id)
     {
         $event = Event::find($id);
+
         $event['manager'] = Account::find($event->user_id)->name;
-        console_log($event->manager);
+
         if ($event->privacy == "Private") {
-            $tickets = Ticket::where([['event_id', '=', $id],
-            ['user_id', '=', Auth::id()]])->get();
+            $tickets = Ticket::where([
+                ['event_id', '=', $id],
+                ['user_id', '=', Auth::id()]
+            ])->get();
 
             $this->authorize('view', $event);
         }
@@ -77,20 +80,18 @@ class EventController extends Controller
             ->get()
             ->toArray();
 
-
         $combined = [];
         foreach ($comments as $comment) {
-            $comment['author'] = Account::find($comment['user_id'])->name;
-            $answers = Answer::where('comment_id', $comment['id'])->get();
 
+            $comment['author'] = Account::find($comment['user_id'])->name;
+
+            $answers = Answer::where('comment_id', $comment['id'])->get();
             foreach ($answers as $answer) {
                 $answer['author'] = Account::find($answer['user_id'])->name;
             }
 
             array_push($combined, [$comment, $answers]);
         }
-
-        console_log($combined);
 
         return view('pages.event', ['event' => $event, 'comments' => $combined]);
     }
