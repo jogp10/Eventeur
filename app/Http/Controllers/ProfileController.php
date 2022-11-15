@@ -45,7 +45,9 @@ class ProfileController extends Controller
      */
     public function show() {
 
-        print_r(Auth::user()->user);
+        #$user = Auth::user()->user();
+
+        #print_r($user->first());
 
         return view('pages.profile', ['account' => Auth::user()]);
     }

@@ -16,7 +16,7 @@ class User extends Authenticatable {
 
     public function events_owned() {return $this->belongsToMany('App\Models\Event');}
 
-    public function account() {return $this->belongsTo('App\Models\Account');}
+    public function account() {return $this->belongsTo('App\Models\Account','id');}
 
     public function invites() {return $this->belongsToMany('App\Models\Event')->withPivot('content');}
 
