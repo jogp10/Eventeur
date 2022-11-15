@@ -61,6 +61,7 @@ class EventController extends Controller
     public function show($id)
     {
         $event = Event::find($id);
+        console_log($event->manager);
         if ($event->privacy == "Private") {
             $tickets = DB::table('userticketevent')
                 ->where('event_id', $id)
@@ -87,8 +88,13 @@ class EventController extends Controller
         foreach ($comments as $comment) {
             $ids = Answer::where('comment_id', $comment['id'])->get();
             $answers = [];
+            $comment['author'] = Account::find($comment['user_id'])->name;
+            $comment['edited'] = $comment['edited'] ? "edited" : "";
             foreach ($ids as $id) {
-                array_push($answers, Comment::find($id->answer_id));
+                $answer = Comment::find($id->answer_id);
+                $answer['author'] = Account::find($answer->user_id)->name;
+                $answer['edited'] = $answer['edited'] ? "edited" : "";
+                array_push($answers, $answer);
             }
             array_push($combined, [$comment, $answers]);
         }
