@@ -13,8 +13,8 @@ class CommentNotification extends Model
         'notification_id', 'comment_id', 'created_at', 'updated_at'
     ];
 
-    public function notification() { return $this->hasOne(Notification::class); }
+    public function notification() { return $this->belongsTo(Notification::class); }
 
-    public function comment() { return $this->hasOne(Comment::class); }
+    public function comment() { return $this->belongsTo(Comment::class); }
 
 }

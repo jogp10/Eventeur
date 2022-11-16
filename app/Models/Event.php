@@ -10,11 +10,11 @@ class Event extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'description', 'start_date', 'end_date', 'location', 'capacity', 'privacy', 'ticket', 'created_at', 'updated_at'
+        'name', 'description', 'start_date', 'end_date', 'location', 'capacity', 'privacy', 'user_id', 'ticket', 'created_at', 'updated_at'
     ];
 
     public function manager() { return $this->belongsTo(User::class); }
-    public function coverImage() { return $this->belongsTo(CoverImage::class); }
+    public function coverImage() { return $this->hasOne(CoverImage::class); }
 
     public function tags() { return $this->belongsToMany(Tag::class); }
 
@@ -27,8 +27,6 @@ class Event extends Model
     public function polls() { return $this->hasMany(Poll::class); }
 
     public function reports() { return $this->hasMany(Report::class); }
-
-    public function ban() { return $this->belongsTo(Ban::class); }
 
     public function votes() { return $this->hasMany(Vote::class); }
 }

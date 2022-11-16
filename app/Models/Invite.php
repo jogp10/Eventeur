@@ -16,6 +16,6 @@ class Invite extends Model
     public function user() { return $this->belongsTo(User::class); }
     public function event() { return $this->belongsTo(Event::class); }
 
-    public function notification() { return $this->belongsTo(Notification::class); }
+    public function notification() { return $this->hasOne(Notification::class); }
 
 }

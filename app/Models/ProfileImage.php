@@ -10,8 +10,8 @@ class ProfileImage extends Model
     use HasFactory;
 
     protected $fillable = [
-        'event_id', 'path', 'created_at', 'updated_at'
+        'user_id', 'path', 'created_at', 'updated_at'
    ];
 
-    public function user() { return $this->hasOne(User::class); }
+    public function user() { return $this->belongsTo(User::class); }
 }

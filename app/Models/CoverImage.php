@@ -13,5 +13,5 @@ class CoverImage extends Model
         'event_id', 'path', 'created_at', 'updated_at'
    ];
 
-    public function event() { return $this->hasOne(Event::class); }
+    public function event() { return $this->belongsTo(Event::class); }
 }

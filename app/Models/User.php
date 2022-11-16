@@ -31,7 +31,7 @@ class User extends Model
 
     public function reports() { return $this->hasMany(Report::class); }
 
-    public function ban() { return $this->belongsTo(Ban::class); }
+    public function ban() { return $this->hasOne(Ban::class); }
 
     
 }

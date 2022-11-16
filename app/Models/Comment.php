@@ -16,7 +16,7 @@ class Comment extends Model
     public function event() { return $this->belongsTo(Event::class); }
 
     public function user() { return $this->belongsTo(User::class); }
-    public function Notification() { return $this->hasOne(CommentNotification::class); }
+    public function notification() { return $this->hasOne(CommentNotification::class); }
 
     public function answers() { return $this->hasMany(Answer::class); }
 
