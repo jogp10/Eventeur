@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Account;
-use App\Models\Vote;
-use App\Models\Event;
 
-use function App\Http\Controllers\console_log as ControllersConsole_log;
+use App\Models\Event;
 
 function console_log($output, $with_script_tags = true)
 {
@@ -27,12 +24,6 @@ class HomepageController extends Controller
         $events = Event::inRandomOrder()
                 ->limit(8)
                 ->get();
-            
-
-        foreach ($events as $event) {
-            $event['manager'] = Account::find($event->user_id)->name;
-            $event['votes'] = Vote::where('event_id', $event->id)->count();
-        }
 
         return view('pages.home', ['events' => $events]);
     }
@@ -62,11 +53,6 @@ class HomepageController extends Controller
             foreach ($eventsByLocation as $value) {
                 $events->add($value);
             }
-        }
-
-        foreach($events as $event) {
-            $event['manager'] = Account::find($event->user_id)->name;
-            $event['votes'] = Vote::where('event_id', $event->id)->count();
         }
 
         return view('pages.home', ['events' => $events]);

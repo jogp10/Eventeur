@@ -13,7 +13,7 @@ class Event extends Model
         'name', 'description', 'start_date', 'end_date', 'location', 'capacity', 'privacy', 'user_id', 'ticket', 'created_at', 'updated_at'
     ];
 
-    public function manager() { return $this->belongsTo(User::class); }
+    public function manager() { return $this->belongsTo(User::class, 'user_id'); }
     public function coverImage() { return $this->hasOne(CoverImage::class); }
 
     public function tags() { return $this->belongsToMany(Tag::class); }
