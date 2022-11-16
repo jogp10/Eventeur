@@ -333,6 +333,7 @@ BEGIN
     UPDATE events SET accounts_id = 1 WHERE accounts_id = OLD.id;
     UPDATE notifications SET user_id = 1 WHERE user_id = OLD.id;
     UPDATE content SET user_id = 1 WHERE user_id = OLD.id;
+    DELETE FROM accounts WHERE id = OLD.id;
     RETURN OLD;
 END
 $BODY$
@@ -344,6 +345,7 @@ Drop TRIGGER IF EXISTS cancel_event_notification ON events;
 Drop TRIGGER IF EXISTS invites_event_notification ON invites;
 Drop TRIGGER IF EXISTS check_attendee ON tickets;
 Drop TRIGGER IF EXISTS delete_user ON users;
+Drop TRIGGER IF EXISTS create_account ON account;
 
 -- Trigger 1
 CREATE TRIGGER invites_event_notification_trigger 
@@ -393,8 +395,19 @@ CREATE INDEX event_name ON events USING btree (name);
 CREATE INDEX event_date ON events USING btree (start_date);
 
 -- Index 11
-ALTER TABLE events
-ADD COLUMN searchs TSVECTOR;
+do $$
+begin
+IF NOT EXISTS( SELECT NULL
+            FROM INFORMATION_SCHEMA.COLUMNS
+           WHERE table_name = 'events'
+             AND table_schema = 'lbaw2224'
+             AND column_name = 'search')  THEN
+
+  ALTER TABLE events ADD search TSVECTOR;
+
+END IF;
+END $$
+LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION event_search_update() RETURNS TRIGGER AS $$
 BEGIN
@@ -418,19 +431,19 @@ BEGIN
 END $$
 LANGUAGE plpgsql;
 
-/*
+
 CREATE TRIGGER event_search_update
  BEFORE INSERT OR UPDATE ON events
  FOR EACH ROW
  EXECUTE PROCEDURE event_search_update();
-*/
-CREATE INDEX search_event ON events USING GIN (searchs);
+
+--CREATE INDEX search_event ON events USING GIN (searchs);
 
 --Index 12
---CREATE INDEX search_users ON users USING GIN (search);
+--CREATE INDEX search_users ON users USING GIN (searchs);
 
 --Index 13
---CREATE INDEX search_comment ON comments USING GIN (search);
+--CREATE INDEX search_comment ON comments USING GIN (searchs);
 
 -- Transactions
 

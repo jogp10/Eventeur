@@ -6,24 +6,10 @@ use App\Models\Answer;
 use App\Models\Ticket;
 use App\Models\Vote;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 
 use App\Models\Event;
 use App\Models\Account;
-use App\Models\Comment;
-use App\Models\UserEventTicket;
-
-function console_log($output, $with_script_tags = true)
-{
-    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
-        ');';
-    if ($with_script_tags) {
-        $js_code = '<script>' . $js_code . '</script>';
-    }
-    echo $js_code;
-}
 
 class EventController extends Controller
 {
