@@ -13,6 +13,6 @@ class Admin extends Model
         'admin_id', 'accounts_id', 'created_at', 'updated_at'
     ];
 
-    public function account() { return $this->hasOne(Account::class); }
+    public function account() { return $this->belongsTo(Account::class); }
 
 }

@@ -18,7 +18,7 @@ class Account extends Authenticatable
     ];
 
 
-    public function user() { return $this->belongsTo(User::class); }
-    public function admin() { return $this->belongsTo(Admin::class); }
+    public function user() { return $this->hasOne(User::class); }
+    public function admin() { return $this->hasOne(Admin::class); }
 
 }
