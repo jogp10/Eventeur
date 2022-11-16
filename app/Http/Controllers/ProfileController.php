@@ -72,7 +72,7 @@ class ProfileController extends Controller
     public function edit(Request $request)
     {
         $validated = $request->validate([
-            'name' => ['unique:accounts', 'max:20'],
+            'name' => ['max:20'],
             'description' => ['max:200'],
         ]);
 
@@ -84,7 +84,7 @@ class ProfileController extends Controller
         }
 
         Auth::user()->save();
-        return view('pages.profile', ['account' => Auth::user()]);
+        return $this->show();
     }
 
     /**
