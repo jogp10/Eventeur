@@ -1,11 +1,10 @@
 <div class="row border border-dark m-5" data-id="{{$event->id}}">
     <div class="container">
         <div class="row align-items-center">
-            <div class="d-flex flex-column col-1 ps-5">
+            <div class="d-flex flex-column col-1 ps-3 align-self-start">
                 @include('partials.form', ['action' => 'up', 'id' => $event->id, 'type' => 'event'])
-                <p class="pt-3 ps-1 pe-0">{{ $event->votes->count() }}</p>
+                <span class="d-flex justify-content-center">{{ $event->votes->count() }}</span>
                 @include('partials.form', ['action' => 'down', 'id' => $event->id, 'type' => 'event'])
-
             </div>
             <div class="col-8">
                 <h3><a style="text-decoration: none; color: black;" href="{{ url('/event') . '/' . $event->id }}">{{$event->name}}</a></h3>

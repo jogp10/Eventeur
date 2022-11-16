@@ -1,9 +1,9 @@
-<form @if ($type != 'event') class="col" @endif method="GET" action="{{ action('VoteController@vote') }}" style="display: inline;padding: 0rem;">
+<form method="GET" class="d-flex justify-content-center" action="{{ action('VoteController@vote') }}">
     <input type="hidden" name="action" value="{{$action}}">
     <input type="hidden" name="id" value="{{$id}}">
     <input type="hidden" name="type" value="{{$type}}">
     <input type="hidden" name="user_id" value="{{Auth::id()}}">
-    <button type="submit" class="btn btn-link ps-0 ms-0">
+    <button type="submit" class="btn btn-link">
 
         @if ($action == 'up')
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">

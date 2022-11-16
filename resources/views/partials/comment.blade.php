@@ -1,19 +1,17 @@
-<div>
-  <div class="container row border border-dark align-items-center" data-id="{{$comment->id}}" style="padding:1rem">
-    <div class="col-3 pe-0 me-0" style="padding-left: 1rem;">
+<div class="p-2" >
+  <div class="border border-dark p-3 ps-4 d-flex flex-row justify-content-start" data-id="{{$comment->id}}">
+    <div class="pe-2">
       <img src="../images/perfil.png" class="img-fluid m-0 p-0" height="80" width="120" alt="...">
     </div>
-    <div class="col-8" style="width: 40rem;">
+    <div class="flex-fill" style="width: 40rem;">
       <h4 style="margin-bottom: 0rem;">{{$comment->user->account->name}}</h4>
       <p class="text-muted" style="margin-left: 0.5rem;">@if ($comment->created_at != $comment->updated_at) edited @endif</p>
       <p>{{ $comment->content }}</p>
-      <div class="row" style="display: flex">
-        <div class="col btn">
-          <div class="row" style="display: inline-block;">
+      <div class="d-flex flex-row">
+        <div class="d-flex flex-row">
             @include('partials.form', ['action' => 'up', 'id' => $comment->id, 'type' => 'comment'])
-            <span class="col" style="padding: 0;width: min-content;display: inline;">{{ $comment->votes->count() }}</span>
+            <span class="" style="line-height:38px;">{{ $comment->votes->count() }}</span>
             @include('partials.form', ['action' => 'down', 'id' => $comment->id, 'type' => 'comment'])
-          </div>
         </div>
         @if (Auth::id() == $comment->user_id)
         <button type="button" class="col btn btn-link" style="text-decoration: none;">
@@ -47,23 +45,21 @@
   </div>
   <div style="margin-left:10rem">
     @foreach ($comment->answers as $reply)
-    <div class="answer container row border border-dark align-items-center" data-id="{{$reply['id']}}" style="padding:1rem;margin-top:0.5rem;margin-bottom:0.25rem;">
-      <div class="col-3 pe-0 me-0">
+    <div class="answer border border-dark mt-2 p-3 ps-4 d-flex flex-row justify-content-start" data-id="{{$reply['id']}}" style="">
+      <div class="pe-2">
         <img src="../images/perfil.png" class="img-fluid m-0 p-0" height="80" width="120" alt="...">
       </div>
-      <div class="col-8" style="width:40rem;">
+      <div class="flex-fill">
         <h4 style="margin-bottom: 0rem;">{{$reply->user->account->name}}</h4>
         <p class="text-muted" style="margin-left: 0.5rem;">@if ($reply->created_at != $reply->updated_at) edited @endif</p>
         <p>{{$reply->content}}</p>
-        <div class="row" style="display: flex;">
-          <div class="col btn">
-            <div class="row" style="display:inline-block;">
-              @include('partials.form', ['action' => 'up', 'id' => $reply->id, 'type' => 'answer'])
-              <span class="col" style="padding: 0;width: min-content;display: inline;">{{ $reply->votes->count() }}</span>
-              @include('partials.form', ['action' => 'down', 'id' => $reply->id, 'type' => 'answer'])
-            </div>
-          </div>
 
+        <div class="d-flex flex-row">
+          <div class="d-flex flex-row justify-content-between">
+              @include('partials.form', ['action' => 'up', 'id' => $reply->id, 'type' => 'answer'])
+              <span class="" style="line-height:38px;">{{ $reply->votes->count() }}</span>
+              @include('partials.form', ['action' => 'down', 'id' => $reply->id, 'type' => 'answer'])
+          </div>
           @if (Auth::id() == $reply->user_id)
           <button type="button" class="col btn btn-link" style="text-decoration: none;">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
