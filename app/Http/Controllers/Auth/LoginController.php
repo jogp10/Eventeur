@@ -50,6 +50,8 @@ class LoginController extends Controller
     public function getUser($request){
         console_log('getuser');
 
+        print_r($request->user()->user);
+
         return $request->user();
     }
 

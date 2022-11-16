@@ -19,10 +19,7 @@ class Vote extends Model
 
     public function event() { return $this->belongsTo(Event::class); }
 
-
     public function comment() { return $this->belongsTo(Comment::class); }
 
-
     public function answer() { return $this->belongsTo(Answer::class); }
-
 }

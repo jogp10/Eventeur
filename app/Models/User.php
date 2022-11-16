@@ -15,6 +15,7 @@ class User extends Model
     ];
 
     public function account() { return $this->belongsTo(Account::class); }
+    
     public function events() { return $this->hasMany(Event::class); }
 
     public function profileImage() { return $this->hasOne(ProfileImage::class); }

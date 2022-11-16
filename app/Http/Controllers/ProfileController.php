@@ -43,9 +43,12 @@ class ProfileController extends Controller
      * @param  \App\Models\Account  $account
      * @return \Illuminate\Http\Response
      */
-    public function show()
-    {
-        return view('pages.profile', ['account' => Auth::user()]);
+
+    public function show() {
+
+        $account_user = Auth::user()->user;
+
+        return view('pages.profile', ['account' => Auth::user(), 'invites' => $account_user->invites]);
     }
 
     public function showEditPage()

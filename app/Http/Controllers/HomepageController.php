@@ -25,13 +25,14 @@ class HomepageController extends Controller
     {
 
         $events = Event::inRandomOrder()
-            ->limit(8)
-            ->get();
+                ->limit(8)
+                ->get();
+            
+
         foreach ($events as $event) {
             $event['manager'] = Account::find($event->user_id)->name;
             $event['votes'] = Vote::where('event_id', $event->id)->count();
         }
-
 
         return view('pages.home', ['events' => $events]);
     }
