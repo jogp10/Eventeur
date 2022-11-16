@@ -5,37 +5,28 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Event extends Model {
+class Event extends Model
+{
     use HasFactory;
-    
-    protected $table = "events";
-
-    public $PRIVACY = [
-        'public', 'private'
-    ];
-
-    public $timestamps = false;
 
     protected $fillable = [
-        'name', 'num_tickets', 'description'
+        'name', 'description', 'start_date', 'end_date', 'location', 'capacity', 'privacy', 'ticket', 'created_at', 'updated_at'
     ];
 
-    protected $casts = [
-        'start_date' => 'datetime',
-        'end_date' => 'datetime'
-    ];
+    public function manager() { return $this->belongsTo(User::class); }
+    public function coverImage() { return $this->belongsTo(CoverImage::class); }
 
-    public function users(){return $this->belongsToMany('App\Models\User');}
+    public function tags() { return $this->belongsToMany(Tag::class); }
 
-    public function tags(){return $this->belongsToMany('App\Models\Tag');}
+    public function tickets() { return $this->hasMany(Ticket::class); }
 
-    public function reports() {return $this->hasMany('App\Models\Report');}
+    public function invites() { return $this->hasMany(Invite::class); }
 
-    public function polls() {return $this->hasMany('App\Models\Poll');}
+    public function comments() { return $this->hasMany(Comment::class); }
 
-    public function comments() {return $this->hasMany('App\Models\Comment');}
+    public function polls() { return $this->hasMany(Poll::class); }
 
-    public function invites() {return $this->belongsToMany('App\Models\User')->withPivot('content');}
+    public function reports() { return $this->hasMany(Report::class); }
 
-    public function tickets() {return $this->hasMany('App\Models\Ticket');}
+    public function ban() { return $this->belongsTo(Ban::class); }
 }

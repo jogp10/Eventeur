@@ -5,19 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Poll extends Model {
+class Poll extends Model
+{
     use HasFactory;
 
-    protected $table = "poll";
-
-    public $timestamps = false;
-
-    public $fillable = [
-        'question'
+    protected $fillable = [
+        'event_id', 'question', 'created_at', 'updated_at'
     ];
 
-    public function options() {return $this->belongsToMany('App\Models\PollOption');}
+    public function event() { return $this->belongsTo(Event::class); }
 
-    
-    
+    public function pollOptions() { return $this->hasMany(PollOption::class); }
 }

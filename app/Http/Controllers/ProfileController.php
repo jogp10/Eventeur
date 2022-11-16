@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Account;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 use App\Models\User;
+use App\Models\Account;
 
 class ProfileController extends Controller
 {
@@ -14,8 +16,8 @@ class ProfileController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
-        
+    public function index()
+    {
     }
 
     /**
@@ -23,8 +25,8 @@ class ProfileController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
-        
+    public function create()
+    {
     }
 
     /**
@@ -33,8 +35,8 @@ class ProfileController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
-        
+    public function store(Request $request)
+    {
     }
 
     /**
@@ -43,21 +45,22 @@ class ProfileController extends Controller
      * @param  \App\Models\Account  $account
      * @return \Illuminate\Http\Response
      */
+
     public function show() {
 
-        #$user = Auth::user()->user();
+        $account_user = Auth::user()->user;
 
-        #print_r($user->first());
-
-        return view('pages.profile', ['account' => Auth::user()]);
+        return view('pages.profile', ['account' => Auth::user(), 'invites' => $account_user->invites]);
     }
 
-    public function showEditPage() {
+    public function showEditPage()
+    {
 
         return view('pages.editProfile', ['account' => Auth::user()]);
     }
 
-    public function showSettingsPage() {
+    public function showSettingsPage()
+    {
 
         return view('pages.securityProfile', ['account' => Auth::user()]);
     }
@@ -68,17 +71,17 @@ class ProfileController extends Controller
      * @param  \App\Models\Account  $account
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request) {
-
+    public function edit(Request $request)
+    {
         $validated = $request->validate([
-            'name' => ['unique:account','max:20'],
+            'name' => ['unique:accounts', 'max:20'],
             'description' => ['max:200'],
         ]);
-        
-        if($request['name'] !== null) {
+
+        if ($request['name'] !== null) {
             Auth::user()->name = $request['name'];
         }
-        if($request['description'] !== null) {
+        if ($request['description'] !== null) {
             Auth::user()->description = $request['description'];
         }
 
@@ -93,7 +96,8 @@ class ProfileController extends Controller
      * @param  \App\Models\Account  $account
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Account $account) {
+    public function update(Request $request, Account $account)
+    {
         //
     }
 
@@ -103,7 +107,7 @@ class ProfileController extends Controller
      * @param  \App\Models\Account  $account
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Account $account) {
-        
+    public function destroy(Account $account)
+    {
     }
 }

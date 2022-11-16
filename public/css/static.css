@@ -1,0 +1,42 @@
+textarea {
+    width: 80%;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    resize: none;
+  }
+
+  input {
+    width: 80%;
+  }
+
+  input[type=submit] {
+    width: auto;
+    right: 0;
+    text-align: end;
+    position: relative;
+    left: 60%;
+  }
+
+  div.col:nth-child(2) {
+    text-align: center;
+  }
+
+  div.col:nth-child(1) > h1:nth-child(1) {
+    padding: 6rem 0rem 3rem 0rem;
+  }
+
+  div.col > div > div > div > h2 {
+    flex-grow: 5;
+    position: relative;
+    left: 5%;
+  }
+
+  .col-sm-1{
+    text-align: center;
+    position: relative;
+    top: 50%;
+    transform: translateY(75%);
+  }

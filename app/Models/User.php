@@ -2,30 +2,37 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable {
+class User extends Model
+{
     use Notifiable;
 
-    protected $table = "users";
+    protected $fillable = [
+        'account_id', 'created_at', 'updated_at'
+    ];
 
-    public $timestamps = false;
+    public function account() { return $this->belongsTo(Account::class); }
+    
+    public function events() { return $this->hasMany(Event::class); }
 
-    public function going_events() {return $this->belongsToMany('App\Models\Event');}
+    public function profileImage() { return $this->hasOne(ProfileImage::class); }
 
-    public function events_owned() {return $this->belongsToMany('App\Models\Event');}
+    public function tickets() { return $this->hasMany(Ticket::class); }
 
-    public function account() {return $this->belongsTo('App\Models\Account','id');}
+    public function invites() { return $this->hasMany(Invite::class); }
 
-    public function invites() {return $this->belongsToMany('App\Models\Event')->withPivot('content');}
+    public function comments() { return $this->hasMany(Comment::class); }
 
-    public function votes() {return $this->belongsToMany('App\Models\PollOption');}
+    public function answers() { return $this->hasMany(Answer::class); }
 
-    public function tickets() {return $this->belongsToMany('App\Models\Ticket');}
+    public function votes() { return $this->hasMany(Vote::class); }
 
-    public function comment() {return $this->hasMany('App\Models\Comment');}
+    public function reports() { return $this->hasMany(Report::class); }
 
-    public function inviteNotification() {$this->hasOne('App\MOdels\InviteNotification');}
+    public function ban() { return $this->belongsTo(Ban::class); }
 
+    
 }

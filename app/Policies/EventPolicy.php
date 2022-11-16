@@ -2,38 +2,102 @@
 
 namespace App\Policies;
 
+use App\Models\Account;
 use App\Models\User;
 use App\Models\Event;
-
+use App\Models\example;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Access\Response;
 
-class CardPolicy
+class EventPolicy
 {
     use HandlesAuthorization;
 
-    public function show(User $user, Event $event)
+    /**
+     * Determine whether the user can view any models.
+     *
+     * @param \App\Models\User  $account
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function view(Account $account, Event $event)
     {
-      // Only a event attendee  can see it
-      //return $user->id == $event->user_id;
-      return True;
+        return True;
     }
 
-    public function list(User $user)
+    /**
+     * Determine whether the user can view the model.
+     *
+     * @param  \App\Models\Account  $account
+     * @param  \App\Models\example  $example
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function viewAny(Account $account, example $example)
     {
-      // Any user can list its own events
-      return Auth::check();
+        //
+        return True;
     }
 
-    public function create(User $user)
+    /**
+     * Determine whether the user can create models.
+     *
+     * @param  \App\Models\Account  $account
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function create(Account $account)
     {
-      // Any user can create a new event
-      return Auth::check();
+        //
+        return True;
     }
 
-    public function delete(User $user, Event $event)
+    /**
+     * Determine whether the user can update the model.
+     *
+     * @param  \App\Models\Account  $account
+     * @param  \App\Models\example  $example
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function update(Account $account, example $example)
     {
-      // Only a event manager can delete it
-      return $user->id == $event->user_id;
+        //
+        return True;
+    }
+
+    /**
+     * Determine whether the user can delete the model.
+     *
+     * @param  \App\Models\Account  $account
+     * @param  \App\Models\example  $example
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function delete(Account $account, example $example)
+    {
+        //
+        return True;
+    }
+
+    /**
+     * Determine whether the user can restore the model.
+     *
+     * @param  \App\Models\Account  $account
+     * @param  \App\Models\example  $example
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function restore(Account $account, example $example)
+    {
+        //
+        return True;
+    }
+
+    /**
+     * Determine whether the user can permanently delete the model.
+     *
+     * @param  \App\Models\Account  $account
+     * @param  \App\Models\example  $example
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function forceDelete(Account $account, example $example)
+    {
+        //
+        return True;
     }
 }

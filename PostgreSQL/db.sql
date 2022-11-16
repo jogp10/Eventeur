@@ -1,24 +1,23 @@
-drop table if exists ACCOUNT CASCADE;
-drop table if exists CoverImage CASCADE;
-drop table if exists PerfilImage CASCADE;
-drop table if exists _USER CASCADE;
-drop table if exists ADMINISTRATOR CASCADE;
-drop table if exists MANAGER CASCADE;
-drop table if exists EVENTS CASCADE;
-drop table if exists TAG CASCADE;
-drop table if exists EventTag CASCADE;
-drop table if exists TICKET CASCADE;
-drop table if exists UserTicketEvent CASCADE;
-drop table if exists INVITE CASCADE;
-drop table if exists NOTIFICATIONS CASCADE;
-drop table if exists InviteNotification CASCADE;
-drop table if exists COMMENT CASCADE;
-drop table if exists CommentNotification CASCADE;
-drop table if exists ANSWER CASCADE;
-drop table if exists POLL CASCADE;
-drop table if exists PollOption CASCADE;
-drop table if exists VOTE CASCADE;
-drop table if exists REPORT CASCADE;
+drop table if exists accounts CASCADE;
+drop table if exists cover_images CASCADE;
+drop table if exists profile_images CASCADE;
+drop table if exists users CASCADE;
+drop table if exists admins CASCADE;
+drop table if exists events CASCADE;
+drop table if exists tags CASCADE;
+drop table if exists event_tags CASCADE;
+drop table if exists tickets CASCADE;
+drop table if exists invites CASCADE;
+drop table if exists notifications CASCADE;
+drop table if exists invite_notifications CASCADE;
+drop table if exists comments CASCADE;
+drop table if exists comment_notifications CASCADE;
+drop table if exists answers CASCADE;
+drop table if exists polls CASCADE;
+drop table if exists poll_options CASCADE;
+drop table if exists votes CASCADE;
+drop table if exists reports CASCADE;
+drop table if exists bans CASCADE;
 
 DROP TYPE IF EXISTS privacy CASCADE;
 
@@ -33,211 +32,235 @@ CREATE TYPE privacy as ENUM (
 -- Tables
 
 
-CREATE TABLE ACCOUNT (
-    id          INTEGER PRIMARY KEY,
+CREATE TABLE accounts (
+    id          SERIAL PRIMARY KEY,
     email       TEXT NOT NULL,
     name        TEXT NOT NULL,
     password    TEXT NOT NULL,
     description TEXT,
     age         INTEGER CHECK (age > 0),
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     UNIQUE(email)
 );
 
-CREATE TABLE EVENTS (
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    accounts_id  INTEGER DEFAULT -1,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_accounts_id  FOREIGN KEY(accounts_id) REFERENCES accounts(id)
+);
+
+CREATE TABLE admins (
+    id SERIAL PRIMARY KEY,
+    accounts_id  INTEGER DEFAULT -1,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_accounts_id  FOREIGN KEY(accounts_id) REFERENCES accounts(id)
+);
+
+CREATE TABLE events (
     id SERIAL PRIMARY KEY,
     name        TEXT NOT NULL,
-    description TEXT,
+    description TEXT NOT NULL,
     start_date  DATE NOT NULL,
     end_date    DATE NOT NULL,
     location    TEXT NOT NULL,
     capacity    INTEGER NOT NULL,
     privacy     privacy DEFAULT 'Public', 
+    user_id     INTEGER NOT NULL,
+    ticket     INTEGER NOT NULL DEFAULT 0,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id),
     CHECK (start_date < end_date),
     CHECK (capacity > 0)
 );
 
-CREATE TABLE CoverImage (
+CREATE TABLE cover_images (
     id SERIAL PRIMARY KEY,
-    events_id   INTEGER NOT NULL,
+    event_id   INTEGER NOT NULL,
     path        TEXT NOT NULL,
-    CONSTRAINT fk_events_id FOREIGN KEY(events_id) REFERENCES EVENTS(id),
-    UNIQUE(events_id)
+    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES events(id),
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    UNIQUE(event_id)
 );
 
-CREATE TABLE PerfilImage (
+CREATE TABLE profile_images (
     id SERIAL PRIMARY KEY,
     account_id  INTEGER DEFAULT -1,
     path        TEXT NOT NULL,
-    CONSTRAINT fk_account_id FOREIGN KEY(account_id) REFERENCES ACCOUNT(id),
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_account_id FOREIGN KEY(account_id) REFERENCES accounts(id),
     UNIQUE(account_id)
 );
 
-CREATE TABLE _USER (--f
-    id SERIAL PRIMARY KEY,
-    account_id  INTEGER DEFAULT -1,
-    CONSTRAINT fk_account_id  FOREIGN KEY(account_id) REFERENCES ACCOUNT(id)
-);
-
-CREATE TABLE ADMINISTRATOR (--f
-    id SERIAL PRIMARY KEY,
-    account_id  INTEGER DEFAULT -1,
-    CONSTRAINT fk_account_id  FOREIGN KEY(account_id) REFERENCES ACCOUNT(id)
-);
-
-CREATE TABLE MANAGER (
-    id SERIAL PRIMARY KEY,
-    account_id  INTEGER DEFAULT -1,
-    event_id    INTEGER NOT NULL,
-    CONSTRAINT fk_account_id  FOREIGN KEY(account_id) REFERENCES ACCOUNT(id),
-    CONSTRAINT fk_event_id  FOREIGN KEY(event_id) REFERENCES EVENTS(id),
-    UNIQUE(account_id, event_id)
-);
-
-
-
-CREATE TABLE TAG (--f
+CREATE TABLE tags (
     id          SERIAL PRIMARY KEY,
     name        TEXT NOT NULL,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     UNIQUE(name)
 );
 
-CREATE TABLE EventTag (--f
+CREATE TABLE event_tags (
     id          SERIAL PRIMARY KEY,
     event_id    INTEGER NOT NULL,
     tag_id      INTEGER NOT NULL,
-    CONSTRAINT fk_event_id  FOREIGN KEY(event_id) REFERENCES EVENTS(id),
-    CONSTRAINT fk_tag_id  FOREIGN KEY(tag_id) REFERENCES TAG(id),
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_event_id  FOREIGN KEY(event_id) REFERENCES events(id),
+    CONSTRAINT fk_tag_id  FOREIGN KEY(tag_id) REFERENCES tags(id),
     UNIQUE(event_id, tag_id)
 );
 
-CREATE TABLE TICKET (
+CREATE TABLE tickets (
     id          SERIAL PRIMARY KEY,
-    price       REAL DEFAULT 0
+    event_id    INTEGER NOT NULL,
+    user_id     INTEGER NOT NULL,
+    num_of_tickets INTEGER NOT NULL,
+    price       REAL DEFAULT 0,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_event_id  FOREIGN KEY(event_id) REFERENCES events(id),
+    CONSTRAINT fk_user_id  FOREIGN KEY(user_id) REFERENCES users(id),
+    UNIQUE(event_id, user_id)
 );
 
-CREATE TABLE UserTicketEvent (
+CREATE TABLE invites (
     id          SERIAL PRIMARY KEY,
     user_id     INTEGER DEFAULT -1,
     event_id    INTEGER NOT NULL,
-    ticket_id   INTEGER NOT NULL,
-    num_tickets INTEGER CHECK (num_tickets > 0),
-    CONSTRAINT fk_user_id  FOREIGN KEY(user_id) REFERENCES _USER(id),
-    CONSTRAINT fk_event_id  FOREIGN KEY(event_id) REFERENCES EVENTS(id),
-    CONSTRAINT fk_ticket_id  FOREIGN KEY(ticket_id) REFERENCES TICKET(id),
-    UNIQUE(user_id, event_id, ticket_id)
-);
-
-CREATE TABLE INVITE (
-    id          SERIAL PRIMARY KEY,
-    user_id     INTEGER DEFAULT -1,
-    event_id    INTEGER NOT NULL,
-    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES _USER(id),
-    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES EVENTS(id),
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
+    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES events(id),
     UNIQUE(user_id, event_id)
 );
 
-CREATE TABLE NOTIFICATIONS (
+CREATE TABLE notifications (
     id          SERIAL PRIMARY KEY,
-    user_id     INTEGER DEFAULT -1,
-    event_id    INTEGER NOT NULL,
     content     TEXT,
     seen        BOOLEAN DEFAULT '0',
-    sent_date        DATE NOT NULL,
-    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES _USER(id),
-    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES EVENTS(id)
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE InviteNotification (
+CREATE TABLE invite_notifications (
     id              SERIAL PRIMARY KEY,
     notification_id INTEGER NOT NULL,
     invite_id       INTEGER NOT NULL,
-    user_id         INTEGER DEFAULT -1,
-    CONSTRAINT fk_notification_id FOREIGN KEY(notification_id) REFERENCES NOTIFICATIONS(id),
-    CONSTRAINT fk_invite_id FOREIGN KEY(invite_id) REFERENCES INVITE(id),
-    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES _USER(id),
-    UNIQUE(notification_id, invite_id, user_id)
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_notification_id FOREIGN KEY(notification_id) REFERENCES notifications(id),
+    CONSTRAINT fk_invite_id FOREIGN KEY(invite_id) REFERENCES invites(id),
+    UNIQUE(notification_id, invite_id)
 );
 
-CREATE TABLE COMMENT (
+CREATE TABLE comments (
     id              SERIAL PRIMARY KEY,
     user_id         INTEGER DEFAULT -1,
     event_id        INTEGER NOT NULL,
     content         TEXT NOT NULL,
-    written_date    DATE NOT NULL CHECK (written_date <= CURRENT_DATE),
     edited          BOOLEAN DEFAULT '0',
-    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES _USER(id),
-    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES EVENTS(id)
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
+    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES events(id)
 );
 
-CREATE TABLE CommentNotification (
+CREATE TABLE comment_notifications (
     id              SERIAL PRIMARY KEY,
     notification_id INTEGER NOT NULL,
     comment_id      INTEGER NOT NULL,
-    user_id         INTEGER DEFAULT -1,
-    CONSTRAINT fk_notification_id FOREIGN KEY(notification_id) REFERENCES NOTIFICATIONS(id),
-    CONSTRAINT fk_comment_id FOREIGN KEY(comment_id) REFERENCES COMMENT(id),
-    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES _USER(id),
-    UNIQUE(notification_id, comment_id, user_id)
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_notification_id FOREIGN KEY(notification_id) REFERENCES notifications(id),
+    CONSTRAINT fk_comment_id FOREIGN KEY(comment_id) REFERENCES comments(id),
+    UNIQUE(notification_id, comment_id)
 );
 
-CREATE TABLE ANSWER (
+CREATE TABLE answers (
     id              SERIAL PRIMARY KEY,
     comment_id      INTEGER NOT NULL,
-    answer_id       INTEGER NOT NULL,
-    CONSTRAINT fk_comment_id FOREIGN KEY(comment_id) REFERENCES COMMENT(id),
-    CONSTRAINT fk_answer_id FOREIGN KEY(answer_id) REFERENCES COMMENT(id),
-    UNIQUE(answer_id)
+    user_id         INTEGER DEFAULT -1,
+    content         TEXT NOT NULL,
+    edited          BOOLEAN DEFAULT '0',
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
+    CONSTRAINT fk_comment_id FOREIGN KEY(comment_id) REFERENCES comments(id)
 );
 
-CREATE TABLE POLL (
+CREATE TABLE polls (
     id              SERIAL PRIMARY KEY,
     event_id        INTEGER NOT NULL,
     question        TEXT NOT NULL,
-    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES EVENTS(id)
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES events(id)
 );
 
-CREATE TABLE PollOption (
+CREATE TABLE poll_options (
     id              SERIAL PRIMARY KEY,
     poll_id         INTEGER NOT NULL,
     description     TEXT NOT NULL,
     votes           INTEGER DEFAULT 0,
-    CONSTRAINT fk_poll_id FOREIGN KEY(poll_id) REFERENCES POLL(id),
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_poll_id FOREIGN KEY(poll_id) REFERENCES polls(id),
     UNIQUE(id, poll_id)
 );
 
-CREATE TABLE VOTE (
+CREATE TABLE votes (
     id              SERIAL PRIMARY KEY,
     user_id         INTEGER DEFAULT -1,
     poll_option_id  INTEGER NOT NULL,
-    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES _USER(id),
-    CONSTRAINT fk_polloption_id FOREIGN KEY(poll_option_id) REFERENCES PollOption(id),
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
+    CONSTRAINT fk_polloption_id FOREIGN KEY(poll_option_id) REFERENCES poll_options(id),
     UNIQUE(user_id)
 );
 
-CREATE TABLE REPORT (
+CREATE TABLE reports (
     id              SERIAL PRIMARY KEY,
     user_id         INTEGER DEFAULT -1,
     event_id        INTEGER NOT NULL,
     content         TEXT NOT NULL,
-    written_date    DATE NOT NULL CHECK (written_date <= CURRENT_DATE),
-    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES _USER(id),
-    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES EVENTS(id)
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
+    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES events(id)
+);
+
+CREATE TABLE bans (
+    id              SERIAL PRIMARY KEY,
+    admin_id        INTEGER NOT NULL,
+    user_id         INTEGER DEFAULT -1,
+    ban_type        INTEGER NOT NULL,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
 --Functions
 
 CREATE OR REPLACE FUNCTION
-    invite_event_notification_function() RETURNS TRIGGER AS $invite_event$
+    invites_event_notification_function() RETURNS TRIGGER AS $invites_event$
     BEGIN
     	INSERT INTO notifications(user_id, event_id, content, sent_date)
-    	VALUES (NEW.user_id, NEW.event_id, 'Invited to Event', NOW()) RETURNING notif_id ;
+    	VALUES (NEW.user_id, NEW.event_id, 'invitesd to event', NOW()) RETURNING notif_id ;
     	
-    	INSERT INTO invitenotification(notification_id, invite_id, user_id)
+    	INSERT INTO invite_notifications(notification_id, invites_id, user_id)
     	VALUES (notif_id, New.id, New.user_id);
 
         RETURN NEW;
     END;
-$invite_event$ LANGUAGE 'plpgsql';
+$invites_event$ LANGUAGE 'plpgsql';
 
 
 CREATE OR REPLACE FUNCTION
@@ -251,35 +274,35 @@ CREATE OR REPLACE FUNCTION
             SELECT DISTINCT user_id
             FROM (
                 SELECT user_id
-                FROM userticketevent
+                FROM tickets
                 WHERE event_id = OLD.id
                 UNION
-                SELECT account_id
-                FROM managers
+                SELECT user_id
+                FROM events
                 WHERE event_id = OLD.id
             ) AS users
         LOOP
             INSERT INTO notifications(content, user_id, event_id, sent_date)
-            VALUES ('EventCancellation', u.user_id, OLD.id, NOW());
+            VALUES ('eventCancellation', u.user_id, OLD.id, NOW());
         END LOOP;
 
         RETURN OLD;
     END;
 $cancel_event$ LANGUAGE 'plpgsql';
 
-CREATE OR REPLACE FUNCTION create_invite_notification() RETURNS TRIGGER AS $BODY$
+CREATE OR REPLACE FUNCTION create_invites_notification() RETURNS TRIGGER AS $BODY$
    	BEGIN
     	WITH inserted AS (
-			INSERT into Notifications (content, user_id, event_id, seen, sent_date) values ('You recied an invite...', NEW.user_id, NEW.event_id, '0', CURRENT_DATE)
+			INSERT into notifications (content, user_id, event_id, seen, sent_date) values ('You recied an invites...', NEW.user_id, NEW.event_id, '0', CURRENT_DATE)
 			RETURNING id
 		)
-		INSERT into InviteNotification SELECT inserted.id, NEW.id, NEW.user_id FROM inserted;
+		INSERT into invite_notifications SELECT inserted.id, NEW.id, NEW.user_id FROM inserted;
 		RETURN NEW;
    	END;
 $BODY$ LANGUAGE plpgsql;
 
 
-CREATE FUNCTION delete_comment() RETURNS TRIGGER AS
+CREATE OR REPLACE FUNCTION delete_comment() RETURNS TRIGGER AS
 $BODY$
 BEGIN 
     DELETE FROM content WHERE content.id = OLD.content_id;
@@ -288,10 +311,10 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-CREATE FUNCTION check_attendee() RETURNS TRIGGER AS
+CREATE OR REPLACE FUNCTION check_attendee() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF (SELECT COUNT(*) FROM userticketevent WHERE user_id = NEW.user_id AND event_id = NEW.event_id) = 0 THEN
+    IF (SELECT COUNT(*) FROM tickets WHERE user_id = NEW.user_id AND event_id = NEW.event_id) = 0 AND (SELECT COUNT(*) FROM events WHERE user_id = NEW.user_id AND id = NEW.event_id) = 0 THEN
         RAISE EXCEPTION 'User is not an attendee of the event';
     END IF;
     RETURN NEW;
@@ -299,14 +322,12 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-CREATE FUNCTION delete_user() RETURNS TRIGGER AS
+CREATE OR REPLACE FUNCTION delete_user() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    UPDATE comment SET user_id = 1 WHERE user_id = OLD.id;
-    UPDATE userticketevent SET user_id = 1 WHERE user_id = OLD.id;
-    UPDATE invite SET user_id = 1 WHERE user_id = OLD.id;
-    UPDATE managers SET account_id = 1 WHERE account_id = OLD.id;
-    UPDATE events SET creator_id = 1 WHERE creator_id = OLD.id;
+    UPDATE comments SET user_id = 1 WHERE user_id = OLD.id;
+    UPDATE invites SET user_id = 1 WHERE user_id = OLD.id;
+    UPDATE events SET accounts_id = 1 WHERE accounts_id = OLD.id;
     UPDATE notifications SET user_id = 1 WHERE user_id = OLD.id;
     UPDATE content SET user_id = 1 WHERE user_id = OLD.id;
     RETURN OLD;
@@ -315,17 +336,17 @@ $BODY$
 LANGUAGE plpgsql;
 
 --Triggers
-Drop TRIGGER IF EXISTS delete_comment ON Comment;
-Drop TRIGGER IF EXISTS cancel_event_notification ON Events;
-Drop TRIGGER IF EXISTS invite_event_notification ON Invite;
-Drop TRIGGER IF EXISTS check_attendee ON userticketevent;
-Drop TRIGGER IF EXISTS delete_user ON _user;
+Drop TRIGGER IF EXISTS delete_comment ON comments;
+Drop TRIGGER IF EXISTS cancel_event_notification ON events;
+Drop TRIGGER IF EXISTS invites_event_notification ON invites;
+Drop TRIGGER IF EXISTS check_attendee ON tickets;
+Drop TRIGGER IF EXISTS delete_user ON users;
 
 -- Trigger 1
-CREATE TRIGGER invite_event_notification_trigger 
-    AFTER INSERT ON invite
+CREATE TRIGGER invites_event_notification_trigger 
+    AFTER INSERT ON invites
     FOR EACH ROW 
-    EXECUTE PROCEDURE invite_event_notification_function();
+    EXECUTE PROCEDURE invites_event_notification_function();
 
 -- Trigger 2
 CREATE TRIGGER cancel_event_notification_trigger 
@@ -335,19 +356,19 @@ CREATE TRIGGER cancel_event_notification_trigger
 
 -- Trigger 3
 CREATE TRIGGER delete_comment
-    AFTER DELETE ON comment
+    AFTER DELETE ON comments
     FOR EACH ROW
     EXECUTE PROCEDURE delete_comment();
 
 -- Trigger 4
 CREATE TRIGGER check_attendee
-    BEFORE INSERT ON comment
+    BEFORE INSERT ON comments
     FOR EACH ROW
     EXECUTE PROCEDURE check_attendee();
 
 -- Trigger 5
 CREATE TRIGGER delete_user
-    AFTER DELETE ON _user
+    AFTER DELETE ON users
     FOR EACH ROW
     EXECUTE PROCEDURE delete_user();
 
@@ -363,7 +384,7 @@ Drop INDEX IF EXISTS search_comment;
 CREATE INDEX event_name ON events USING btree (name);
 
 --Index 2
-CREATE INDEX user_name ON user USING btree (name);
+--CREATE INDEX user_name ON users USING btree (name);
 
 -- Index 3
 CREATE INDEX event_date ON events USING btree (start_date);
@@ -372,7 +393,7 @@ CREATE INDEX event_date ON events USING btree (start_date);
 ALTER TABLE events
 ADD COLUMN searchs TSVECTOR;
 
-CREATE FUNCTION event_search_update() RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION event_search_update() RETURNS TRIGGER AS $$
 BEGIN
  IF TG_OP = 'INSERT' THEN
         NEW.search = (
@@ -394,35 +415,38 @@ BEGIN
 END $$
 LANGUAGE plpgsql;
 
+/*
 CREATE TRIGGER event_search_update
  BEFORE INSERT OR UPDATE ON events
  FOR EACH ROW
  EXECUTE PROCEDURE event_search_update();
-
- CREATE INDEX search_event ON events USING GIN (searchs);
+*/
+CREATE INDEX search_event ON events USING GIN (searchs);
 
 --Index 12
-CREATE INDEX search_users ON user USING GIN (search);
+--CREATE INDEX search_users ON users USING GIN (search);
 
 --Index 13
-CREATE INDEX search_comment ON comment USING GIN (search);
+--CREATE INDEX search_comment ON comments USING GIN (search);
 
 -- Transactions
 
 -- Transaction 1
+
+/*
 BEGIN TRANSACTION;
 
 SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 
-Create Poll
-INSERT INTO poll (event_id, question)
+Create polls
+INSERT INTO polls (event_id, question)
  VALUES ($event_id, $question);
  
 Create at least two options
-INSERT INTO polloption (poll_id, description)
+INSERT INTO poll_options (poll_id, description)
  VALUES (currval('poll_id_seq'), $description1);
  
-INSERT INTO polloption (poll_id, description)
+INSERT INTO poll_options (poll_id, description)
  VALUES (currval('poll_id_seq'), $description2);
 
-END TRANSACTION;
+END TRANSACTION;*/
