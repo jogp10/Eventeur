@@ -45,7 +45,7 @@ CREATE TABLE accounts (
 );
 
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
+    id          SERIAL PRIMARY KEY,
     account_id  INTEGER DEFAULT -1,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -53,7 +53,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE admins (
-    id SERIAL PRIMARY KEY,
+    id         SERIAL PRIMARY KEY,
     account_id  INTEGER DEFAULT -1,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -218,12 +218,15 @@ CREATE TABLE poll_options (
 CREATE TABLE votes (
     id              SERIAL PRIMARY KEY,
     user_id         INTEGER DEFAULT -1,
-    poll_option_id  INTEGER NOT NULL,
+    poll_option_id  INTEGER,
+    event_id        INTEGER,
+    comment_id      INTEGER,
+    answer_id      INTEGER,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
     CONSTRAINT fk_polloption_id FOREIGN KEY(poll_option_id) REFERENCES poll_options(id),
-    UNIQUE(user_id)
+    CHECK (poll_option_id IS NOT NULL OR event_id IS NOT NULL OR comment_id IS NOT NULL OR answer_id IS NOT NULL)
 );
 
 CREATE TABLE reports (
@@ -558,18 +561,18 @@ VALUES
   ('quis.lectus@google.com','Sierra Webb','EWD06GOK4JK','nonummy ut, molestie in, tempus eu, ligula. Aenean euismod mauris eu elit. Nulla facilisi. Sed neque. Sed eget lacus. Mauris',25);
 
 
-INSERT INTO admins (id, account_id)
+INSERT INTO admins (account_id)
 VALUES
-  (1,49),
-  (2,14),
-  (3,86),
-  (4,64),   
-  (5,96),
-  (6,50),
-  (7,48),
-  (8,2),
-  (9,75),
-  (10,51);
+  (49),
+  (14),
+  (86),
+  (64),   
+  (96),
+  (50),
+  (48),
+  (2),
+  (75),
+  (51);
 
 
 INSERT INTO users (account_id)

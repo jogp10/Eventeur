@@ -47,7 +47,6 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        console_log('construct');
         $this->middleware('guest');
     }
 
@@ -58,9 +57,7 @@ class RegisterController extends Controller
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
-    {
-        console_log('Validator');
-        
+    {        
         return Validator::make($data, [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:accounts',
@@ -82,8 +79,6 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
-        
-        print_r($account->id);
         
         $account->user()->create(['account_id' => $account->id]);
         return $account;

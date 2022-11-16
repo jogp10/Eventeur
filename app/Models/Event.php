@@ -29,4 +29,6 @@ class Event extends Model
     public function reports() { return $this->hasMany(Report::class); }
 
     public function ban() { return $this->belongsTo(Ban::class); }
+
+    public function votes() { return $this->hasMany(Vote::class); }
 }

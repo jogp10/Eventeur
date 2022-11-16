@@ -3,54 +3,62 @@
 namespace App\Http\Controllers;
 
 use App\Models\Account;
+use App\Models\Vote;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Event;
 
-class HomepageController extends Controller {
+class HomepageController extends Controller
+{
 
-    public function home() {
+    public function home()
+    {
 
         $events = Event::inRandomOrder()
                 ->limit(8)
                 ->get();
-                
+            
+
         foreach ($events as $event) {
             $event['manager'] = Account::find($event->user_id)->name;
+            $event['votes'] = Vote::where('event_id', $event->id)->count();
         }
-        
-    
+
         return view('pages.home', ['events' => $events]);
     }
 
-    public function search(){
+    public function search()
+    {
         $search_text = $_GET['query'];
 
-        if(mb_substr($search_text, 0,1) == "\""){
+        if (mb_substr($search_text, 0, 1) == "\"") {
             $events = Event::whereFullText('name', $search_text)->get();
             $eventsByDescripton = Event::whereFullText('description', $search_text)->get();
             $eventsByLocation = Event::whereFullText('location', $search_text)->get();
-            foreach($eventsByDescripton as $value){
+            foreach ($eventsByDescripton as $value) {
                 $events->add($value);
             }
-            foreach($eventsByLocation as $value){
+            foreach ($eventsByLocation as $value) {
                 $events->add($value);
             }
+        } else {
+            $events = Event::where('name', 'like', '%' . $search_text . '%')->get();
+            $eventsByDescripton = Event::where('description', 'like', '%' . $search_text . '%')->get();
+            $eventsByLocation = Event::where('location', 'like', '%' . $search_text . '%')->get();
+            foreach ($eventsByDescripton as $value) {
+                $events->add($value);
+            }
+            foreach ($eventsByLocation as $value) {
+                $events->add($value);
+            }
+        }
 
+        foreach($events as $event) {
+            $event['manager'] = Account::find($event->user_id)->name;
+            $event['votes'] = Vote::where('event_id', $event->id)->count();
         }
-        else{
-            $events = Event::where('name', 'like', '%'.$search_text.'%')->get();
-            $eventsByDescripton = Event::where('description', 'like', '%'.$search_text.'%')->get();
-            $eventsByLocation = Event::where('location', 'like', '%'.$search_text.'%')->get();
-            foreach($eventsByDescripton as $value){
-                $events->add($value);
-            }
-            foreach($eventsByLocation as $value){
-                $events->add($value);
-            }
-        }
-        
+
         return view('pages.home', ['events' => $events]);
     }
 }
