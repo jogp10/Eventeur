@@ -104,7 +104,7 @@ VALUES
   ('quis.lectus@google.com','Sierra Webb','EWD06GOK4JK','nonummy ut, molestie in, tempus eu, ligula. Aenean euismod mauris eu elit. Nulla facilisi. Sed neque. Sed eget lacus. Mauris',25);
 
 
-INSERT INTO admins (id, accounts_id)
+INSERT INTO admins (id, account_id)
 VALUES
   (1,49),
   (2,14),
@@ -118,7 +118,7 @@ VALUES
   (10,51);
 
 
-INSERT INTO users (id, accounts_id)
+INSERT INTO users (id, account_id)
 VALUES
   (1,1),
   (3,3),
@@ -260,7 +260,7 @@ VALUES
   ('urna.');
 
 
-INSERT INTO event_tags (event_id,tag_id)
+INSERT INTO event_tag (event_id,tag_id)
 VALUES
   (2,3),
   (18,4),

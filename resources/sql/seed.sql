@@ -5,7 +5,7 @@ drop table if exists users CASCADE;
 drop table if exists admins CASCADE;
 drop table if exists events CASCADE;
 drop table if exists tags CASCADE;
-drop table if exists event_tags CASCADE;
+drop table if exists event_tag CASCADE;
 drop table if exists tickets CASCADE;
 drop table if exists invites CASCADE;
 drop table if exists notifications CASCADE;
@@ -106,7 +106,7 @@ CREATE TABLE tags (
     UNIQUE(name)
 );
 
-CREATE TABLE event_tags (
+CREATE TABLE event_tag (
     id          SERIAL PRIMARY KEY,
     event_id    INTEGER NOT NULL,
     tag_id      INTEGER NOT NULL,
@@ -730,7 +730,7 @@ VALUES
   ('urna.');
 
 
-INSERT INTO event_tags (event_id,tag_id)
+INSERT INTO event_tag (event_id,tag_id)
 VALUES
   (2,3),
   (18,4),

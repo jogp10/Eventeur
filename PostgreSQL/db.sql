@@ -5,7 +5,7 @@ drop table if exists users CASCADE;
 drop table if exists admins CASCADE;
 drop table if exists events CASCADE;
 drop table if exists tags CASCADE;
-drop table if exists event_tags CASCADE;
+drop table if exists event_tag CASCADE;
 drop table if exists tickets CASCADE;
 drop table if exists invites CASCADE;
 drop table if exists notifications CASCADE;
@@ -45,19 +45,19 @@ CREATE TABLE accounts (
 );
 
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    accounts_id  INTEGER DEFAULT -1,
+    id          INTEGER PRIMARY KEY,
+    account_id  INTEGER DEFAULT -1,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_accounts_id  FOREIGN KEY(accounts_id) REFERENCES accounts(id)
+    CONSTRAINT fk_accounts_id  FOREIGN KEY(account_id) REFERENCES accounts(id)
 );
 
 CREATE TABLE admins (
-    id SERIAL PRIMARY KEY,
-    accounts_id  INTEGER DEFAULT -1,
+    id          INTEGER PRIMARY KEY,
+    account_id  INTEGER DEFAULT -1,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_accounts_id  FOREIGN KEY(accounts_id) REFERENCES accounts(id)
+    CONSTRAINT fk_account_id  FOREIGN KEY(account_id) REFERENCES accounts(id)
 );
 
 CREATE TABLE events (
@@ -82,9 +82,9 @@ CREATE TABLE cover_images (
     id SERIAL PRIMARY KEY,
     event_id   INTEGER NOT NULL,
     path        TEXT NOT NULL,
-    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES events(id),
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES events(id),
     UNIQUE(event_id)
 );
 
@@ -106,7 +106,7 @@ CREATE TABLE tags (
     UNIQUE(name)
 );
 
-CREATE TABLE event_tags (
+CREATE TABLE event_tag (
     id          SERIAL PRIMARY KEY,
     event_id    INTEGER NOT NULL,
     tag_id      INTEGER NOT NULL,
@@ -218,12 +218,15 @@ CREATE TABLE poll_options (
 CREATE TABLE votes (
     id              SERIAL PRIMARY KEY,
     user_id         INTEGER DEFAULT -1,
-    poll_option_id  INTEGER NOT NULL,
+    poll_option_id  INTEGER,
+    event_id        INTEGER,
+    comment_id      INTEGER,
+    answer_id      INTEGER,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
     CONSTRAINT fk_polloption_id FOREIGN KEY(poll_option_id) REFERENCES poll_options(id),
-    UNIQUE(user_id)
+    CHECK (poll_option_id IS NOT NULL OR event_id IS NOT NULL OR comment_id IS NOT NULL OR answer_id IS NOT NULL)
 );
 
 CREATE TABLE reports (
@@ -330,6 +333,7 @@ BEGIN
     UPDATE events SET accounts_id = 1 WHERE accounts_id = OLD.id;
     UPDATE notifications SET user_id = 1 WHERE user_id = OLD.id;
     UPDATE content SET user_id = 1 WHERE user_id = OLD.id;
+    DELETE FROM accounts WHERE id = OLD.id;
     RETURN OLD;
 END
 $BODY$
@@ -341,6 +345,7 @@ Drop TRIGGER IF EXISTS cancel_event_notification ON events;
 Drop TRIGGER IF EXISTS invites_event_notification ON invites;
 Drop TRIGGER IF EXISTS check_attendee ON tickets;
 Drop TRIGGER IF EXISTS delete_user ON users;
+Drop TRIGGER IF EXISTS create_account ON account;
 
 -- Trigger 1
 CREATE TRIGGER invites_event_notification_trigger 
@@ -390,8 +395,19 @@ CREATE INDEX event_name ON events USING btree (name);
 CREATE INDEX event_date ON events USING btree (start_date);
 
 -- Index 11
-ALTER TABLE events
-ADD COLUMN searchs TSVECTOR;
+do $$
+begin
+IF NOT EXISTS( SELECT NULL
+            FROM INFORMATION_SCHEMA.COLUMNS
+           WHERE table_name = 'events'
+             AND table_schema = 'lbaw2224'
+             AND column_name = 'search')  THEN
+
+  ALTER TABLE events ADD search TSVECTOR;
+
+END IF;
+END $$
+LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION event_search_update() RETURNS TRIGGER AS $$
 BEGIN
@@ -415,19 +431,19 @@ BEGIN
 END $$
 LANGUAGE plpgsql;
 
-/*
+
 CREATE TRIGGER event_search_update
  BEFORE INSERT OR UPDATE ON events
  FOR EACH ROW
  EXECUTE PROCEDURE event_search_update();
-*/
-CREATE INDEX search_event ON events USING GIN (searchs);
+
+--CREATE INDEX search_event ON events USING GIN (searchs);
 
 --Index 12
---CREATE INDEX search_users ON users USING GIN (search);
+--CREATE INDEX search_users ON users USING GIN (searchs);
 
 --Index 13
---CREATE INDEX search_comment ON comments USING GIN (search);
+--CREATE INDEX search_comment ON comments USING GIN (searchs);
 
 -- Transactions
 
