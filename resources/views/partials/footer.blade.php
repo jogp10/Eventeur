@@ -1,5 +1,5 @@
 <footer class="main-footer" style="max-height: 100%">
-    <div class="d-flex flex-column flex-md-row justify-content-md-between text-center" style="margin-top:3rem">
+    <div class="d-flex flex-column flex-md-row justify-content-md-between text-center">
         <div class="mx-5 px-5 order-1 order-md-0">
             <p>{{ config('app.name', 'Laravel') }} Inc &copy; 2022. All rights reserved.</p>
         </div>

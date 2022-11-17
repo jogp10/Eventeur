@@ -71,8 +71,31 @@ body {
   flex: 1 0 auto;
 }
 
+body {
+  min-height: 100vh;
+  margin: 0;
+}
+
+main {
+  flex:1;
+}
+
 footer {
-  flex-shrink: 0;
+  width: 100%;
+  height: 2.5rem;
+}
+
+#modal {
+  display: none;
+  position: fixed; 
+  z-index: 1; 
+  left: 33%;
+  top: 15%;
+  width: 35%; 
+  height: 65%; 
+  overflow: auto; 
+  background-color: darkblue;
+  border-radius: 15px;
 }
 
 
