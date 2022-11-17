@@ -4,7 +4,7 @@
 
 @section('content')
 <div id="{{$event->id}}" class="event container-md d-flex flex-column" style="width:100%">
-  <div class="d-flex flex-column border border-dark m-3 p-2 ps-4 pe-4" style="min-height: 500px">
+  <div class="d-flex flex-column border border-dark m-3 p-2 ps-4 pe-4 rounded" style="min-height: 500px">
     <div class="event d-flex flex-row justify-content-between">
       <div class="p-2 ps-4">
         @include('partials.form', ['action' => 'up', 'id' => $event->id, 'type' => 'event'])
@@ -18,7 +18,7 @@
           <div class="badge bg-secondary">{{ $tag->name }}</div>
           @endforeach
         </div>
-        <button type="button" class="btn btn-link ps-0 align-self-start" style="text-decoration: none;">
+        <button type="button" class="btn ps-0 align-self-start" style="text-decoration: none;">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
             <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
           </svg>
@@ -36,7 +36,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left" viewBox="0 0 16 16">
           <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
         </svg>
-        <span>{{ count($event->comments) }} Comment</span>
+        <span>Comment</span>
       </button>
       <button type="button" class="btn btn-link" style="text-decoration: none;">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">
@@ -75,7 +75,7 @@
     <div class="modal-content">
       <div class="modal-header d-flex flex-row">
         <form class="d-none d-sm-flex w-20 align-self-center form-inline" action="" style="width:100%">
-          <input type="text" class="form-control" id="searchuser" name="query" placeholder="Search people" aria-label="Search" aria-describedby="button-addon2">
+          <input type="text" class="form-control" id="searchuser" name="query" placeholder="Search people" aria-label="Search" aria-describedby="button-addon2" value="">
           <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
               <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />

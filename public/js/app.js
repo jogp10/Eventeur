@@ -25,12 +25,12 @@ function addEventListeners() {
 
   let searchCard = document.querySelector('#searchuser');
   if (searchCard != null) {
+    sendSearchUserRequest();
     searchCard.addEventListener('input', sendSearchUserRequest);
   }
 
   let submit = document.getElementById("send");
   if (submit != null) {
-    sendInvitesRequest();
     submit.addEventListener('click', sendInvitesRequest);
   }
 }
@@ -109,9 +109,6 @@ function sendInvitesRequest(event) {
 
   if (checkedArray.length > 0)
     sendAjaxRequest('post', '/api/invite/', { ids: checkedArray, event_id:event_id }, sendInviteHandler);
-
-  var modal = document.getElementsByClassName("modal")[0];
-  modal.getElementsByClassName.display = "none";
 }
 
 function itemUpdatedHandler() {
@@ -192,17 +189,15 @@ function searchUserHandler() {
 
   var tr = document.getElementsByTagName("tr");
   for (var i = 0; i < tr.length; i++) {
-    console.log(tr[i]);
     tr[i].addEventListener('click', checks, false);
   }
 }
 
 function sendInviteHandler() {
-  if (this.status != 200) {
+  if (this.status != 200) window.location = '/';
 
-  }
-
-  console.log(this.responseText);
+  var modal = document.getElementsByClassName("modal")[0];
+  modal.getElementsByClassName.display = "none";
 
   let invites = JSON.parse(this.responseText);
 }
