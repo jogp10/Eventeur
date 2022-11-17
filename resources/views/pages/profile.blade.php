@@ -22,12 +22,12 @@
             <div class="">
                 <h3>Invites</h3>
                 <div class="border border-grey m-0 my-5 p-0 text-center" style="min">
-                    @if(sizeof($invites) === 0)
+                    @if(sizeof($account->user->invites) === 0)
                         <p class="mt-3 fs-4">There are no invites.</p>
                     @else
                     <!--Mudar isto(talvez?) e nao tenho a certeza se esta a funcionar. Na minha conta nao tenho invites.-->
                     <section id="cards">
-                        @each('partials.event', $invites, 'event')
+                        @each('partials.invite', $account->user->invites, 'invites')
                     </section>
                     @endif
                 </div>

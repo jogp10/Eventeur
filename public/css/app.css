@@ -85,17 +85,12 @@ footer {
   height: 2.5rem;
 }
 
-#modal {
+.modal-dialog {
+  margin:auto;
+}
+
+.hidden {
   display: none;
-  position: fixed; 
-  z-index: 1; 
-  left: 33%;
-  top: 15%;
-  width: 35%; 
-  height: 65%; 
-  overflow: auto; 
-  background-color: darkblue;
-  border-radius: 15px;
 }
 
 

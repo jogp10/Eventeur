@@ -5,7 +5,7 @@ var modal = document.getElementsByClassName("modal")[0];
 var btn = document.getElementById("invite");
 
 // Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
+//var span = document.getElementsByClassName("close")[0];
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function (event) {
@@ -19,6 +19,7 @@ btn.onclick = function () {
   modal.style.display = "block";
 }
 
+/*
 // When the user clicks on <span> (x), close the modal
 span.onclick = function () {
   modal.style.display = "none";
@@ -26,4 +27,17 @@ span.onclick = function () {
 
 modal.addEventListener('shown.bs.modal', () => {
   span.focus()
-})
+})*/
+
+var tr = document.getElementsByTagName("tr");
+console.log(tr);
+
+for (var i = 0; i < tr.length; i++) {
+  tr[i].addEventListener('click', checks, false);
+}
+
+function checks(e) {
+  var check =   e.target.querySelector('td div svg');
+  console.log(check);
+  check.classList.toggle("hidden");
+};
