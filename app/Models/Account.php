@@ -4,36 +4,20 @@ namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use App\Models\User;
 
-class Account extends Authenticatable {
-    use Notifiable;
-
-    public $timestamps  = false;
-
-    protected $table = "account";
+class Account extends Authenticatable
+{
+    use HasFactory;
 
     protected $fillable = [
-        'name', 'email', 'description', 'age', 'password' 
+        'email', 'name', 'password', 'description', 'age', 'created_at', 'updated_at'
     ];
 
     protected $hidden = [
         'password'
     ];
 
-    public function coverImage() {return $this->hasOne('App\Models\CoverImage');} 
-    
-    public function perfilPicture() {return $this->hasOne('App\Models\PerfilPicture');}
-
-    public function user() {return $this->hasOne('App\Models\User','id');}
-
-    public function admin() {return $this->hasOne('App\Models\Administrator');}
+    public function user() { return $this->hasOne(User::class); }
+    public function admin() { return $this->hasOne(Admin::class); }
 }
-
-
-
-
-
-

@@ -2,13 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Answer;
+use App\Models\Ticket;
+use App\Models\User;
+use App\Models\Vote;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 
 use App\Models\Event;
 use App\Models\Account;
+
+function console_log($output, $with_script_tags = true)
+{
+    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
+        ');';
+    if ($with_script_tags) {
+        $js_code = '<script>' . $js_code . '</script>';
+    }
+    echo $js_code;
+}
 
 class EventController extends Controller
 {
@@ -49,20 +61,13 @@ class EventController extends Controller
     public function show($id)
     {
         $event = Event::find($id);
+
         if ($event->privacy == "Private") {
-            $tickets = DB::table('userticketevent')
-                ->where('event_id', $id)
-                ->get();
 
             $this->authorize('view', $event);
         }
 
-        $comments = DB::table('comment')
-            ->where('event_id', $id)
-            ->orderBy('written_date', 'desc')
-            ->get();
-
-        return view('pages.event', ['event' => $event, 'comments' => $comments]);
+        return view('pages.event', ['event' => $event]);
     }
 
     /**

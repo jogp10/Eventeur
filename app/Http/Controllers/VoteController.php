@@ -2,20 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\example;
+use App\Models\Vote;
 use Illuminate\Http\Request;
 
-function console_log($output, $with_script_tags = true)
-{
-    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
-        ');';
-    if ($with_script_tags) {
-        $js_code = '<script>' . $js_code . '</script>';
-    }
-    echo $js_code;
-}
-
-class ExampleController extends Controller
+class VoteController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -51,10 +41,10 @@ class ExampleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\example  $example
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(example $example)
+    public function show($id)
     {
         //
     }
@@ -62,10 +52,10 @@ class ExampleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\example  $example
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(example $example)
+    public function edit($id)
     {
         //
     }
@@ -74,10 +64,10 @@ class ExampleController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\example  $example
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, example $example)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -85,11 +75,33 @@ class ExampleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\example  $example
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(example $example)
+    public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Submit a Vote.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function vote()
+    {
+        $action = $_GET['action'];
+        $id = $_GET['id'];
+        $user_id = $_GET['user_id'];
+        $type = $_GET['type'];
+        
+        Vote::where('user_id', $user_id)->where($type.'_id', $id)->count() > 0 ? $vote = Vote::where('user_id', $user_id)->where($type.'_id', $id)->first() 
+                : $vote = Vote::create(['user_id' => $user_id, $type.'_id' => $id]);
+        
+        if ($action == 'down')
+        {
+            $vote->delete();
+        }
+        return redirect()->back()->with('message', 'Your vote has been set successfully!');;
     }
 }

@@ -2,35 +2,59 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\Account;
 
-class HomepageController extends Controller {
+use App\Models\Event;
 
-    public function home() {
+function console_log($output, $with_script_tags = true)
+{
+    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
+        ');';
+    if ($with_script_tags) {
+        $js_code = '<script>' . $js_code . '</script>';
+    }
+    echo $js_code;
+}
 
-        $events = DB::table('events')
-                ->inRandomOrder()
+class HomepageController extends Controller
+{
+
+    public function home()
+    {
+
+        $events = Event::inRandomOrder()
                 ->limit(8)
                 ->get();
-
-        $users = DB::table('account')
-                ->get();
-
-        
-        
-
-
 
         return view('pages.home', ['events' => $events]);
     }
 
-    public function search(){
+    public function search()
+    {
         $search_text = $_GET['query'];
 
-        $events = DB::table('events')->whereFullText('name', $search_text)->get(); //->where('name', $search_text);
+        if (mb_substr($search_text, 0, 1) != "\"") {
+            $events = Event::whereFullText('name', $search_text)->get();
+            $eventsByDescripton = Event::whereFullText('description', $search_text)->get();
+            $eventsByLocation = Event::whereFullText('location', $search_text)->get();
+            foreach ($eventsByDescripton as $value) {
+                $events->add($value);
+            }
+            foreach ($eventsByLocation as $value) {
+                $events->add($value);
+            }
+        } else {
+            $search_text = mb_substr($search_text, 1, strlen($search_text) - 2);
+            $events = Event::where('name', 'like', '%' . $search_text . '%')->get();
+            $eventsByDescripton = Event::where('description', 'like', '%' . $search_text . '%')->get();
+            $eventsByLocation = Event::where('location', 'like', '%' . $search_text . '%')->get();
+            foreach ($eventsByDescripton as $value) {
+                $events->add($value);
+            }
+            foreach ($eventsByLocation as $value) {
+                $events->add($value);
+            }
+        }
+
         return view('pages.home', ['events' => $events]);
     }
 }

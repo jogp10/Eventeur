@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
-use App\Models\User;
 use App\Models\Account;
 
 class ProfileController extends Controller
@@ -45,9 +43,12 @@ class ProfileController extends Controller
      * @param  \App\Models\Account  $account
      * @return \Illuminate\Http\Response
      */
-    public function show()
-    {
-        return view('pages.profile', ['account' => Auth::user()]);
+
+    public function show() {
+
+        $account_user = Auth::user()->user;
+
+        return view('pages.profile', ['account' => Auth::user(), 'invites' => $account_user->invites]);
     }
 
     public function showEditPage()
@@ -70,9 +71,8 @@ class ProfileController extends Controller
      */
     public function edit(Request $request)
     {
-
         $validated = $request->validate([
-            'name' => ['unique:account', 'max:20'],
+            'name' => ['max:20'],
             'description' => ['max:200'],
         ]);
 
@@ -84,7 +84,7 @@ class ProfileController extends Controller
         }
 
         Auth::user()->save();
-        return view('pages.profile', ['account' => Auth::user()]);
+        return $this->show();
     }
 
     /**

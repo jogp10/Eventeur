@@ -5,18 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Comment extends Model {
+class Comment extends Model
+{
     use HasFactory;
 
-    protected $table = "comment";
-
-    public $timestamps = false;
-
     protected $fillable = [
-        'content', 'date', 'edited'
+        'user_id', 'event_id', 'content', 'edited', 'created_at', 'updated_at'
     ];
 
-    public function replies() {return $this->belongsToMany('App\Models\Comment');}
-    
-    public function notification() {return $this->hasOne('App\Models\CommentNotification');}
+    public function event() { return $this->belongsTo(Event::class); }
+
+    public function user() { return $this->belongsTo(User::class); }
+    public function notification() { return $this->hasOne(CommentNotification::class); }
+
+    public function answers() { return $this->hasMany(Answer::class); }
+
+    public function votes() { return $this->hasMany(Vote::class); }
 }

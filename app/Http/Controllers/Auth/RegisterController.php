@@ -8,6 +8,16 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
+function console_log($output, $with_script_tags = true)
+{
+    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
+        ');';
+    if ($with_script_tags) {
+        $js_code = '<script>' . $js_code . '</script>';
+    }
+    echo $js_code;
+}
+
 class RegisterController extends Controller
 {
     /*
@@ -47,11 +57,10 @@ class RegisterController extends Controller
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
-    {
-        
+    {        
         return Validator::make($data, [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:account',
+            'email' => 'required|string|email|max:255|unique:accounts',
             'password' => 'required|string|min:6|confirmed',
         ]);
     }
@@ -64,13 +73,17 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-
+        console_log('data');
         $account = Account::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
-
+        
+        $user = User::create([
+            'id' => $account->id,
+            'account_id' => $account->id,
+        ]);
         return $account;
     }
 }

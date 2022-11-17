@@ -1,24 +1,23 @@
-drop table if exists ACCOUNT CASCADE;
-drop table if exists CoverImage CASCADE;
-drop table if exists PerfilImage CASCADE;
-drop table if exists _USER CASCADE;
-drop table if exists ADMINISTRATOR CASCADE;
-drop table if exists MANAGER CASCADE;
-drop table if exists EVENTS CASCADE;
-drop table if exists TAG CASCADE;
-drop table if exists EventTag CASCADE;
-drop table if exists TICKET CASCADE;
-drop table if exists UserTicketEvent CASCADE;
-drop table if exists INVITE CASCADE;
-drop table if exists NOTIFICATIONS CASCADE;
-drop table if exists InviteNotification CASCADE;
-drop table if exists COMMENT CASCADE;
-drop table if exists CommentNotification CASCADE;
-drop table if exists ANSWER CASCADE;
-drop table if exists POLL CASCADE;
-drop table if exists PollOption CASCADE;
-drop table if exists VOTE CASCADE;
-drop table if exists REPORT CASCADE;
+drop table if exists accounts CASCADE;
+drop table if exists cover_images CASCADE;
+drop table if exists profile_images CASCADE;
+drop table if exists users CASCADE;
+drop table if exists admins CASCADE;
+drop table if exists events CASCADE;
+drop table if exists tags CASCADE;
+drop table if exists event_tag CASCADE;
+drop table if exists tickets CASCADE;
+drop table if exists invites CASCADE;
+drop table if exists notifications CASCADE;
+drop table if exists invite_notifications CASCADE;
+drop table if exists comments CASCADE;
+drop table if exists comment_notifications CASCADE;
+drop table if exists answers CASCADE;
+drop table if exists polls CASCADE;
+drop table if exists poll_options CASCADE;
+drop table if exists votes CASCADE;
+drop table if exists reports CASCADE;
+drop table if exists bans CASCADE;
 
 DROP TYPE IF EXISTS privacy CASCADE;
 
@@ -33,211 +32,238 @@ CREATE TYPE privacy as ENUM (
 -- Tables
 
 
-CREATE TABLE ACCOUNT (
+CREATE TABLE accounts (
     id          SERIAL PRIMARY KEY,
     email       TEXT NOT NULL,
     name        TEXT NOT NULL,
     password    TEXT NOT NULL,
     description TEXT,
     age         INTEGER CHECK (age > 0),
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     UNIQUE(email)
 );
 
-CREATE TABLE EVENTS (
+CREATE TABLE users (
+    id          SERIAL PRIMARY KEY,
+    account_id  INTEGER DEFAULT -1,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_accounts_id  FOREIGN KEY(account_id) REFERENCES accounts(id)
+);
+
+CREATE TABLE admins (
+    id         SERIAL PRIMARY KEY,
+    account_id  INTEGER DEFAULT -1,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_account_id  FOREIGN KEY(account_id) REFERENCES accounts(id)
+);
+
+CREATE TABLE events (
     id SERIAL PRIMARY KEY,
     name        TEXT NOT NULL,
-    description TEXT,
+    description TEXT NOT NULL,
     start_date  DATE NOT NULL,
     end_date    DATE NOT NULL,
     location    TEXT NOT NULL,
     capacity    INTEGER NOT NULL,
     privacy     privacy DEFAULT 'Public', 
+    user_id     INTEGER NOT NULL,
+    ticket     INTEGER NOT NULL DEFAULT 0,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id),
     CHECK (start_date < end_date),
     CHECK (capacity > 0)
 );
 
-CREATE TABLE CoverImage (
+CREATE TABLE cover_images (
     id SERIAL PRIMARY KEY,
-    events_id   INTEGER NOT NULL,
+    event_id   INTEGER NOT NULL,
     path        TEXT NOT NULL,
-    CONSTRAINT fk_events_id FOREIGN KEY(events_id) REFERENCES EVENTS(id),
-    UNIQUE(events_id)
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES events(id),
+    UNIQUE(event_id)
 );
 
-CREATE TABLE PerfilImage (
+CREATE TABLE profile_images (
     id SERIAL PRIMARY KEY,
     account_id  INTEGER DEFAULT -1,
     path        TEXT NOT NULL,
-    CONSTRAINT fk_account_id FOREIGN KEY(account_id) REFERENCES ACCOUNT(id),
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_account_id FOREIGN KEY(account_id) REFERENCES accounts(id),
     UNIQUE(account_id)
 );
 
-CREATE TABLE _USER (--f
-    id SERIAL PRIMARY KEY,
-    account_id  INTEGER DEFAULT -1,
-    CONSTRAINT fk_account_id  FOREIGN KEY(account_id) REFERENCES ACCOUNT(id)
-);
-
-CREATE TABLE ADMINISTRATOR (--f
-    id SERIAL PRIMARY KEY,
-    account_id  INTEGER DEFAULT -1,
-    CONSTRAINT fk_account_id  FOREIGN KEY(account_id) REFERENCES ACCOUNT(id)
-);
-
-CREATE TABLE MANAGER (
-    id SERIAL PRIMARY KEY,
-    account_id  INTEGER DEFAULT -1,
-    event_id    INTEGER NOT NULL,
-    CONSTRAINT fk_account_id  FOREIGN KEY(account_id) REFERENCES ACCOUNT(id),
-    CONSTRAINT fk_event_id  FOREIGN KEY(event_id) REFERENCES EVENTS(id),
-    UNIQUE(account_id, event_id)
-);
-
-
-
-CREATE TABLE TAG (--f
+CREATE TABLE tags (
     id          SERIAL PRIMARY KEY,
     name        TEXT NOT NULL,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     UNIQUE(name)
 );
 
-CREATE TABLE EventTag (--f
+CREATE TABLE event_tag (
     id          SERIAL PRIMARY KEY,
     event_id    INTEGER NOT NULL,
     tag_id      INTEGER NOT NULL,
-    CONSTRAINT fk_event_id  FOREIGN KEY(event_id) REFERENCES EVENTS(id),
-    CONSTRAINT fk_tag_id  FOREIGN KEY(tag_id) REFERENCES TAG(id),
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_event_id  FOREIGN KEY(event_id) REFERENCES events(id),
+    CONSTRAINT fk_tag_id  FOREIGN KEY(tag_id) REFERENCES tags(id),
     UNIQUE(event_id, tag_id)
 );
 
-CREATE TABLE TICKET (
+CREATE TABLE tickets (
     id          SERIAL PRIMARY KEY,
-    price       REAL DEFAULT 0
+    event_id    INTEGER NOT NULL,
+    user_id     INTEGER NOT NULL,
+    num_of_tickets INTEGER NOT NULL,
+    price       REAL DEFAULT 0,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_event_id  FOREIGN KEY(event_id) REFERENCES events(id),
+    CONSTRAINT fk_user_id  FOREIGN KEY(user_id) REFERENCES users(id),
+    UNIQUE(event_id, user_id)
 );
 
-CREATE TABLE UserTicketEvent (
+CREATE TABLE invites (
     id          SERIAL PRIMARY KEY,
     user_id     INTEGER DEFAULT -1,
     event_id    INTEGER NOT NULL,
-    ticket_id   INTEGER NOT NULL,
-    num_tickets INTEGER CHECK (num_tickets > 0),
-    CONSTRAINT fk_user_id  FOREIGN KEY(user_id) REFERENCES _USER(id),
-    CONSTRAINT fk_event_id  FOREIGN KEY(event_id) REFERENCES EVENTS(id),
-    CONSTRAINT fk_ticket_id  FOREIGN KEY(ticket_id) REFERENCES TICKET(id),
-    UNIQUE(user_id, event_id, ticket_id)
-);
-
-CREATE TABLE INVITE (
-    id          SERIAL PRIMARY KEY,
-    user_id     INTEGER DEFAULT -1,
-    event_id    INTEGER NOT NULL,
-    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES _USER(id),
-    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES EVENTS(id),
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
+    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES events(id),
     UNIQUE(user_id, event_id)
 );
 
-CREATE TABLE NOTIFICATIONS (
+CREATE TABLE notifications (
     id          SERIAL PRIMARY KEY,
-    user_id     INTEGER DEFAULT -1,
-    event_id    INTEGER NOT NULL,
     content     TEXT,
     seen        BOOLEAN DEFAULT '0',
-    sent_date        DATE NOT NULL,
-    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES _USER(id),
-    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES EVENTS(id)
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE InviteNotification (
+CREATE TABLE invite_notifications (
     id              SERIAL PRIMARY KEY,
     notification_id INTEGER NOT NULL,
     invite_id       INTEGER NOT NULL,
-    user_id         INTEGER DEFAULT -1,
-    CONSTRAINT fk_notification_id FOREIGN KEY(notification_id) REFERENCES NOTIFICATIONS(id),
-    CONSTRAINT fk_invite_id FOREIGN KEY(invite_id) REFERENCES INVITE(id),
-    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES _USER(id),
-    UNIQUE(notification_id, invite_id, user_id)
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_notification_id FOREIGN KEY(notification_id) REFERENCES notifications(id),
+    CONSTRAINT fk_invite_id FOREIGN KEY(invite_id) REFERENCES invites(id),
+    UNIQUE(notification_id, invite_id)
 );
 
-CREATE TABLE COMMENT (
+CREATE TABLE comments (
     id              SERIAL PRIMARY KEY,
     user_id         INTEGER DEFAULT -1,
     event_id        INTEGER NOT NULL,
     content         TEXT NOT NULL,
-    written_date    DATE NOT NULL CHECK (written_date <= CURRENT_DATE),
     edited          BOOLEAN DEFAULT '0',
-    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES _USER(id),
-    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES EVENTS(id)
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
+    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES events(id)
 );
 
-CREATE TABLE CommentNotification (
+CREATE TABLE comment_notifications (
     id              SERIAL PRIMARY KEY,
     notification_id INTEGER NOT NULL,
     comment_id      INTEGER NOT NULL,
-    user_id         INTEGER DEFAULT -1,
-    CONSTRAINT fk_notification_id FOREIGN KEY(notification_id) REFERENCES NOTIFICATIONS(id),
-    CONSTRAINT fk_comment_id FOREIGN KEY(comment_id) REFERENCES COMMENT(id),
-    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES _USER(id),
-    UNIQUE(notification_id, comment_id, user_id)
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_notification_id FOREIGN KEY(notification_id) REFERENCES notifications(id),
+    CONSTRAINT fk_comment_id FOREIGN KEY(comment_id) REFERENCES comments(id),
+    UNIQUE(notification_id, comment_id)
 );
 
-CREATE TABLE ANSWER (
+CREATE TABLE answers (
     id              SERIAL PRIMARY KEY,
     comment_id      INTEGER NOT NULL,
-    answer_id       INTEGER NOT NULL,
-    CONSTRAINT fk_comment_id FOREIGN KEY(comment_id) REFERENCES COMMENT(id),
-    CONSTRAINT fk_answer_id FOREIGN KEY(answer_id) REFERENCES COMMENT(id),
-    UNIQUE(answer_id)
+    user_id         INTEGER DEFAULT -1,
+    content         TEXT NOT NULL,
+    edited          BOOLEAN DEFAULT '0',
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
+    CONSTRAINT fk_comment_id FOREIGN KEY(comment_id) REFERENCES comments(id)
 );
 
-CREATE TABLE POLL (
+CREATE TABLE polls (
     id              SERIAL PRIMARY KEY,
     event_id        INTEGER NOT NULL,
     question        TEXT NOT NULL,
-    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES EVENTS(id)
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES events(id)
 );
 
-CREATE TABLE PollOption (
+CREATE TABLE poll_options (
     id              SERIAL PRIMARY KEY,
     poll_id         INTEGER NOT NULL,
     description     TEXT NOT NULL,
     votes           INTEGER DEFAULT 0,
-    CONSTRAINT fk_poll_id FOREIGN KEY(poll_id) REFERENCES POLL(id),
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_poll_id FOREIGN KEY(poll_id) REFERENCES polls(id),
     UNIQUE(id, poll_id)
 );
 
-CREATE TABLE VOTE (
+CREATE TABLE votes (
     id              SERIAL PRIMARY KEY,
     user_id         INTEGER DEFAULT -1,
-    poll_option_id  INTEGER NOT NULL,
-    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES _USER(id),
-    CONSTRAINT fk_polloption_id FOREIGN KEY(poll_option_id) REFERENCES PollOption(id),
-    UNIQUE(user_id)
+    poll_option_id  INTEGER,
+    event_id        INTEGER,
+    comment_id      INTEGER,
+    answer_id      INTEGER,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
+    CONSTRAINT fk_polloption_id FOREIGN KEY(poll_option_id) REFERENCES poll_options(id),
+    CHECK (poll_option_id IS NOT NULL OR event_id IS NOT NULL OR comment_id IS NOT NULL OR answer_id IS NOT NULL)
 );
 
-CREATE TABLE REPORT (
+CREATE TABLE reports (
     id              SERIAL PRIMARY KEY,
     user_id         INTEGER DEFAULT -1,
     event_id        INTEGER NOT NULL,
     content         TEXT NOT NULL,
-    written_date    DATE NOT NULL CHECK (written_date <= CURRENT_DATE),
-    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES _USER(id),
-    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES EVENTS(id)
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
+    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES events(id)
+);
+
+CREATE TABLE bans (
+    id              SERIAL PRIMARY KEY,
+    admin_id        INTEGER NOT NULL,
+    user_id         INTEGER DEFAULT -1,
+    ban_type        INTEGER NOT NULL,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
 --Functions
 
 CREATE OR REPLACE FUNCTION
-    invite_event_notification_function() RETURNS TRIGGER AS $invite_event$
+    invites_event_notification_function() RETURNS TRIGGER AS $invites_event$
     BEGIN
     	INSERT INTO notifications(user_id, event_id, content, sent_date)
-    	VALUES (NEW.user_id, NEW.event_id, 'Invited to Event', NOW()) RETURNING notif_id ;
+    	VALUES (NEW.user_id, NEW.event_id, 'invitesd to event', NOW()) RETURNING notif_id ;
     	
-    	INSERT INTO invitenotification(notification_id, invite_id, user_id)
+    	INSERT INTO invite_notifications(notification_id, invites_id, user_id)
     	VALUES (notif_id, New.id, New.user_id);
 
         RETURN NEW;
     END;
-$invite_event$ LANGUAGE 'plpgsql';
+$invites_event$ LANGUAGE 'plpgsql';
 
 
 CREATE OR REPLACE FUNCTION
@@ -251,29 +277,29 @@ CREATE OR REPLACE FUNCTION
             SELECT DISTINCT user_id
             FROM (
                 SELECT user_id
-                FROM userticketevent
+                FROM tickets
                 WHERE event_id = OLD.id
                 UNION
-                SELECT account_id
-                FROM managers
+                SELECT user_id
+                FROM events
                 WHERE event_id = OLD.id
             ) AS users
         LOOP
             INSERT INTO notifications(content, user_id, event_id, sent_date)
-            VALUES ('EventCancellation', u.user_id, OLD.id, NOW());
+            VALUES ('eventCancellation', u.user_id, OLD.id, NOW());
         END LOOP;
 
         RETURN OLD;
     END;
 $cancel_event$ LANGUAGE 'plpgsql';
 
-CREATE OR REPLACE FUNCTION create_invite_notification() RETURNS TRIGGER AS $BODY$
+CREATE OR REPLACE FUNCTION create_invites_notification() RETURNS TRIGGER AS $BODY$
    	BEGIN
     	WITH inserted AS (
-			INSERT into Notifications (content, user_id, event_id, seen, sent_date) values ('You recied an invite...', NEW.user_id, NEW.event_id, '0', CURRENT_DATE)
+			INSERT into notifications (content, user_id, event_id, seen, sent_date) values ('You recied an invites...', NEW.user_id, NEW.event_id, '0', CURRENT_DATE)
 			RETURNING id
 		)
-		INSERT into InviteNotification SELECT inserted.id, NEW.id, NEW.user_id FROM inserted;
+		INSERT into invite_notifications SELECT inserted.id, NEW.id, NEW.user_id FROM inserted;
 		RETURN NEW;
    	END;
 $BODY$ LANGUAGE plpgsql;
@@ -291,7 +317,7 @@ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION check_attendee() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF (SELECT COUNT(*) FROM userticketevent WHERE user_id = NEW.user_id AND event_id = NEW.event_id) = 0 THEN
+    IF (SELECT COUNT(*) FROM tickets WHERE user_id = NEW.user_id AND event_id = NEW.event_id) = 0 AND (SELECT COUNT(*) FROM events WHERE user_id = NEW.user_id AND id = NEW.event_id) = 0 THEN
         RAISE EXCEPTION 'User is not an attendee of the event';
     END IF;
     RETURN NEW;
@@ -302,30 +328,30 @@ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION delete_user() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    UPDATE comment SET user_id = 1 WHERE user_id = OLD.id;
-    UPDATE userticketevent SET user_id = 1 WHERE user_id = OLD.id;
-    UPDATE invite SET user_id = 1 WHERE user_id = OLD.id;
-    UPDATE managers SET account_id = 1 WHERE account_id = OLD.id;
-    UPDATE events SET creator_id = 1 WHERE creator_id = OLD.id;
+    UPDATE comments SET user_id = 1 WHERE user_id = OLD.id;
+    UPDATE invites SET user_id = 1 WHERE user_id = OLD.id;
+    UPDATE events SET accounts_id = 1 WHERE accounts_id = OLD.id;
     UPDATE notifications SET user_id = 1 WHERE user_id = OLD.id;
     UPDATE content SET user_id = 1 WHERE user_id = OLD.id;
+    DELETE FROM accounts WHERE id = OLD.id;
     RETURN OLD;
 END
 $BODY$
 LANGUAGE plpgsql;
 
 --Triggers
-Drop TRIGGER IF EXISTS delete_comment ON Comment;
-Drop TRIGGER IF EXISTS cancel_event_notification ON Events;
-Drop TRIGGER IF EXISTS invite_event_notification ON Invite;
-Drop TRIGGER IF EXISTS check_attendee ON userticketevent;
-Drop TRIGGER IF EXISTS delete_user ON _user;
+Drop TRIGGER IF EXISTS delete_comment ON comments;
+Drop TRIGGER IF EXISTS cancel_event_notification ON events;
+Drop TRIGGER IF EXISTS invites_event_notification ON invites;
+Drop TRIGGER IF EXISTS check_attendee ON tickets;
+Drop TRIGGER IF EXISTS delete_user ON users;
+Drop TRIGGER IF EXISTS create_account ON account;
 
 -- Trigger 1
-CREATE TRIGGER invite_event_notification_trigger 
-    AFTER INSERT ON invite
+CREATE TRIGGER invites_event_notification_trigger 
+    AFTER INSERT ON invites
     FOR EACH ROW 
-    EXECUTE PROCEDURE invite_event_notification_function();
+    EXECUTE PROCEDURE invites_event_notification_function();
 
 -- Trigger 2
 CREATE TRIGGER cancel_event_notification_trigger 
@@ -335,19 +361,19 @@ CREATE TRIGGER cancel_event_notification_trigger
 
 -- Trigger 3
 CREATE TRIGGER delete_comment
-    AFTER DELETE ON comment
+    AFTER DELETE ON comments
     FOR EACH ROW
     EXECUTE PROCEDURE delete_comment();
 
 -- Trigger 4
 CREATE TRIGGER check_attendee
-    BEFORE INSERT ON comment
+    BEFORE INSERT ON comments
     FOR EACH ROW
     EXECUTE PROCEDURE check_attendee();
 
 -- Trigger 5
 CREATE TRIGGER delete_user
-    AFTER DELETE ON _user
+    AFTER DELETE ON users
     FOR EACH ROW
     EXECUTE PROCEDURE delete_user();
 
@@ -363,14 +389,25 @@ Drop INDEX IF EXISTS search_comment;
 CREATE INDEX event_name ON events USING btree (name);
 
 --Index 2
---CREATE INDEX user_name ON _user USING btree (name);
+--CREATE INDEX user_name ON users USING btree (name);
 
 -- Index 3
 CREATE INDEX event_date ON events USING btree (start_date);
 
 -- Index 11
-ALTER TABLE events
-ADD COLUMN searchs TSVECTOR;
+do $$
+begin
+IF NOT EXISTS( SELECT NULL
+            FROM INFORMATION_SCHEMA.COLUMNS
+           WHERE table_name = 'events'
+             AND table_schema = 'lbaw2224'
+             AND column_name = 'search')  THEN
+
+  ALTER TABLE events ADD search TSVECTOR;
+
+END IF;
+END $$
+LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION event_search_update() RETURNS TRIGGER AS $$
 BEGIN
@@ -393,19 +430,20 @@ BEGIN
  RETURN NEW;
 END $$
 LANGUAGE plpgsql;
-/*
+
+
 CREATE TRIGGER event_search_update
  BEFORE INSERT OR UPDATE ON events
  FOR EACH ROW
  EXECUTE PROCEDURE event_search_update();
-*/
-CREATE INDEX search_event ON events USING GIN (searchs);
+
+--CREATE INDEX search_event ON events USING GIN (searchs);
 
 --Index 12
---CREATE INDEX search_users ON _user USING GIN (search);
+--CREATE INDEX search_users ON users USING GIN (searchs);
 
 --Index 13
---CREATE INDEX search_comment ON comment USING GIN (search);
+--CREATE INDEX search_comment ON comments USING GIN (searchs);
 
 -- Transactions
 
@@ -416,15 +454,15 @@ BEGIN TRANSACTION;
 
 SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 
-Create Poll
-INSERT INTO poll (event_id, question)
+Create polls
+INSERT INTO polls (event_id, question)
  VALUES ($event_id, $question);
  
 Create at least two options
-INSERT INTO polloption (poll_id, description)
+INSERT INTO poll_options (poll_id, description)
  VALUES (currval('poll_id_seq'), $description1);
  
-INSERT INTO polloption (poll_id, description)
+INSERT INTO poll_options (poll_id, description)
  VALUES (currval('poll_id_seq'), $description2);
 
 END TRANSACTION;*/
@@ -432,9 +470,9 @@ END TRANSACTION;*/
 
 -- Populate
 
-INSERT INTO ACCOUNT (email, name, password, description, age)
+INSERT INTO accounts (email, name, password, description, age)
 VALUES
-  ('id@outlook.edu','Alexander Mccormick','MRS20KYI7ST','aliquet vel, vulputate eu, odio. Phasellus at augue id ante dictum cursus.',38),
+  ('anynomous@anynomous.com','deleted account','MRS20KYI7ST','deleted account',999),
   ('ante.ipsum@icloud.org','Tobias Rodriquez','YEK65KFW7BP','enim diam vel arcu. Curabitur ut odio vel est tempor bibendum. Donec felis orci, adipiscing',18),
   ('purus.ac@aol.org','Clark Franklin','JSZ36EKV3JZ','nascetur ridiculus mus. Aenean eget magna. Suspendisse tristique neque venenatis lacus. Etiam bibendum fermentum metus. Aenean sed pede nec ante',53),
   ('iaculis.lacus@outlook.couk','Inez Hopper','EKI16OVT3BM','Cras sed leo. Cras vehicula aliquet libero. Integer in magna. Phasellus dolor elit, pellentesque a, facilisis non, bibendum sed,',54),
@@ -536,162 +574,149 @@ VALUES
   ('quis.lectus@google.com','Sierra Webb','EWD06GOK4JK','nonummy ut, molestie in, tempus eu, ligula. Aenean euismod mauris eu elit. Nulla facilisi. Sed neque. Sed eget lacus. Mauris',25);
 
 
-INSERT INTO ADMINISTRATOR (id, account_id)
+INSERT INTO admins (account_id)
 VALUES
-  (1,49),
-  (2,14),
-  (3,86),
-  (4,64),
-  (5,96),
-  (6,50),
-  (7,48),
-  (8,2),
-  (9,75),
-  (10,51);
-  
+  (49),
+  (14),
+  (86),
+  (64),   
+  (96),
+  (50),
+  (48),
+  (2),
+  (75),
+  (51);
 
-INSERT INTO _USER (id, account_id)
+
+INSERT INTO users (account_id)
 VALUES
-  (1,1),
-  (3,3),
-  (4,4),
-  (5,5),
-  (6,6),
-  (7,7),
-  (8,8),
-  (9,9),
-  (10,10),
-  (11,11),
-  (12,12),
-  (13,13),
-  (15,15),
-  (16,16),
-  (17,17),
-  (18,18),
-  (19,19),
-  (20,20),
-  (21,21),
-  (22,22),
-  (23,23),
-  (24,24),
-  (25,25),
-  (26,26),
-  (27,27),
-  (28,28),
-  (29,29),
-  (30,30),
-  (31,31),
-  (32,32),
-  (33,33),
-  (34,34),
-  (35,35),
-  (36,36),
-  (37,37),
-  (38,38),
-  (39,39),
-  (40,40),
-  (41,41),
-  (42,42),
-  (43,43),
-  (44,44),
-  (45,45),
-  (46,46),
-  (47,47),
-  (52,52),
-  (53,53),
-  (54,54),
-  (55,55),
-  (56,56),
-  (57,57),
-  (58,58),
-  (59,59),
-  (60,60),
-  (61,61),
-  (62,62),
-  (63,63),
-  (65,65),
-  (66,66),
-  (67,67),
-  (68,68),
-  (69,69),
-  (70,70),
-  (71,71),
-  (72,72),
-  (73,73),
-  (74,74),
-  (76,76),
-  (77,77),
-  (78,78),
-  (79,79),
-  (80,80),
-  (81,81),
-  (82,82),
-  (83,83),
-  (84,84),
-  (85,85),
-  (87,87),
-  (88,88),
-  (89,89),
-  (90,90),
-  (91,91),
-  (92,92),
-  (93,93),
-  (94,94),
-  (95,95),
-  (97,97),
-  (98,98),
-  (99,99),
-  (100,100);
+  (1),
+  (2),
+  (3),
+  (4),
+  (5),
+  (6),
+  (7),
+  (8),
+  (9),
+  (10),
+  (11),
+  (12),
+  (13),
+  (14),
+  (15),
+  (16),
+  (17),
+  (18),
+  (19),
+  (20),
+  (21),
+  (22),
+  (23),
+  (24),
+  (25),
+  (26),
+  (27),
+  (28),
+  (29),
+  (30),
+  (31),
+  (32),
+  (33),
+  (34),
+  (35),
+  (36),
+  (37),
+  (38),
+  (39),
+  (40),
+  (41),
+  (42),
+  (43),
+  (44),
+  (45),
+  (46),
+  (47),
+  (48),
+  (49),
+  (50),
+  (51),
+  (52),
+  (53),
+  (54),
+  (55),
+  (56),
+  (57),
+  (58),
+  (59),
+  (60),
+  (61),
+  (62),
+  (63),
+  (64),
+  (65),
+  (66),
+  (67),
+  (68),
+  (69),
+  (70),
+  (71),
+  (72),
+  (73),
+  (74),
+  (75),
+  (76),
+  (77),
+  (78),
+  (79),
+  (80),
+  (81),
+  (82),
+  (83),
+  (84),
+  (85),
+  (86),
+  (87),
+  (88),
+  (89),
+  (90),
+  (91),
+  (92),
+  (93),
+  (94),
+  (95),
+  (96),
+  (97),
+  (98),
+  (99),
+  (100);
 
 
-INSERT INTO EVENTS (name,description,start_date,end_date,location,capacity,privacy)
+INSERT INTO events (user_id, name,description,start_date,end_date,location,capacity,privacy)
 VALUES
-  ('eu dolor egestas rhoncus. Proin nisl sem, consequat','In lorem. Donec elementum, lorem ut aliquam iaculis, lacus pede sagittis augue, eu tempor erat neque non quam.','2021-10-25', '2021-11-13','P.O. Box 737, 2366 Diam Av.',417,'Private'),
-  ('magnis dis parturient montes, nascetur ridiculus','tellus. Aenean egestas hendrerit neque. In ornare sagittis felis. Donec tempor, est ac mattis semper, dui lectus rutrum urna, nec luctus felis purus ac tellus. Suspendisse sed dolor. Fusce mi lorem, vehicula et, rutrum eu, ultrices sit amet,','2021-10-22','2021-11-20','Ap #415-6093 Eget Street',380,'Public'),
-  ('senectus et netus et','congue. In scelerisque scelerisque dui. Suspendisse ac metus vitae velit egestas lacinia. Sed congue, elit sed consequat auctor, nunc nulla vulputate dui, nec tempus mauris erat eget ipsum. Suspendisse sagittis. Nullam vitae diam. Proin dolor. Nulla semper tellus id','2021-10-18','2021-11-23','1448 Ac, Av.',204,'Public'),
-  ('elit sed consequat auctor, nunc','sodales elit erat vitae risus. Duis a mi fringilla mi lacinia mattis. Integer eu lacus. Quisque imperdiet,','2021-10-21','2021-11-08','883-8470 Magna Av.',58,'Public'),
-  ('amet, consectetuer adipiscing elit. Etiam laoreet,','Cras vehicula aliquet libero. Integer in magna. Phasellus dolor elit, pellentesque a, facilisis non, bibendum sed, est. Nunc','2021-10-25','2021-11-02','190-3930 Cum St.',204,'Private'),
-  ('non sapien molestie orci tincidunt adipiscing. Mauris','Cras interdum. Nunc sollicitudin commodo ipsum. Suspendisse non leo. Vivamus nibh dolor, nonummy ac, feugiat non, lobortis quis, pede. Suspendisse dui. Fusce diam nunc, ullamcorper eu, euismod ac, fermentum vel,','2021-05-19','2021-07-11','Ap #812-8492 Cum Road',355,'Public'),
-  ('Sed malesuada augue ut','lobortis risus. In mi pede, nonummy ut, molestie in, tempus eu, ligula. Aenean euismod mauris eu elit. Nulla facilisi. Sed neque. Sed eget lacus.','2021-10-28','2021-11-13','249-9537 Eget, Avenue',324,'Public'),
-  ('vehicula aliquet libero. Integer in magna.','consequat, lectus sit amet luctus vulputate, nisi sem semper erat, in consectetuer ipsum nunc id enim. Curabitur massa. Vestibulum accumsan neque et nunc. Quisque ornare','2021-10-21','2021-11-22','757-8707 Mi. Ave',361,'Public'),
-  ('arcu. Curabitur ut','euismod ac, fermentum vel, mauris. Integer sem elit, pharetra ut, pharetra sed, hendrerit a, arcu. Sed et libero. Proin mi. Aliquam gravida mauris ut mi. Duis risus odio, auctor vitae, aliquet','2021-10-26','2021-11-17','Ap #257-9182 Sapien. Ave',274,'Public'),
-  ('augue scelerisque mollis.','sit amet ornare lectus justo eu arcu. Morbi sit amet massa. Quisque porttitor eros nec tellus. Nunc lectus pede, ultrices a, auctor non, feugiat nec,','2021-10-23','2021-11-13','246-6797 Pharetra, Road',475,'Private'),
-  ('dolor. Quisque tincidunt pede ac','metus vitae velit egestas lacinia. Sed congue, elit sed consequat auctor, nunc nulla vulputate dui, nec tempus mauris erat eget ipsum. Suspendisse sagittis. Nullam vitae','2021-10-23','2021-11-24','5716 Augue St.',364,'Private'),
-  ('risus. Donec egestas. Aliquam nec enim.','mollis. Duis sit amet diam eu dolor egestas rhoncus. Proin nisl sem, consequat nec, mollis vitae, posuere at, velit. Cras','2021-10-26','2021-11-06','123-8901 Lacus. Av.',73,'Public'),
-  ('pede, nonummy ut, molestie','Donec vitae erat vel pede blandit congue. In scelerisque scelerisque dui. Suspendisse ac metus vitae velit egestas lacinia. Sed congue,','2021-10-23','2021-11-18','Ap #886-3769 Ligula Av.',493,'Private'),
-  ('magna. Suspendisse tristique','et ultrices posuere cubilia Curae Donec tincidunt. Donec vitae erat vel pede blandit congue. In scelerisque scelerisque dui. Suspendisse ac metus vitae velit egestas lacinia. Sed congue, elit sed consequat auctor, nunc','2021-10-24','2021-11-19','P.O. Box 132, 259 Lorem Street',474,'Public'),
-  ('viverra. Donec tempus, lorem','at, iaculis quis, pede. Praesent eu dui. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean eget magna. Suspendisse tristique neque venenatis lacus. Etiam bibendum fermentum metus.','2021-10-30','2021-11-04','575-1718 Orci Ave',89,'Public'),
-  ('velit justo nec','ante lectus convallis est, vitae sodales nisi magna sed dui. Fusce aliquam, enim nec tempus scelerisque, lorem','2021-10-28','2021-11-19','491-4933 Quis Avenue',59,'Public'),
-  ('sollicitudin a, malesuada id, erat. Etiam vestibulum','cursus vestibulum. Mauris magna. Duis dignissim tempor arcu. Vestibulum ut eros non enim commodo hendrerit. Donec porttitor tellus non magna. Nam ligula elit, pretium et, rutrum non, hendrerit id, ante. Nunc mauris sapien, cursus in,','2021-10-31','2021-11-15','Ap #103-5435 Aliquam Road',326,'Public'),
-  ('quis, tristique ac, eleifend vitae,','ipsum porta elit, a feugiat tellus lorem eu metus. In lorem. Donec elementum, lorem ut aliquam iaculis, lacus pede sagittis augue, eu','2021-10-30','2021-11-22','Ap #265-3578 Cum St.',299,'Public'),
-  ('pede. Cras vulputate velit','ut nisi a odio semper cursus. Integer mollis. Integer tincidunt aliquam arcu. Aliquam ultrices iaculis odio. Nam interdum enim non nisi. Aenean eget metus. In nec orci. Donec nibh. Quisque nonummy ipsum','2021-10-22','2021-11-03','P.O. Box 670, 4409 Neque. Street',86,'Private'),
-  ('condimentum. Donec at arcu. Vestibulum','faucibus orci luctus et ultrices posuere cubilia Curae Phasellus ornare. Fusce mollis. Duis sit amet diam eu dolor egestas rhoncus. Proin nisl sem, consequat nec, mollis vitae, posuere at, velit. Cras lorem lorem, luctus ut, pellentesque eget, dictum','2021-10-19','2021-11-02','806-7720 Litora Ave',205,'Public');
-
-INSERT INTO MANAGER (account_id,event_id)
-VALUES
-  (45,1),
-  (98,2),
-  (16,3),
-  (59,4),
-  (83,5),
-  (39,6),
-  (79,7),
-  (19,8),
-  (45,9),
-  (14,10),
-  (71,11),
-  (83,12),
-  (5,13),
-  (76,14),
-  (88,15),
-  (87,16),
-  (98,17),
-  (3,18),
-  (92,19),
-  (58,20);
+  (45,'eu dolor egestas rhoncus. Proin nisl sem, consequat','In lorem. Donec elementum, lorem ut aliquam iaculis, lacus pede sagittis augue, eu tempor erat neque non quam.','2021-10-25', '2021-11-13','P.O. Box 737, 2366 Diam Av.',417,'Public'),
+  (98,'magnis dis parturient montes, nascetur ridiculus','tellus. Aenean egestas hendrerit neque. In ornare sagittis felis. Donec tempor, est ac mattis semper, dui lectus rutrum urna, nec luctus felis purus ac tellus. Suspendisse sed dolor. Fusce mi lorem, vehicula et, rutrum eu, ultrices sit amet,','2021-10-22','2021-11-20','Ap #415-6093 Eget Street',380,'Public'),
+  (16,'senectus et netus et','congue. In scelerisque scelerisque dui. Suspendisse ac metus vitae velit egestas lacinia. Sed congue, elit sed consequat auctor, nunc nulla vulputate dui, nec tempus mauris erat eget ipsum. Suspendisse sagittis. Nullam vitae diam. Proin dolor. Nulla semper tellus id','2021-10-18','2021-11-23','1448 Ac, Av.',204,'Public'),
+  (59,'elit sed consequat auctor, nunc','sodales elit erat vitae risus. Duis a mi fringilla mi lacinia mattis. Integer eu lacus. Quisque imperdiet,','2021-10-21','2021-11-08','883-8470 Magna Av.',58,'Public'),
+  (83,'amet, consectetuer adipiscing elit. Etiam laoreet,','Cras vehicula aliquet libero. Integer in magna. Phasellus dolor elit, pellentesque a, facilisis non, bibendum sed, est. Nunc','2021-10-25','2021-11-02','190-3930 Cum St.',204,'Private'),
+  (39,'non sapien molestie orci tincidunt adipiscing. Mauris','Cras interdum. Nunc sollicitudin commodo ipsum. Suspendisse non leo. Vivamus nibh dolor, nonummy ac, feugiat non, lobortis quis, pede. Suspendisse dui. Fusce diam nunc, ullamcorper eu, euismod ac, fermentum vel,','2021-05-19','2021-07-11','Ap #812-8492 Cum Road',355,'Public'),
+  (79,'Sed malesuada augue ut','lobortis risus. In mi pede, nonummy ut, molestie in, tempus eu, ligula. Aenean euismod mauris eu elit. Nulla facilisi. Sed neque. Sed eget lacus.','2021-10-28','2021-11-13','249-9537 Eget, Avenue',324,'Public'),
+  (19,'vehicula aliquet libero. Integer in magna.','consequat, lectus sit amet luctus vulputate, nisi sem semper erat, in consectetuer ipsum nunc id enim. Curabitur massa. Vestibulum accumsan neque et nunc. Quisque ornare','2021-10-21','2021-11-22','757-8707 Mi. Ave',361,'Public'),
+  (45,'arcu. Curabitur ut','euismod ac, fermentum vel, mauris. Integer sem elit, pharetra ut, pharetra sed, hendrerit a, arcu. Sed et libero. Proin mi. Aliquam gravida mauris ut mi. Duis risus odio, auctor vitae, aliquet','2021-10-26','2021-11-17','Ap #257-9182 Sapien. Ave',274,'Public'),
+  (15,'augue scelerisque mollis.','sit amet ornare lectus justo eu arcu. Morbi sit amet massa. Quisque porttitor eros nec tellus. Nunc lectus pede, ultrices a, auctor non, feugiat nec,','2021-10-23','2021-11-13','246-6797 Pharetra, Road',475,'Private'),
+  (71,'dolor. Quisque tincidunt pede ac','metus vitae velit egestas lacinia. Sed congue, elit sed consequat auctor, nunc nulla vulputate dui, nec tempus mauris erat eget ipsum. Suspendisse sagittis. Nullam vitae','2021-10-23','2021-11-24','5716 Augue St.',364,'Private'),
+  (83,'risus. Donec egestas. Aliquam nec enim.','mollis. Duis sit amet diam eu dolor egestas rhoncus. Proin nisl sem, consequat nec, mollis vitae, posuere at, velit. Cras','2021-10-26','2021-11-06','123-8901 Lacus. Av.',73,'Public'),
+  (5,'pede, nonummy ut, molestie','Donec vitae erat vel pede blandit congue. In scelerisque scelerisque dui. Suspendisse ac metus vitae velit egestas lacinia. Sed congue,','2021-10-23','2021-11-18','Ap #886-3769 Ligula Av.',493,'Private'),
+  (76,'magna. Suspendisse tristique','et ultrices posuere cubilia Curae Donec tincidunt. Donec vitae erat vel pede blandit congue. In scelerisque scelerisque dui. Suspendisse ac metus vitae velit egestas lacinia. Sed congue, elit sed consequat auctor, nunc','2021-10-24','2021-11-19','P.O. Box 132, 259 Lorem Street',474,'Public'),
+  (88,'viverra. Donec tempus, lorem','at, iaculis quis, pede. Praesent eu dui. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean eget magna. Suspendisse tristique neque venenatis lacus. Etiam bibendum fermentum metus.','2021-10-30','2021-11-04','575-1718 Orci Ave',89,'Public'),
+  (87,'velit justo nec','ante lectus convallis est, vitae sodales nisi magna sed dui. Fusce aliquam, enim nec tempus scelerisque, lorem','2021-10-28','2021-11-19','491-4933 Quis Avenue',59,'Public'),
+  (98,'sollicitudin a, malesuada id, erat. Etiam vestibulum','cursus vestibulum. Mauris magna. Duis dignissim tempor arcu. Vestibulum ut eros non enim commodo hendrerit. Donec porttitor tellus non magna. Nam ligula elit, pretium et, rutrum non, hendrerit id, ante. Nunc mauris sapien, cursus in,','2021-10-31','2021-11-15','Ap #103-5435 Aliquam Road',326,'Public'),
+  (3,'quis, tristique ac, eleifend vitae,','ipsum porta elit, a feugiat tellus lorem eu metus. In lorem. Donec elementum, lorem ut aliquam iaculis, lacus pede sagittis augue, eu','2021-10-30','2021-11-22','Ap #265-3578 Cum St.',299,'Public'),
+  (92,'pede. Cras vulputate velit','ut nisi a odio semper cursus. Integer mollis. Integer tincidunt aliquam arcu. Aliquam ultrices iaculis odio. Nam interdum enim non nisi. Aenean eget metus. In nec orci. Donec nibh. Quisque nonummy ipsum','2021-10-22','2021-11-03','P.O. Box 670, 4409 Neque. Street',86,'Private'),
+  (58,'condimentum. Donec at arcu. Vestibulum','faucibus orci luctus et ultrices posuere cubilia Curae Phasellus ornare. Fusce mollis. Duis sit amet diam eu dolor egestas rhoncus. Proin nisl sem, consequat nec, mollis vitae, posuere at, velit. Cras lorem lorem, luctus ut, pellentesque eget, dictum','2021-10-19','2021-11-02','806-7720 Litora Ave',205,'Public');
 
 
-INSERT INTO TAG (name)
+INSERT INTO tags (name)
 VALUES
   ('diam.'),
   ('Nullam'),
@@ -715,7 +740,7 @@ VALUES
   ('urna.');
 
 
-INSERT INTO EventTag (event_id,tag_id)
+INSERT INTO event_tag (event_id,tag_id)
 VALUES
   (2,3),
   (18,4),
@@ -738,17 +763,14 @@ VALUES
   (12,12),
   (20,16);
 
-
-INSERT INTO TICKET (price)
+INSERT INTO tickets (user_id, event_id, num_of_tickets)
 VALUES
-    (1);
-
-
-INSERT INTO UserTicketEvent (user_id, event_id, ticket_id, num_tickets)
-VALUES
-    (3, 1, 1, 1);
-
+    (3, 1, 5);
 	
-INSERT INTO COMMENT (user_id, event_id, content, written_date)
+INSERT INTO comments (user_id, event_id, content)
 VALUES
-   (3, 1, 'Great job the organizer team has done here!', '2021-02-10');
+   (3, 1, 'Great job the organizer team has done here!');
+
+INSERT INTO answers (comment_id, user_id, content)
+VALUES
+   (1, 45, 'Danke!');
