@@ -38,12 +38,10 @@ for (var i = 0; i < tr.length; i++) {
 
 function checks(e) {
   let target = e.target;
-  console.log(target.tagName);
   while (target.tagName !="TR") {
     target = target.parentNode;
   }
 
   var check =   target.querySelector('td div svg');
-  console.log(target);
   check.classList.toggle("hidden");
 };
