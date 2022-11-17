@@ -97,11 +97,13 @@ class VoteController extends Controller
         
         Vote::where('user_id', $user_id)->where($type.'_id', $id)->count() > 0 ? $vote = Vote::where('user_id', $user_id)->where($type.'_id', $id)->first() 
                 : $vote = Vote::create(['user_id' => $user_id, $type.'_id' => $id]);
-        
+
+
         if ($action == 'down')
         {
             $vote->delete();
         }
+
         return redirect()->back()->with('message', 'Your vote has been set successfully!');;
     }
 }
