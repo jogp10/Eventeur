@@ -48,7 +48,9 @@ Route::get('faq', 'StaticPageController@faq');
 
 
 // Actions
-Route::get('/search', 'HomepageController@search');
+Route::get('search', 'SearchController@searchEvent');
+Route::get('api/searchuser', 'SearchController@showUser');
 Route::get('submitContact', 'StaticPageController@submitContact');
-Route::get('/vote', 'VoteController@vote');
+Route::get('vote', 'VoteController@vote');
+
 

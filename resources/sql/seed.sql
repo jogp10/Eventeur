@@ -389,7 +389,7 @@ Drop INDEX IF EXISTS search_comment;
 CREATE INDEX event_name ON events USING btree (name);
 
 --Index 2
---CREATE INDEX user_name ON users USING btree (name);
+CREATE INDEX account_name ON accounts USING btree (name);
 
 -- Index 3
 CREATE INDEX event_date ON events USING btree (start_date);
