@@ -27,7 +27,7 @@
                     @else
                     <!--Mudar isto(talvez?) e nao tenho a certeza se esta a funcionar. Na minha conta nao tenho invites.-->
                     <section id="cards">
-                        @each('partials.invite', $account->user->invites, 'invites')
+                        @each('partials.invite', $account->user->invites, 'invite')
                     </section>
                     @endif
                 </div>
