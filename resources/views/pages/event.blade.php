@@ -3,7 +3,7 @@
 @section('title', '{{$event->name}}')
 
 @section('content')
-<div class="container-md d-flex flex-column" style="width:100%">
+<div id="{{$event->id}}" class="event container-md d-flex flex-column" style="width:100%">
   <div class="d-flex flex-column border border-dark m-3 p-2 ps-4 pe-4" style="min-height: 500px">
     <div class="event d-flex flex-row justify-content-between">
       <div class="p-2 ps-4">
@@ -76,7 +76,8 @@
       <div class="modal-header d-flex flex-row">
         <form class="d-none d-sm-flex w-20 align-self-center form-inline" action="" style="width:100%">
           <input type="text" class="form-control" id="searchuser" name="query" placeholder="Search people" aria-label="Search" aria-describedby="button-addon2">
-          <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+          <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
               <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
             </svg>
           </button>
@@ -89,12 +90,11 @@
               <tbody>
               </tbody>
             </table>
-
           </div>
         </div>
       </div>
       <div class="modal-footer p-0">
-        <button type="button" class="btn btn-primary align-self-end m-1">Send Invites</button>
+        <button id="send" type="button" class="btn btn-primary align-self-end m-1">Send Invites</button>
       </div>
     </div>
   </div>

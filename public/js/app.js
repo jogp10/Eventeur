@@ -25,8 +25,12 @@ function addEventListeners() {
 
   let searchCard = document.querySelector('#searchuser');
   if (searchCard != null) {
-    console.log('input');
-    searchCard.addEventListener('input', searchUserRequest);
+    searchCard.addEventListener('input', sendSearchUserRequest);
+  }
+
+  let submit = document.getElementById("send");
+  if (submit != null) {
+    submit.addEventListener('click', sendInvitesRequest);
   }
 }
 
@@ -86,11 +90,29 @@ function sendCreateCardRequest(event) {
   event.preventDefault();
 }
 
-function searchUserRequest() {
-  console.log('input given');
+function sendSearchUserRequest() {
   let search = this.value;
-  console.log(search);
-  sendAjaxRequest('get', '/api/searchuser?search=' + search, null, searchUserHandler);
+
+  sendAjaxRequest('get', '/api/searchuser?search=' + search, {search:search}, searchUserHandler);
+}
+
+function sendInvitesRequest(event) {
+  var checked = document.querySelectorAll("td div svg:not(.hidden)");
+  var event_id = document.querySelector(".event").id;
+
+  var checkedArray = [];
+  for (var i = 0; i < checked.length; i++) {
+    let id = checked[i].parentElement.parentElement.parentElement.id;
+    checkedArray.push(Number(id));
+  }
+
+  if (checkedArray.length > 0)
+    sendAjaxRequest('post', '/api/invite/', { ids: checkedArray, event_id:event_id }, sendInviteHandler);
+
+  var modal = document.getElementsByClassName("modal")[0];
+  modal.getElementsByClassName.display = "none";
+
+  event.preventDefault();
 }
 
 function itemUpdatedHandler() {
@@ -151,24 +173,18 @@ function cardAddedHandler() {
 }
 
 function searchUserHandler() {
-  if (this.status != 200) {
-
-  }
+  if (this.status != 200) window.location = '/';
 
   let users = JSON.parse(this.responseText);
   let new_rows = [];
-
-  console.log(this.responseText);
 
 
   for (let i = 0; i < users.length; i++) {
     new_rows += createRow(users[i]);
   }
 
-  console.log('finish');
-
   let table = document.querySelector('tbody');
-  //console.log(table.innerHTML);
+
   if (users.length == 0) {
     table.innerHTML = '<tr><td colspan="3">No users found</td></tr>';
   } else {
@@ -179,7 +195,16 @@ function searchUserHandler() {
   for (var i = 0; i < tr.length; i++) {
     tr[i].addEventListener('click', checks, false);
   }
-  
+}
+
+function sendInviteHandler() {
+  if (this.status != 200) {
+
+  }
+
+  console.log(this.responseText);
+
+  let invites = JSON.parse(this.responseText);
 }
 
 function createCard(card) {
@@ -225,21 +250,21 @@ function createItem(item) {
 function createRow(user) {
   let htmlView = '';
   htmlView += '<tr class="d-flex flex-row btn pb-1" id="' + user['id'] + '">';
-  htmlView += '<td>';
-  htmlView += '<img src="../images/perfil.png" class="img-fluid m-0 p-0" style="height:3rem; width:3.5rem" alt="...">';
-  htmlView += '</td>';
-  htmlView += '<td class="align-middle ps-2">';
+  htmlView += ' <td>';
+  htmlView += '   <img src="../images/perfil.png" class="img-fluid m-0 p-0" style="height:3rem; width:3.5rem" alt="...">';
+  htmlView += ' </td>';
+  htmlView += ' <td class="align-middle ps-2">';
   htmlView += '  <div class="d-flex flex-column">';
   htmlView += '    <span class="fw-bold">' + user['name'] + '</span>';
   htmlView += '  </div>';
-  htmlView += '</td>';
-  htmlView += '<td class="d-flex flex-fill justify-content-end">';
-  htmlView += ' <div class="align-self-center">';
+  htmlView += ' </td>';
+  htmlView += ' <td class="d-flex flex-fill justify-content-end">';
+  htmlView += '   <div class="align-self-center">';
   htmlView += '    <svg xmlns="http://www.w3.org/2000/svg" style="height:22px" class="check hidden" width="56" height="16" fill="currentColor" viewBox="0 0 16 16">';
   htmlView += '      <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"></path>';
   htmlView += '    </svg>';
   htmlView += '  </div>';
-  htmlView += '</td>';
+  htmlView += ' </td>';
   htmlView += '</tr >';
 
   return htmlView;

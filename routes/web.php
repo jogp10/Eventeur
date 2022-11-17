@@ -52,5 +52,6 @@ Route::get('search', 'SearchController@searchEvent');
 Route::get('api/searchuser', 'SearchController@showUser');
 Route::get('submitContact', 'StaticPageController@submitContact');
 Route::get('vote', 'VoteController@vote');
+Route::post('api/invite', 'InviteController@invite');
 
 

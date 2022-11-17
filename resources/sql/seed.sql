@@ -253,17 +253,18 @@ CREATE TABLE bans (
 --Functions
 
 CREATE OR REPLACE FUNCTION
-    invites_event_notification_function() RETURNS TRIGGER AS $invites_event$
+    invites_event_notification_function() RETURNS TRIGGER AS $BODY$
     BEGIN
-    	INSERT INTO notifications(user_id, event_id, content, sent_date)
-    	VALUES (NEW.user_id, NEW.event_id, 'invitesd to event', NOW()) RETURNING notif_id ;
-    	
-    	INSERT INTO invite_notifications(notification_id, invites_id, user_id)
-    	VALUES (notif_id, New.id, New.user_id);
+    	INSERT INTO notifications(content) VALUES ('Invited to event');
+
+    	INSERT INTO invite_notifications(notification_id, invite_id) VALUES ((select currval(pg_get_serial_sequence('notifications', 'id'))), New.id);
 
         RETURN NEW;
+
     END;
-$invites_event$ LANGUAGE 'plpgsql';
+$BODY$ LANGUAGE 'plpgsql';
+
+
 
 
 CREATE OR REPLACE FUNCTION
@@ -292,18 +293,6 @@ CREATE OR REPLACE FUNCTION
         RETURN OLD;
     END;
 $cancel_event$ LANGUAGE 'plpgsql';
-
-CREATE OR REPLACE FUNCTION create_invites_notification() RETURNS TRIGGER AS $BODY$
-   	BEGIN
-    	WITH inserted AS (
-			INSERT into notifications (content, user_id, event_id, seen, sent_date) values ('You recied an invites...', NEW.user_id, NEW.event_id, '0', CURRENT_DATE)
-			RETURNING id
-		)
-		INSERT into invite_notifications SELECT inserted.id, NEW.id, NEW.user_id FROM inserted;
-		RETURN NEW;
-   	END;
-$BODY$ LANGUAGE plpgsql;
-
 
 CREATE OR REPLACE FUNCTION delete_comment() RETURNS TRIGGER AS
 $BODY$
@@ -571,7 +560,8 @@ VALUES
   ('pellentesque.massa@yahoo.com','Bruno Kramer','QQL12HFZ7CA','Sed nunc est, mollis non, cursus non, egestas a, dui. Cras pellentesque. Sed dictum. Proin eget odio. Aliquam vulputate',56),
   ('sit.amet.metus@outlook.couk','Donna Olsen','RRH84SQE4UW','nunc sed libero. Proin sed turpis nec mauris blandit mattis. Cras eget nisi',62),
   ('felis.donec.tempor@icloud.couk','Nicole Williams','OGH87PGM6DC','a sollicitudin orci sem eget massa. Suspendisse eleifend. Cras sed leo. Cras vehicula aliquet libero.',61),
-  ('quis.lectus@google.com','Sierra Webb','EWD06GOK4JK','nonummy ut, molestie in, tempus eu, ligula. Aenean euismod mauris eu elit. Nulla facilisi. Sed neque. Sed eget lacus. Mauris',25);
+  ('quis.lectus@google.com','Sierra Webb','EWD06GOK4JK','nonummy ut, molestie in, tempus eu, ligula. Aenean euismod mauris eu elit. Nulla facilisi. Sed neque. Sed eget lacus. Mauris',25),
+  ('johndoe@gmail.com', 'John Doe', '$2y$10$1n1Mta/k896NGbgQLIfY1uyYgA3rDOm5Q2xOqoeutmgCuuocdeexe', 'Hey, Im John Doe', 22);
 
 
 INSERT INTO admins (account_id)
@@ -689,7 +679,8 @@ VALUES
   (97),
   (98),
   (99),
-  (100);
+  (100),
+  (101);
 
 
 INSERT INTO events (user_id, name,description,start_date,end_date,location,capacity,privacy)
