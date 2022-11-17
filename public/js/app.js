@@ -30,6 +30,7 @@ function addEventListeners() {
 
   let submit = document.getElementById("send");
   if (submit != null) {
+    sendInvitesRequest();
     submit.addEventListener('click', sendInvitesRequest);
   }
 }
@@ -111,8 +112,6 @@ function sendInvitesRequest(event) {
 
   var modal = document.getElementsByClassName("modal")[0];
   modal.getElementsByClassName.display = "none";
-
-  event.preventDefault();
 }
 
 function itemUpdatedHandler() {
@@ -193,6 +192,7 @@ function searchUserHandler() {
 
   var tr = document.getElementsByTagName("tr");
   for (var i = 0; i < tr.length; i++) {
+    console.log(tr[i]);
     tr[i].addEventListener('click', checks, false);
   }
 }

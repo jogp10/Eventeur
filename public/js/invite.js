@@ -30,14 +30,20 @@ modal.addEventListener('shown.bs.modal', () => {
 })*/
 
 var tr = document.getElementsByTagName("tr");
-console.log(tr);
+
 
 for (var i = 0; i < tr.length; i++) {
   tr[i].addEventListener('click', checks, false);
 }
 
 function checks(e) {
-  var check =   e.target.querySelector('td div svg');
-  console.log(check);
+  let target = e.target;
+  console.log(target.tagName);
+  while (target.tagName !="TR") {
+    target = target.parentNode;
+  }
+
+  var check =   target.querySelector('td div svg');
+  console.log(target);
   check.classList.toggle("hidden");
 };
