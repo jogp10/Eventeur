@@ -80,10 +80,7 @@ class RegisterController extends Controller
             'password' => bcrypt($data['password']),
         ]);
         
-        $user = User::create([
-            'id' => $account->id,
-            'account_id' => $account->id,
-        ]);
+        $account->user()->create(['account_id' => $account->id]);
         return $account;
     }
 }

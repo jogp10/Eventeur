@@ -141,6 +141,9 @@ CREATE TABLE invites (
     UNIQUE(user_id, event_id)
 );
 
+
+
+
 CREATE TABLE notifications (
     id          SERIAL PRIMARY KEY,
     content     TEXT,
