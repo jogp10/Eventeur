@@ -28,7 +28,11 @@
                     @else
                     <!--Mudar isto(talvez?) e nao tenho a certeza se esta a funcionar. Na minha conta nao tenho invites.-->
                     <section id="cards">
+<<<<<<< HEAD
                         @each('partials.event', $invites, 'event')
+=======
+                        @each('partials.invite', $account->user->invites, 'invite')
+>>>>>>> f03ad85c62c9e2a9cc02a98e77e5e76551fb16a8
                     </section>
                     @endif
                 </div>

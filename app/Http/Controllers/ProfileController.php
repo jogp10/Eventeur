@@ -48,7 +48,7 @@ class ProfileController extends Controller
 
         $account_user = Auth::user()->user;
 
-        return view('pages.profile', ['account' => Auth::user(), 'invites' => $account_user->invites]);
+        return view('pages.profile', ['account' => Auth::user()]);
     }
 
     public function showEditPage()
