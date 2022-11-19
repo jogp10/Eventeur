@@ -48,7 +48,7 @@
                 <label for="name" class="form-label"><span class="align-middle">Name</span></label>
             </div>
             <div class="col-12 col-lg-10">
-                <input type="name" name="name" id="inputName" class="form-control" aria-describedby="nameHelpBlock">
+                <input type="name" name="name" id="inputName" class="form-control" aria-describedby="nameHelpBlock" value="{{$account->name}}">
                 <div id="nameHelpBlock" class="form-text pe-2">Change your password</div>
             </div>
         </div>
@@ -58,7 +58,7 @@
             </div>
             <div class="col-12 col-lg-10">
                 <div class="form-floating">
-                    <textarea class="form-control" name="description" id="floatingTextarea2" style="height: 300px"></textarea>
+                    <textarea class="form-control" name="description" id="floatingTextarea2" style="height: 300px"> {{$account->description}} </textarea>
                     <div id="nameHelpBlock" class="form-text pe-2">Must not exceed 200 characters</div>
                     <div class="clearfix">
                         <button type="submit" class="btn btn-primary btn-lg float-end">Save Settings</button>
