@@ -8,7 +8,7 @@
     <h1 class="text-center ms-5">Admin - Users <a href="{{ url('/admin/create') }}" class="ms-5 btn btn-primary">Create Account</a></h1>
 
     <div class="m-2">
-        <form class="d-none d-sm-flex w-20 align-self-center form-inline" action="" style="width:100%">
+        <form class="d-none d-sm-flex w-20 align-self-center form-inline w-100">
             <input type="text" class="form-control" id="searchusers" name="query" placeholder="Search users" aria-label="Search" aria-describedby="button-addon2" value="">
             <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">

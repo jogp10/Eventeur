@@ -23,7 +23,7 @@
         <div class="col-8 d-flex flex-column m-5 p-0 w-50">
             <div class="">
                 <h3>Invites</h3>
-                <div class="border border-grey m-0 my-5 p-0 text-center" style="">
+                <div class="border border-grey m-0 my-5 p-0 text-center">
                     @if(sizeof($account->user->invites) === 0)
                         <p class="mt-3 fs-4">There are no invites.</p>
                     @else
