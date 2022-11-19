@@ -3,26 +3,12 @@
 namespace App\Policies;
 
 use App\Models\Account;
-use App\Models\Event;
+use App\Models\Report;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class EventPolicy
+class ReportPolicy
 {
     use HandlesAuthorization;
-
-    /**
-     * Perform pre-authorization checks.
-     *
-     * @param  \App\Models\Account  $account
-     * @param  string  $ability
-     * @return void|bool
-     */
-    public function before(Account $account, $ability)
-    {
-        if ($account->admin() != null) {
-            return true;
-        }
-    }
 
     /**
      * Determine whether the user can view any models.
@@ -30,7 +16,7 @@ class EventPolicy
      * @param  \App\Models\Account  $account
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(?Account $account)
+    public function viewAny(Account $account)
     {
         //
         return True;
@@ -40,10 +26,10 @@ class EventPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\Report  $report
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(?Account $account, Event $event)
+    public function view(Account $account, Report $report)
     {
         //
         return True;
@@ -65,36 +51,36 @@ class EventPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\Report  $report
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(Account $account, Event $event)
+    public function update(Account $account, Report $report)
     {
         //
-        return $event->manager === $account->id;
+        return False;
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\Report  $report
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(Account $account, Event $event)
+    public function delete(Account $account, Report $report)
     {
         //
-        return $event->manager === $account->id;
+        return False;
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\Report  $report
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(Account $account, Event $event)
+    public function restore(Account $account, Report $report)
     {
         //
         return False;
@@ -104,10 +90,10 @@ class EventPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\Report  $report
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(Account $account, Event $event)
+    public function forceDelete(Account $account, Report $report)
     {
         //
         return False;

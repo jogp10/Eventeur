@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use App\Models\Account;
-use App\Models\example;
+use App\Models\Ban;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class ProfilePolicy
+class BanPolicy
 {
     use HandlesAuthorization;
 
@@ -16,23 +16,23 @@ class ProfilePolicy
      * @param  \App\Models\Account  $account
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(Account $account)
+    public function viewAny(Account $account)
     {
         //
-        return True;
+        return False;
     }
 
     /**
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\example  $example
+     * @param  \App\Models\Ban  $ban
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(Account $account, example $example)
+    public function view(Account $account, Ban $ban)
     {
         //
-        return True;
+        return False;
     }
 
     /**
@@ -44,58 +44,58 @@ class ProfilePolicy
     public function create(Account $account)
     {
         //
-        return True;
+        return False;
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\example  $example
+     * @param  \App\Models\Ban  $ban
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(Account $account, example $example)
+    public function update(Account $account, Ban $ban)
     {
         //
-        return True;
+        return False;
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\example  $example
+     * @param  \App\Models\Ban  $ban
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(Account $account, example $example)
+    public function delete(Account $account, Ban $ban)
     {
         //
-        return True;
+        return False;
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\example  $example
+     * @param  \App\Models\Ban  $ban
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(Account $account, example $example)
+    public function restore(Account $account, Ban $ban)
     {
         //
-        return True;
+        return False;
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\example  $example
+     * @param  \App\Models\Ban  $ban
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(Account $account, example $example)
+    public function forceDelete(Account $account, Ban $ban)
     {
         //
-        return True;
+        return False;
     }
 }

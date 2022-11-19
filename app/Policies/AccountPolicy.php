@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use App\Models\Account;
-use App\Models\example;
+use App\Models\Accout;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class ExamplePolicy
+class AccountPolicy
 {
     use HandlesAuthorization;
 
@@ -20,96 +20,96 @@ class ExamplePolicy
     public function before(Account $account, $ability)
     {
         if ($account->admin() != null) {
-            return true;
+            return True;
         }
     }
 
     /**
-     * Determine whether the account can view any models.
+     * Determine whether the user can view any models.
      *
      * @param  \App\Models\Account  $account
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(Account $account)
+    public function viewAny(Account $account)
     {
         //
         return True;
     }
 
     /**
-     * Determine whether the account can view the model.
+     * Determine whether the user can view the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\example  $example
+     * @param  \App\Models\Accout  $accout
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(Account $account, example $example)
+    public function view(Account $account, Accout $accout)
     {
         //
         return True;
     }
 
     /**
-     * Determine whether the account can create models.
+     * Determine whether the user can create models.
      *
      * @param  \App\Models\Account  $account
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function create(Account  $account)
+    public function create(Account $account)
     {
         //
         return True;
     }
 
     /**
-     * Determine whether the account can update the model.
+     * Determine whether the user can update the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\example  $example
+     * @param  \App\Models\Accout  $accout
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(Account  $account, example $example)
+    public function update(Account $account, Account $account2)
     {
         //
-        return True;
+        return $account->id == $account2->id;
     }
 
     /**
-     * Determine whether the account can delete the model.
+     * Determine whether the user can delete the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\example  $example
+     * @param  \App\Models\Accout  $accout
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(Account  $account, example $example)
+    public function delete(Account $account, Account $account2)
     {
         //
-        return True;
+        return $account->id == $account2->id;
     }
 
     /**
-     * Determine whether the account can restore the model.
+     * Determine whether the user can restore the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\example  $example
+     * @param  \App\Models\Accout  $accout
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(Account  $account, example $example)
+    public function restore(Account $account, Accout $accout)
     {
         //
-        return True;
+        return False;
     }
 
     /**
-     * Determine whether the account can permanently delete the model.
+     * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\example  $example
+     * @param  \App\Models\Accout  $accout
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(Account $account, example $example)
+    public function forceDelete(Account $account, Accout $accout)
     {
         //
-        return True;
+        return False;
     }
 }

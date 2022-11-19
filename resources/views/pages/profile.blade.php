@@ -16,7 +16,7 @@
             @else
             <p class="pt-3 px-5 mx-5">{{$account->description}}</p>
             @endif
-            @if ($account->id === Auth::user()->id)
+            @if (Auth::user() && $account->id === Auth::user()->id)
             <a href="{{ url('/editProfile') }}" type="button" class="btn btn-primary btn-lg">Edit Profile</a>
             @endif
         </div>

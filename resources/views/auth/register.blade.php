@@ -3,7 +3,7 @@
 @section('content')
 <div class="container-sm">
     <div class="row row-cols-1 row-cols-lg-2 mt-5">
-       <div class="col border border-dark p-5">
+       <div class="col p-5">
            <h2>Sign Up</h2>
            <p>By continuing you agree to our user Agreement and Privacy Policy.</p>
            <form method="POST" action="{{ route('register') }}">
