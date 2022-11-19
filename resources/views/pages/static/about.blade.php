@@ -25,46 +25,46 @@
             Eventeur is here to help you with that.
         </p>
     </div>
-    <div class="row">
-        <div style="padding-left: 5rem; margin-top:3rem; margin-bottom:2rem">
-            <h2>The Team</h2>
+    <div class="row mb-3">
+        <div style="margin-top:3rem; margin-bottom:2rem">
+            <h2 class="text-center">The Team</h2>
         </div>
         <div class="col">
-            <div class="row">
+            <div class="d-flex flex-row ps-1 pe-1 w-75">
                 <div class="col">
-                    <img src="images/perfil.png" class="img-fluid rounded-circle me-4" height="100" width="90" alt="...">
+                    <img src="images/perfil.png" class="rounded-circle img-fluid rounded-circle " height="100" width="90" alt="...">
                 </div>
-                <div class="col" style="flex-grow: 4;">
+                <div class="col">
                     <h3>Bernardo Ferreira</h3>
                     <p>up20XXXXXXX@up.pt</p>
                 </div>
             </div>
-            <div class="row">
+            <div class="d-flex flex-row ps-1 pe-1 w-75">
                 <div class="col">
-                    <img src="images/perfil.png" class="img-fluid rounded-circle me-4" height="100" width="90" alt="...">
+                    <img src="images/perfil.png" class="rounded-circle img-fluid rounded-circle" height="100" width="90" alt="...">
                 </div>
-                <div class="col" style="flex-grow: 4;">
+                <div class="col">
                     <h3>João Pinheiro</h3>
                     <p>up20XXXXXXX@up.pt</p>
                 </div>
             </div>
 
         </div>
-        <div class="col">
-            <div class="row">
+        <div class="col pe-3">
+            <div class="d-flex flex-row ps-3 pe-5 w-75">
                 <div class="col">
-                    <img src="images/perfil.png" class="img-fluid rounded-circle me-4" height="100" width="90" alt="...">
+                    <img src="images/perfil.png" class="rounded-circle img-fluid rounded-circle" height="100" width="90" alt="...">
                 </div>
-                <div class="col" style="flex-grow: 4;">
+                <div class="col">
                     <h3>João Rodrigo</h3>
                     <p>up20XXXXXXX@up.pt</p>
                 </div>
             </div>
-            <div class="row">
+            <div class="d-flex flex-row ps-3 pe-5 w-75">
                 <div class="col">
-                    <img src="images/perfil.png" class="img-fluid rounded-circle me-4" height="100" width="90" alt="...">
+                    <img src="images/perfil.png" class="rounded-circle img-fluid rounded-circle" height="100" width="90" alt="...">
                 </div>
-                <div class="col" style="flex-grow: 4;">
+                <div class="col">
                     <h3>Telmo Botelho</h3>
                     <p>up20XXXXXXX@up.pt</p>
                 </div>

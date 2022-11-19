@@ -4,14 +4,14 @@
 
 @section('content')
 <div id="{{$event->id}}" class="event container-md d-flex flex-column w-100">
-  <div class="d-flex flex-column border border-dark m-3 p-2 ps-4 pe-4 rounded" style="min-height: 500px">
+  <div class="d-flex flex-column border m-3 p-2 ps-4 rounded" style="min-height: 500px">
     <div class="event d-flex flex-row justify-content-between">
-      <div class="p-2 ps-4">
+      <div class="pt-1">
         @include('partials.form', ['action' => 'up', 'id' => $event->id, 'type' => 'event'])
         <span class="d-flex justify-content-center">{{ $event->votes->count() }}</span>
         @include('partials.form', ['action' => 'down', 'id' => $event->id, 'type' => 'event'])
       </div>
-      <div class="p-2 pb-1 d-flex flex-column">
+      <div class="pt-2 ps-2 pe-2 pb-1 d-flex flex-column" style="max-width:800px">
         <h3 class="">{{ $event->name}}</h3>
         <div class="tags">
           @foreach($event->tags as $tag)
@@ -25,10 +25,10 @@
           <span>Posted by {{$event->manager->account->name}}</span>
         </button>
         <h4 class="text-muted pb-3">{{ strtok($event->description, '.') }}</h4>
-        <p class=""> {{ substr($event->description, strpos($event->description, '.')+2) }}</p>
+        <p class="text-break" style="max-width: 700px"> {{ substr($event->description, strpos($event->description, '.')+2) }}</p>
       </div>
-      <div class="p-2 pt-5">
-        <img src="../images/community-events.jpeg" class="img-fluid m-0 p-0" height="300" width="400" alt="...">
+      <div class="p-3 justify-content-center d-flex">
+        <img src="../images/community-events.jpeg" class="rounded img-fluid m-0 p-0" height="300" width="400" alt="...">
       </div>
     </div>
     <div class="d-flex flex-row mt-auto justify-content-between pb-3 ps-4 pe-4">
