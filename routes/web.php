@@ -33,7 +33,7 @@ Route::post('register', 'Auth\RegisterController@register')->name('register');
 
 
 //User
-Route::get('profile', 'ProfileController@show');
+Route::get('profile/{id}', 'ProfileController@show');
 Route::get('editProfile', 'ProfileController@showEditPage');
 Route::post('editProfile', 'ProfileController@edit')->name('editProfile');
 Route::get('settigsProfile', 'ProfileController@showSettingsPage');
@@ -54,4 +54,5 @@ Route::get('submitContact', 'StaticPageController@submitContact');
 Route::get('vote', 'VoteController@vote');
 Route::post('api/invite', 'InviteController@invite');
 
-
+// Amin
+Route::get('admin', 'AdminController@home');

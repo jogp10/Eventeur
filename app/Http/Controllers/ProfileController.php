@@ -44,9 +44,9 @@ class ProfileController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function show() {
+    public function show($id) {
 
-        $account_user = Auth::user()->user->account;
+        $account_user = Account::findOrFail($id);
 
         return view('pages.profile', ['account' => $account_user]);
     }

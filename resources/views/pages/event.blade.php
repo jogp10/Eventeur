@@ -60,10 +60,12 @@
         </svg>
         <span>Buy Tickets</span>
       </button>
+      @if (Auth::user() != null)
       <button type="button" id="invite" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#inviteModal" style="text-decoration: none; background-color:#d1410c; border-color:#d1410c;">
         <i class="fa-regular fa-share-from-square"></i>
         <span>Invite</span>
       </button>
+      @endif
     </div>
   </div>
   <div id="comments" class="m-3" style="margin-left: 7rem !important">

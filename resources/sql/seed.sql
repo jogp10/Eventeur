@@ -561,7 +561,8 @@ VALUES
   ('sit.amet.metus@outlook.couk','Donna Olsen','RRH84SQE4UW','nunc sed libero. Proin sed turpis nec mauris blandit mattis. Cras eget nisi',62),
   ('felis.donec.tempor@icloud.couk','Nicole Williams','OGH87PGM6DC','a sollicitudin orci sem eget massa. Suspendisse eleifend. Cras sed leo. Cras vehicula aliquet libero.',61),
   ('quis.lectus@google.com','Sierra Webb','EWD06GOK4JK','nonummy ut, molestie in, tempus eu, ligula. Aenean euismod mauris eu elit. Nulla facilisi. Sed neque. Sed eget lacus. Mauris',25),
-  ('johndoe@gmail.com', 'John Doe', '$2y$10$1n1Mta/k896NGbgQLIfY1uyYgA3rDOm5Q2xOqoeutmgCuuocdeexe', 'Hey, Im John Doe', 22);
+  ('johndoe@gmail.com', 'John Doe', '$2y$10$1n1Mta/k896NGbgQLIfY1uyYgA3rDOm5Q2xOqoeutmgCuuocdeexe', 'Hey, Im John Doe', 22),
+  ('admin1@gmail.com', 'admin1', '$2y$10$BSs2Kg/G.r3fE5oPUD/6CObVNX9touzKQFAG24uQXORT5gED.NzAa', 'admin1', 1);
 
 
 INSERT INTO admins (account_id)
@@ -575,7 +576,8 @@ VALUES
   (48),
   (2),
   (75),
-  (51);
+  (51),
+  (102);
 
 
 INSERT INTO users (account_id)
@@ -680,7 +682,8 @@ VALUES
   (98),
   (99),
   (100),
-  (101);
+  (101),
+  (102);
 
 
 INSERT INTO events (user_id, name,description,start_date,end_date,location,capacity,privacy)
@@ -765,3 +768,7 @@ VALUES
 INSERT INTO answers (comment_id, user_id, content)
 VALUES
    (1, 45, 'Danke!');
+
+INSERT INTO invites (user_id, event_id)
+VALUES
+   (101, 1);
