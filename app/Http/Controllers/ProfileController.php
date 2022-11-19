@@ -69,22 +69,24 @@ class ProfileController extends Controller
      * @param  \App\Models\Account  $account
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request)
+    public function edit(Request $request, $id)
     {
         $validated = $request->validate([
             'name' => ['max:20'],
             'description' => ['max:200'],
         ]);
 
+        $account = Account::findOrFail($id);
+
         if ($request['name'] !== null) {
-            Auth::user()->name = $request['name'];
+            $account->name = $request['name'];
         }
         if ($request['description'] !== null) {
-            Auth::user()->description = $request['description'];
+            $account->description = $request['description'];
         }
 
-        Auth::user()->save();
-        return $this->show();
+        $account->save();
+        return $this->show($account->id);
     }
 
     /**

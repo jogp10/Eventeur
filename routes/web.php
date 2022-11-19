@@ -35,7 +35,7 @@ Route::post('register', 'Auth\RegisterController@register')->name('register');
 //User
 Route::get('profile/{id}', 'ProfileController@show');
 Route::get('editProfile', 'ProfileController@showEditPage');
-Route::post('editProfile', 'ProfileController@edit')->name('editProfile');
+Route::post('editProfile/{id}', 'ProfileController@edit')->name('editProfile');
 Route::get('settigsProfile', 'ProfileController@showSettingsPage');
 
 //Event
@@ -56,3 +56,8 @@ Route::post('api/invite', 'InviteController@invite');
 
 // Amin
 Route::get('admin', 'AdminController@home');
+Route::get('admin/users', 'AdminController@users')->name('admin.users');
+Route::get('admin/users/{id}', 'AdminController@user')->name('admin.user');
+Route::get('admin/users/{id}/edit', 'AdminController@editUser')->name('admin.editUser');
+Route::post('admin/users/{id}/edit', 'AdminController@updateUser')->name('admin.updateUser');
+Route::get('admin/users/{id}/delete', 'AdminController@deleteUser');

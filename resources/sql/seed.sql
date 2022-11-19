@@ -314,16 +314,38 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION delete_account() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    DELETE FROM profile_images WHERE profile_images.account_id = OLD.id;
+    DELETE FROM users WHERE users.account_id = OLD.id;
+    DELETE FROM admins WHERE admins.account_id = OLD.id;
+    RETURN OLD;
+END
+$BODY$
+LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION delete_user() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     UPDATE comments SET user_id = 1 WHERE user_id = OLD.id;
+    UPDATE answers SET user_id = 1 WHERE user_id = OLD.id;
+    UPDATE votes SET user_id = 1 WHERE user_id = OLD.id;
     UPDATE invites SET user_id = 1 WHERE user_id = OLD.id;
-    UPDATE events SET accounts_id = 1 WHERE accounts_id = OLD.id;
-    UPDATE notifications SET user_id = 1 WHERE user_id = OLD.id;
-    UPDATE content SET user_id = 1 WHERE user_id = OLD.id;
-    DELETE FROM accounts WHERE id = OLD.id;
+    UPDATE events SET user_id = 1 WHERE user_id = OLD.id;
+    UPDATE tickets SET user_id = 1 WHERE user_id = OLD.id;
+    UPDATE reports SET user_id = 1 WHERE user_id = OLD.id;
+    UPDATE bans SET user_id = 1 WHERE user_id = OLD.id;
     RETURN OLD;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION create_user() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    INSERT INTO users(account_id) VALUES (NEW.id);
+    RETURN NEW;
 END
 $BODY$
 LANGUAGE plpgsql;
@@ -333,6 +355,8 @@ Drop TRIGGER IF EXISTS delete_comment ON comments;
 Drop TRIGGER IF EXISTS cancel_event_notification ON events;
 Drop TRIGGER IF EXISTS invites_event_notification ON invites;
 Drop TRIGGER IF EXISTS check_attendee ON tickets;
+
+Drop TRIGGER IF EXISTS delete_account ON accounts;
 Drop TRIGGER IF EXISTS delete_user ON users;
 Drop TRIGGER IF EXISTS create_account ON account;
 
@@ -361,10 +385,22 @@ CREATE TRIGGER check_attendee
     EXECUTE PROCEDURE check_attendee();
 
 -- Trigger 5
+CREATE TRIGGER delete_account
+    BEFORE DELETE ON accounts
+    FOR EACH ROW
+    EXECUTE PROCEDURE delete_account();
+
+-- Trigger 6
 CREATE TRIGGER delete_user
-    AFTER DELETE ON users
+    BEFORE DELETE ON users
     FOR EACH ROW
     EXECUTE PROCEDURE delete_user();
+
+-- Trigger 7
+CREATE TRIGGER create_account
+    AFTER INSERT ON accounts
+    FOR EACH ROW
+    EXECUTE PROCEDURE create_user();
 
 --Indexes
 Drop INDEX IF EXISTS event_name;
@@ -408,10 +444,10 @@ BEGIN
         );
  END IF;
  IF TG_OP = 'UPDATE' THEN
-         IF (NEW.title <> OLD.title OR NEW.obs <> OLD.obs OR NEW.location <> OLD.location) THEN
+         IF (NEW.name <> OLD.name OR NEW.description <> OLD.description OR NEW.location <> OLD.location) THEN
            NEW.tsvectors = (
-             setweight(to_tsvector('english', NEW.title), 'A') ||
-             setweight(to_tsvector('english', NEW.obs), 'B') ||
+             setweight(to_tsvector('english', NEW.name), 'A') ||
+             setweight(to_tsvector('english', NEW.description), 'B') ||
              setweight(to_tsvector('english', NEW.location), 'C')
            );
          END IF;
@@ -461,7 +497,7 @@ END TRANSACTION;*/
 
 INSERT INTO accounts (email, name, password, description, age)
 VALUES
-  ('anynomous@anynomous.com','deleted account','MRS20KYI7ST','deleted account',999),
+  ('anonymous@anonymous.com','deleted account','MRS20KYI7ST','deleted account',999),
   ('ante.ipsum@icloud.org','Tobias Rodriquez','YEK65KFW7BP','enim diam vel arcu. Curabitur ut odio vel est tempor bibendum. Donec felis orci, adipiscing',18),
   ('purus.ac@aol.org','Clark Franklin','JSZ36EKV3JZ','nascetur ridiculus mus. Aenean eget magna. Suspendisse tristique neque venenatis lacus. Etiam bibendum fermentum metus. Aenean sed pede nec ante',53),
   ('iaculis.lacus@outlook.couk','Inez Hopper','EKI16OVT3BM','Cras sed leo. Cras vehicula aliquet libero. Integer in magna. Phasellus dolor elit, pellentesque a, facilisis non, bibendum sed,',54),
@@ -577,112 +613,6 @@ VALUES
   (2),
   (75),
   (51),
-  (102);
-
-
-INSERT INTO users (account_id)
-VALUES
-  (1),
-  (2),
-  (3),
-  (4),
-  (5),
-  (6),
-  (7),
-  (8),
-  (9),
-  (10),
-  (11),
-  (12),
-  (13),
-  (14),
-  (15),
-  (16),
-  (17),
-  (18),
-  (19),
-  (20),
-  (21),
-  (22),
-  (23),
-  (24),
-  (25),
-  (26),
-  (27),
-  (28),
-  (29),
-  (30),
-  (31),
-  (32),
-  (33),
-  (34),
-  (35),
-  (36),
-  (37),
-  (38),
-  (39),
-  (40),
-  (41),
-  (42),
-  (43),
-  (44),
-  (45),
-  (46),
-  (47),
-  (48),
-  (49),
-  (50),
-  (51),
-  (52),
-  (53),
-  (54),
-  (55),
-  (56),
-  (57),
-  (58),
-  (59),
-  (60),
-  (61),
-  (62),
-  (63),
-  (64),
-  (65),
-  (66),
-  (67),
-  (68),
-  (69),
-  (70),
-  (71),
-  (72),
-  (73),
-  (74),
-  (75),
-  (76),
-  (77),
-  (78),
-  (79),
-  (80),
-  (81),
-  (82),
-  (83),
-  (84),
-  (85),
-  (86),
-  (87),
-  (88),
-  (89),
-  (90),
-  (91),
-  (92),
-  (93),
-  (94),
-  (95),
-  (96),
-  (97),
-  (98),
-  (99),
-  (100),
-  (101),
   (102);
 
 

@@ -4,7 +4,7 @@
 
 @section('content')
 
-<div>
+<div class="container-md">
     <h1>Admin</h1>
 
     <a href="{{ url('/admin/users') }}">Users</a>

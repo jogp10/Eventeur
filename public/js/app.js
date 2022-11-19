@@ -29,6 +29,11 @@ function addEventListeners() {
     searchCard.addEventListener('input', sendSearchUserRequest);
   }
 
+  let searchCard2 = document.querySelector('#searchusers');
+  if (searchCard2 != null) {
+    searchCard2.addEventListener('input', sendSearchUsersRequest);
+  }
+
   let submit = document.getElementById("send");
   if (submit != null) {
     submit.addEventListener('click', sendInvitesRequest);
@@ -95,6 +100,12 @@ function sendSearchUserRequest() {
   let search = this.value;
 
   sendAjaxRequest('get', '/api/searchuser?search=' + search, {search:search}, searchUserHandler);
+}
+
+function sendSearchUsersRequest() {
+  let search = this.value;
+
+  sendAjaxRequest('get', '/api/searchuser?search=' + search, {search:search}, searchUsersHandler);
 }
 
 function sendInvitesRequest(event) {
@@ -193,6 +204,28 @@ function searchUserHandler() {
   }
 }
 
+function searchUsersHandler() {
+  if (this.status != 200) window.location = '/';
+
+  let users = JSON.parse(this.responseText);
+  let new_rows = [];
+
+  let url = window.location.href;
+  url = url.substring(0, url.indexOf('/'));
+
+  for (let i = 0; i < users.length; i++) {
+    new_rows += createUserRow(users[i], url);
+  }
+
+  let sections = document.querySelector('#cards');
+
+  if (users.length == 0) {
+    sections.innerHTML = '<div><h3>No users found</h3></div>';
+  } else {
+    sections.innerHTML = new_rows;
+  }
+}
+
 function sendInviteHandler() {
   if (this.status != 200) window.location = '/';
 
@@ -261,6 +294,34 @@ function createRow(user) {
   htmlView += '  </div>';
   htmlView += ' </td>';
   htmlView += '</tr >';
+
+  return htmlView;
+}
+
+function createUserRow(user, url) {
+  let htmlView = '';
+  htmlView += '<div class="card mb-3" style="max-width: 540px;">';
+  htmlView += '  <div class="row g-0">';
+  htmlView += '    <div class="col-md-4">';
+  htmlView += '      <img src="../images/perfil.png" class="img-fluid rounded-start" alt="...">';
+  htmlView += '    </div>';
+  htmlView += '    <div class="col-md-8 d-flex flex-row">';
+  htmlView += '      <div class="card-body col-md-8">';
+  htmlView += '        <a href="' + url + '/profile/' + user['id'] + '">';
+  htmlView += '        <h5 class="card-title">' + user['name'] + '</h5></a>';
+  htmlView += '        <p class="card-text">' + user['email'] + '</p>';
+  htmlView += '        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>';
+  htmlView += '      </div>';
+  htmlView += '      <div class="col-md-4 d-flex flex-column justify-content-center">';
+  htmlView += '        <p>Reports:' + user['user']['reports'].length + '</p>';
+  if (user['admin'] != null) {htmlView += '        <p>Bans:' + user['admin']['bans'].length + '</p>';};
+  console.log('here');
+  htmlView += '      <a href="' + url + '/admin/users/' + user['id'] + '/edit">Edit</a>';
+  htmlView += '      <a href="' + url + '/admin/users/' + user['id'] + '/delete">Delete</a>';
+  htmlView += '    </div>';
+  htmlView += '  </div>';
+  htmlView += '</div>';
+  htmlView += '</div>';
 
   return htmlView;
 }
