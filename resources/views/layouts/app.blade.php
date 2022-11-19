@@ -25,7 +25,6 @@
   <script src={{ asset('js/static.js') }} defer></script>
   <script src={{ asset('js/calendar.js') }} defer></script>
   <script src={{ asset('js/invite.js') }} defer></script>
-
 </head>
 
 <body>
@@ -34,6 +33,11 @@
     @if( Session::has('message'))
     <div class="alert alert-success" role="alert">
       {{ Session::get('message')}}
+    </div>
+    @endif
+    @if( Session::has('error'))
+    <div class="alert alert-error" role="alert">
+      {{ Session::get('error')}}
     </div>
     @endif
     <section id="content">

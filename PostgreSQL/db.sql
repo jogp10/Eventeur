@@ -45,7 +45,7 @@ CREATE TABLE accounts (
 );
 
 CREATE TABLE users (
-    id          INTEGER PRIMARY KEY,
+    id          SERIAL PRIMARY KEY,
     account_id  INTEGER DEFAULT -1,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -53,7 +53,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE admins (
-    id          INTEGER PRIMARY KEY,
+    id         SERIAL PRIMARY KEY,
     account_id  INTEGER DEFAULT -1,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -253,17 +253,18 @@ CREATE TABLE bans (
 --Functions
 
 CREATE OR REPLACE FUNCTION
-    invites_event_notification_function() RETURNS TRIGGER AS $invites_event$
+    invites_event_notification_function() RETURNS TRIGGER AS $BODY$
     BEGIN
-    	INSERT INTO notifications(user_id, event_id, content, sent_date)
-    	VALUES (NEW.user_id, NEW.event_id, 'invitesd to event', NOW()) RETURNING notif_id ;
-    	
-    	INSERT INTO invite_notifications(notification_id, invites_id, user_id)
-    	VALUES (notif_id, New.id, New.user_id);
+    	INSERT INTO notifications(content) VALUES ('Invited to event');
+
+    	INSERT INTO invite_notifications(notification_id, invite_id) VALUES ((select currval(pg_get_serial_sequence('notifications', 'id'))), New.id);
 
         RETURN NEW;
+
     END;
-$invites_event$ LANGUAGE 'plpgsql';
+$BODY$ LANGUAGE 'plpgsql';
+
+
 
 
 CREATE OR REPLACE FUNCTION
@@ -293,18 +294,6 @@ CREATE OR REPLACE FUNCTION
     END;
 $cancel_event$ LANGUAGE 'plpgsql';
 
-CREATE OR REPLACE FUNCTION create_invites_notification() RETURNS TRIGGER AS $BODY$
-   	BEGIN
-    	WITH inserted AS (
-			INSERT into notifications (content, user_id, event_id, seen, sent_date) values ('You recied an invites...', NEW.user_id, NEW.event_id, '0', CURRENT_DATE)
-			RETURNING id
-		)
-		INSERT into invite_notifications SELECT inserted.id, NEW.id, NEW.user_id FROM inserted;
-		RETURN NEW;
-   	END;
-$BODY$ LANGUAGE plpgsql;
-
-
 CREATE OR REPLACE FUNCTION delete_comment() RETURNS TRIGGER AS
 $BODY$
 BEGIN 
@@ -325,16 +314,38 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION delete_account() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    DELETE FROM profile_images WHERE profile_images.account_id = OLD.id;
+    DELETE FROM users WHERE users.account_id = OLD.id;
+    DELETE FROM admins WHERE admins.account_id = OLD.id;
+    RETURN OLD;
+END
+$BODY$
+LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION delete_user() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     UPDATE comments SET user_id = 1 WHERE user_id = OLD.id;
+    UPDATE answers SET user_id = 1 WHERE user_id = OLD.id;
+    UPDATE votes SET user_id = 1 WHERE user_id = OLD.id;
     UPDATE invites SET user_id = 1 WHERE user_id = OLD.id;
-    UPDATE events SET accounts_id = 1 WHERE accounts_id = OLD.id;
-    UPDATE notifications SET user_id = 1 WHERE user_id = OLD.id;
-    UPDATE content SET user_id = 1 WHERE user_id = OLD.id;
-    DELETE FROM accounts WHERE id = OLD.id;
+    UPDATE events SET user_id = 1 WHERE user_id = OLD.id;
+    UPDATE tickets SET user_id = 1 WHERE user_id = OLD.id;
+    UPDATE reports SET user_id = 1 WHERE user_id = OLD.id;
+    UPDATE bans SET user_id = 1 WHERE user_id = OLD.id;
     RETURN OLD;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION create_user() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    INSERT INTO users(account_id) VALUES (NEW.id);
+    RETURN NEW;
 END
 $BODY$
 LANGUAGE plpgsql;
@@ -344,6 +355,8 @@ Drop TRIGGER IF EXISTS delete_comment ON comments;
 Drop TRIGGER IF EXISTS cancel_event_notification ON events;
 Drop TRIGGER IF EXISTS invites_event_notification ON invites;
 Drop TRIGGER IF EXISTS check_attendee ON tickets;
+
+Drop TRIGGER IF EXISTS delete_account ON accounts;
 Drop TRIGGER IF EXISTS delete_user ON users;
 Drop TRIGGER IF EXISTS create_account ON account;
 
@@ -372,10 +385,22 @@ CREATE TRIGGER check_attendee
     EXECUTE PROCEDURE check_attendee();
 
 -- Trigger 5
+CREATE TRIGGER delete_account
+    BEFORE DELETE ON accounts
+    FOR EACH ROW
+    EXECUTE PROCEDURE delete_account();
+
+-- Trigger 6
 CREATE TRIGGER delete_user
-    AFTER DELETE ON users
+    BEFORE DELETE ON users
     FOR EACH ROW
     EXECUTE PROCEDURE delete_user();
+
+-- Trigger 7
+CREATE TRIGGER create_account
+    AFTER INSERT ON accounts
+    FOR EACH ROW
+    EXECUTE PROCEDURE create_user();
 
 --Indexes
 Drop INDEX IF EXISTS event_name;
@@ -389,7 +414,7 @@ Drop INDEX IF EXISTS search_comment;
 CREATE INDEX event_name ON events USING btree (name);
 
 --Index 2
---CREATE INDEX user_name ON users USING btree (name);
+CREATE INDEX account_name ON accounts USING btree (name);
 
 -- Index 3
 CREATE INDEX event_date ON events USING btree (start_date);
@@ -419,10 +444,10 @@ BEGIN
         );
  END IF;
  IF TG_OP = 'UPDATE' THEN
-         IF (NEW.title <> OLD.title OR NEW.obs <> OLD.obs OR NEW.location <> OLD.location) THEN
+         IF (NEW.name <> OLD.name OR NEW.description <> OLD.description OR NEW.location <> OLD.location) THEN
            NEW.tsvectors = (
-             setweight(to_tsvector('english', NEW.title), 'A') ||
-             setweight(to_tsvector('english', NEW.obs), 'B') ||
+             setweight(to_tsvector('english', NEW.name), 'A') ||
+             setweight(to_tsvector('english', NEW.description), 'B') ||
              setweight(to_tsvector('english', NEW.location), 'C')
            );
          END IF;

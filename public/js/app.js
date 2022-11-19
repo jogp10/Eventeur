@@ -315,7 +315,6 @@ function createUserRow(user, url) {
   htmlView += '      <div class="col-md-4 d-flex flex-column justify-content-center">';
   htmlView += '        <p>Reports:' + user['user']['reports'].length + '</p>';
   if (user['admin'] != null) {htmlView += '        <p>Bans:' + user['admin']['bans'].length + '</p>';};
-  console.log('here');
   htmlView += '      <a href="' + url + '/admin/users/' + user['id'] + '/edit">Edit</a>';
   htmlView += '      <a href="' + url + '/admin/users/' + user['id'] + '/delete">Delete</a>';
   htmlView += '    </div>';

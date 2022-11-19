@@ -2,7 +2,7 @@
 
 INSERT INTO accounts (email, name, password, description, age)
 VALUES
-  ('anynomous@anynomous.com','deleted account','MRS20KYI7ST','deleted account',999),
+  ('anonymous@anonymous.com','deleted account','MRS20KYI7ST','deleted account',999),
   ('ante.ipsum@icloud.org','Tobias Rodriquez','YEK65KFW7BP','enim diam vel arcu. Curabitur ut odio vel est tempor bibendum. Donec felis orci, adipiscing',18),
   ('purus.ac@aol.org','Clark Franklin','JSZ36EKV3JZ','nascetur ridiculus mus. Aenean eget magna. Suspendisse tristique neque venenatis lacus. Etiam bibendum fermentum metus. Aenean sed pede nec ante',53),
   ('iaculis.lacus@outlook.couk','Inez Hopper','EKI16OVT3BM','Cras sed leo. Cras vehicula aliquet libero. Integer in magna. Phasellus dolor elit, pellentesque a, facilisis non, bibendum sed,',54),
@@ -101,115 +101,24 @@ VALUES
   ('pellentesque.massa@yahoo.com','Bruno Kramer','QQL12HFZ7CA','Sed nunc est, mollis non, cursus non, egestas a, dui. Cras pellentesque. Sed dictum. Proin eget odio. Aliquam vulputate',56),
   ('sit.amet.metus@outlook.couk','Donna Olsen','RRH84SQE4UW','nunc sed libero. Proin sed turpis nec mauris blandit mattis. Cras eget nisi',62),
   ('felis.donec.tempor@icloud.couk','Nicole Williams','OGH87PGM6DC','a sollicitudin orci sem eget massa. Suspendisse eleifend. Cras sed leo. Cras vehicula aliquet libero.',61),
-  ('quis.lectus@google.com','Sierra Webb','EWD06GOK4JK','nonummy ut, molestie in, tempus eu, ligula. Aenean euismod mauris eu elit. Nulla facilisi. Sed neque. Sed eget lacus. Mauris',25);
+  ('quis.lectus@google.com','Sierra Webb','EWD06GOK4JK','nonummy ut, molestie in, tempus eu, ligula. Aenean euismod mauris eu elit. Nulla facilisi. Sed neque. Sed eget lacus. Mauris',25),
+  ('johndoe@gmail.com', 'John Doe', '$2y$10$1n1Mta/k896NGbgQLIfY1uyYgA3rDOm5Q2xOqoeutmgCuuocdeexe', 'Hey, Im John Doe', 22),
+  ('admin1@gmail.com', 'admin1', '$2y$10$BSs2Kg/G.r3fE5oPUD/6CObVNX9touzKQFAG24uQXORT5gED.NzAa', 'admin1', 1);
 
 
-INSERT INTO admins (id, account_id)
+INSERT INTO admins (account_id)
 VALUES
-  (1,49),
-  (2,14),
-  (3,86),
-  (4,64),   
-  (5,96),
-  (6,50),
-  (7,48),
-  (8,2),
-  (9,75),
-  (10,51);
-
-
-INSERT INTO users (id, account_id)
-VALUES
-  (1,1),
-  (3,3),
-  (4,4),
-  (5,5),
-  (6,6),
-  (7,7),
-  (8,8),
-  (9,9),
-  (10,10),
-  (11,11),
-  (12,12),
-  (13,13),
-  (15,15),
-  (16,16),
-  (17,17),
-  (18,18),
-  (19,19),
-  (20,20),
-  (21,21),
-  (22,22),
-  (23,23),
-  (24,24),
-  (25,25),
-  (26,26),
-  (27,27),
-  (28,28),
-  (29,29),
-  (30,30),
-  (31,31),
-  (32,32),
-  (33,33),
-  (34,34),
-  (35,35),
-  (36,36),
-  (37,37),
-  (38,38),
-  (39,39),
-  (40,40),
-  (41,41),
-  (42,42),
-  (43,43),
-  (44,44),
-  (45,45),
-  (46,46),
-  (47,47),
-  (52,52),
-  (53,53),
-  (54,54),
-  (55,55),
-  (56,56),
-  (57,57),
-  (58,58),
-  (59,59),
-  (60,60),
-  (61,61),
-  (62,62),
-  (63,63),
-  (65,65),
-  (66,66),
-  (67,67),
-  (68,68),
-  (69,69),
-  (70,70),
-  (71,71),
-  (72,72),
-  (73,73),
-  (74,74),
-  (76,76),
-  (77,77),
-  (78,78),
-  (79,79),
-  (80,80),
-  (81,81),
-  (82,82),
-  (83,83),
-  (84,84),
-  (85,85),
-  (87,87),
-  (88,88),
-  (89,89),
-  (90,90),
-  (91,91),
-  (92,92),
-  (93,93),
-  (94,94),
-  (95,95),
-  (97,97),
-  (98,98),
-  (99,99),
-  (100,100);
+  (49),
+  (14),
+  (86),
+  (64),   
+  (96),
+  (50),
+  (48),
+  (2),
+  (75),
+  (51),
+  (102);
 
 
 INSERT INTO events (user_id, name,description,start_date,end_date,location,capacity,privacy)
@@ -294,3 +203,7 @@ VALUES
 INSERT INTO answers (comment_id, user_id, content)
 VALUES
    (1, 45, 'Danke!');
+
+INSERT INTO invites (user_id, event_id)
+VALUES
+   (101, 1);

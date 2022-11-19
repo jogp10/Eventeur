@@ -58,6 +58,8 @@ Route::post('api/invite', 'InviteController@invite');
 Route::get('admin', 'AdminController@home');
 Route::get('admin/users', 'AdminController@users')->name('admin.users');
 Route::get('admin/users/{id}', 'AdminController@user')->name('admin.user');
+Route::get('admin/create', 'AdminController@createAccount');
+Route::post('admin/create', 'AdminController@storeAccount')->name('admin.storeAccount');
 Route::get('admin/users/{id}/edit', 'AdminController@editUser')->name('admin.editUser');
 Route::post('admin/users/{id}/edit', 'AdminController@updateUser')->name('admin.updateUser');
 Route::get('admin/users/{id}/delete', 'AdminController@deleteUser');

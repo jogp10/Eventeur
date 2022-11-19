@@ -10,7 +10,7 @@ class Admin extends Model
     use HasFactory;
 
     protected $fillable = [
-        'admin_id', 'accounts_id', 'created_at', 'updated_at'
+        'admin_id', 'account_id', 'created_at', 'updated_at'
     ];
 
     public function account() { return $this->belongsTo(Account::class); }

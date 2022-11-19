@@ -1,9 +1,8 @@
-const date = new Date();
+let date = new Date();
 
 function renderCalendar() {
-
-    const monhtDays = document.querySelector('.days')
-    const lastDay = new Date(date.getFullYear(), date.getMonth()+1, 0).getDate()
+    
+    let lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
 
     const months = [
         'January',
@@ -26,14 +25,14 @@ function renderCalendar() {
 
     let days = ""
 
-    for(let i=1; i<=lastDay; i++) {
+    for (let i = 1; i <= lastDay; i++) {
 
         let day = i
 
-        if(i < 10) {
+        if (i < 10) {
             day = '0' + i
         }
-        if(i == date.getUTCDate()) {
+        if (i == date.getUTCDate()) {
             days += `<div class="today border border-grey m-0 p-4">${day}</div>`
             continue
         }
@@ -44,19 +43,25 @@ function renderCalendar() {
     monhtDays.innerHTML = days
 }
 
-
-renderCalendar()
-
-
-const prevButton = document.querySelector('.prev-month');
-prevButton.addEventListener('click', () => {
-    date.setMonth(date.getMonth()-1)
+let monhtDays = document.querySelector('.days')
+if (monhtDays != null) {
     renderCalendar()
-})
+}
 
 
-const nextButton = document.querySelector('.next-month');
-nextButton.addEventListener('click', () => {
-    date.setMonth(date.getMonth()+1)
-    renderCalendar()
-})
+let prevButton = document.querySelector('.prev-month');
+if (prevButton != null) {
+    prevButton.addEventListener('click', () => {
+        date.setMonth(date.getMonth() - 1)
+        renderCalendar()
+    })
+}
+
+
+let nextButton = document.querySelector('.next-month');
+if (nextButton != null) {
+    nextButton.addEventListener('click', () => {
+        date.setMonth(date.getMonth() + 1)
+        renderCalendar()
+    })
+}

@@ -15,8 +15,10 @@ window.onclick = function (event) {
 }
 
 // When the user clicks on the button, open the modal
-btn.onclick = function () {
-  modal.style.display = "block";
+if (btn != null) {
+  btn.onclick = function () {
+    modal.style.display = "block";
+  }
 }
 
 /*
@@ -38,10 +40,10 @@ for (var i = 0; i < tr.length; i++) {
 
 function checks(e) {
   let target = e.target;
-  while (target.tagName !="TR") {
+  while (target.tagName != "TR") {
     target = target.parentNode;
   }
 
-  var check =   target.querySelector('td div svg');
+  var check = target.querySelector('td div svg');
   check.classList.toggle("hidden");
 };
