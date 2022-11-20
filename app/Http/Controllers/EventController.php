@@ -156,7 +156,7 @@ class EventController extends Controller
         */
         
 
-        return view('pages.profile');
+        return redirect()->route('home');
     }
 
     public function invite(Request $request)

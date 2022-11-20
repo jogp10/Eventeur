@@ -47,26 +47,6 @@ let monhtDays = document.querySelector('.days')
 if (monhtDays != null) {
     renderCalendar()
 }
-<<<<<<< HEAD
-
-
-let prevButton = document.querySelector('.prev-month');
-if (prevButton != null) {
-    prevButton.addEventListener('click', () => {
-        date.setMonth(date.getMonth() - 1)
-        renderCalendar()
-    })
-}
-
-
-let nextButton = document.querySelector('.next-month');
-if (nextButton != null) {
-    nextButton.addEventListener('click', () => {
-        date.setMonth(date.getMonth() + 1)
-        renderCalendar()
-    })
-}
-=======
   
 let prevButton = document.querySelector('.prev-month');
 if (prevButton != null) {
@@ -112,4 +92,3 @@ function truncateText(selector, maxLength) {
     }
   
 document.querySelector('#invite-event-description').innerText = truncateText('#invite-event-description', 150);
->>>>>>> manage-events
