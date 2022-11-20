@@ -87,7 +87,7 @@ function sendTicketsRequest(event) {
   }
 
   if (checkedArray.length > 0)
-    sendAjaxRequest('post', '/api/ticket/', { ids: checkedArray, event_id:event_id }, sendTicketHandler);
+    sendAjaxRequest('post', '/api/give_ticket/', { ids: checkedArray, event_id:event_id }, sendTicketHandler);
 }
 
 function searchUserInviteHandler() {
