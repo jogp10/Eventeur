@@ -366,8 +366,8 @@ Drop TRIGGER IF EXISTS invites_event_notification ON invites;
 Drop TRIGGER IF EXISTS check_attendee ON tickets;
 Drop TRIGGER IF EXISTS delete_account ON accounts;
 Drop TRIGGER IF EXISTS delete_user ON users;
-Drop TRIGGER IF EXISTS create_account ON account;
-Drop TRIGGER IF EXISTS delete_invite ON account;
+Drop TRIGGER IF EXISTS create_account ON accounts;
+Drop TRIGGER IF EXISTS delete_invite ON invites;
 
 -- Trigger 1
 CREATE TRIGGER invites_event_notification_trigger 
