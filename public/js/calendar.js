@@ -60,3 +60,17 @@ nextButton.addEventListener('click', () => {
     date.setMonth(date.getMonth()+1)
     renderCalendar()
 })
+
+
+function truncateText(selector, maxLength) {
+    var element = document.querySelector(selector), truncated = element.innerText;
+  
+    if (truncated.length > maxLength) {
+        truncated = truncated.substr(0, maxLength) + '...';
+    }
+    
+    return truncated;
+    }
+  
+document.querySelector('#invite-event-description').innerText = truncateText('#invite-event-description', 150);
+  

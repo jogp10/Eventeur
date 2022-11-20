@@ -33,13 +33,16 @@ Route::post('register', 'Auth\RegisterController@register')->name('register');
 
 
 //User
-Route::get('profile', 'ProfileController@show');
+Route::get('profile/{type}','ProfileController@show');
 Route::get('editProfile', 'ProfileController@showEditPage');
 Route::post('editProfile', 'ProfileController@edit')->name('editProfile');
 Route::get('settigsProfile', 'ProfileController@showSettingsPage');
 
 //Event
 Route::get('event/{id}', 'EventController@show');
+Route::get('event/{id}/event_settings', 'EventController@showEditEvent')->name('eventSettings');
+Route::post('event/{id}/event_settings', 'EventController@edit')->name('editEvent');
+Route::get('event/{id}/delete_event', 'EventController@destroy')->name('deleteEvent');
 
 //Static Pages
 Route::get('about', 'StaticPageController@about');
@@ -54,4 +57,6 @@ Route::get('submitContact', 'StaticPageController@submitContact');
 Route::get('vote', 'VoteController@vote');
 Route::post('api/invite', 'InviteController@invite');
 
+Route::post('api/invite/accept', 'InviteController@accept');
+Route::post('api/invite/ignore', 'InviteController@ignore');
 

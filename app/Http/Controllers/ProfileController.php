@@ -44,11 +44,10 @@ class ProfileController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function show() {
+    public function show($type) {
 
-        $account_user = Auth::user()->user;
 
-        return view('pages.profile', ['account' => Auth::user()]);
+        return view('pages.profile', ['account' => Auth::user(), 'type' => $type]);
     }
 
     public function showEditPage()

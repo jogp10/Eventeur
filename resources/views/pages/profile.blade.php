@@ -5,10 +5,9 @@
     <div class="row">
         <div class="col-4 border border-dark text-center m-5 p-0 text-center" style="min-height: 600px;">
             <div class="position-relative">
-                <img src="images/placeholder.png" class="img-fluid" width="500" height="250" alt="...">
-                <img src="images/perfil.png" class="img-fluid rounded-circle position-absolute top-100 start-50 translate-middle" width="100" height="230" alt="...">
+                <img src="../../images/placeholder.png" class="img-fluid" width="500" height="250" alt="...">
+                <img src="../../images/perfil.png" class="img-fluid rounded-circle position-absolute top-100 start-50 translate-middle" width="100" height="230" alt="...">
             </div>
-
             <h4 class="mt-5 pt-5">{{$account->name}}</h4>
             <hr class="px-5 mx-5">
             @if($account->description === null)
@@ -19,25 +18,19 @@
             <a href="{{ url('/editProfile') }}" type="button" class="btn btn-primary btn-lg">Edit Profile</a>
         </div>
         <div class="col-8 d-flex flex-column m-5 p-0 w-50">
-            <div class="">
-                <h3>Invites</h3>
-                <div class="border border-grey m-0 my-5 p-0 text-center" style="min">
-                    <?php echo sizeof($invites) ?>
-                    @if(sizeof($invites) === 0)
-                        <p class="mt-3 fs-4">There are no invites.</p>
-                    @else
-                    <!--Mudar isto(talvez?) e nao tenho a certeza se esta a funcionar. Na minha conta nao tenho invites.-->
-                    <section id="cards">
-<<<<<<< HEAD
-                        @each('partials.event', $invites, 'event')
-=======
-                        @each('partials.invite', $account->user->invites, 'invite')
->>>>>>> f03ad85c62c9e2a9cc02a98e77e5e76551fb16a8
-                    </section>
-                    @endif
-                </div>
-            </div>
-            <div class="border border-grey m-0 p-0">
+            @include('partials.breadcrums', [ 
+                'pages' => [ 
+                    ['title' => "Invites", "href"=>"/profile/0"], 
+                    ['title' => "Events", "href"=>"/profile/1"]
+                ], 
+                'type' => $type
+            ])
+            @if($type == 0)
+                @include('partials.invites', ['invites' => $account->user->invites])
+            @else
+                @include('partials.ownedEvents', ['events' => $account->user->events])
+            @endif
+            <div class="border border-grey m-0 mt-5 p-0">
                 <div class="calendar">
                     <div class="d-flex flex-row justify-content-around align-items-center text-center month">
                         <div>
