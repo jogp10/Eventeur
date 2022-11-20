@@ -53,7 +53,14 @@
         </svg>
         <span>{{ $event->start_date }}</span>
       </button>
-      @if(Auth::id() == $event->user_id)
+      @can('update', $event)
+      <button type="button" id="giveticket" class="btn btn-success text-decoration-none" data-bs-toggle="modal" data-bs-target="#giveticketModal">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-ticket-perforated" viewBox="0 0 16 16">
+          <path d="M4 4.85v.9h1v-.9H4Zm7 0v.9h1v-.9h-1Zm-7 1.8v.9h1v-.9H4Zm7 0v.9h1v-.9h-1Zm-7 1.8v.9h1v-.9H4Zm7 0v.9h1v-.9h-1Zm-7 1.8v.9h1v-.9H4Zm7 0v.9h1v-.9h-1Z" />
+          <path d="M1.5 3A1.5 1.5 0 0 0 0 4.5V6a.5.5 0 0 0 .5.5 1.5 1.5 0 1 1 0 3 .5.5 0 0 0-.5.5v1.5A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5V10a.5.5 0 0 0-.5-.5 1.5 1.5 0 0 1 0-3A.5.5 0 0 0 16 6V4.5A1.5 1.5 0 0 0 14.5 3h-13ZM1 4.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v1.05a2.5 2.5 0 0 0 0 4.9v1.05a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-1.05a2.5 2.5 0 0 0 0-4.9V4.5Z" />
+        </svg>
+        <span>Give Ticket</span>
+      </button>
       @else
       <button type="button" class="btn btn-link text-decoration-none">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-flag" viewBox="0 0 16 16">
@@ -61,14 +68,14 @@
         </svg>
         <span>Report</span>
       </button>
-      @endif
+      @endcan
       <button type="button" class="btn btn-primary text-decoration-none">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
           <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
         </svg>
         <span>Buy Tickets</span>
       </button>
-      @if (Auth::user() != null)
+      @if(Auth::check())
       <button type="button" id="invite" class="btn btn-primary text-decoration-none" data-bs-toggle="modal" data-bs-target="#inviteModal" style="background-color:#d1410c; border-color:#d1410c;">
         <i class="fa-regular fa-share-from-square"></i>
         <span>Invite</span>
@@ -85,7 +92,7 @@
     <div class="modal-content">
       <div class="modal-header d-flex flex-row">
         <form class="d-none d-sm-flex w-20 align-self-center form-inline w-100">
-          <input type="text" class="form-control" id="searchuser" name="query" placeholder="Search people" aria-label="Search" aria-describedby="button-addon2" value="">
+          <input type="text" class="form-control" id="searchuser_invite" name="query" placeholder="Search people" aria-label="Search" aria-describedby="button-addon2" value="">
           <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
               <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
@@ -109,6 +116,34 @@
     </div>
   </div>
 </div>
-
+<div class="modal fade" tabindex="-1" id="giveticketModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header d-flex flex-row">
+        <form class="d-none d-sm-flex w-20 align-self-center form-inline w-100">
+          <input type="text" class="form-control" id="searchuser_ticket" name="query" placeholder="Search people" aria-label="Search" aria-describedby="button-addon2" value="">
+          <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+            </svg>
+          </button>
+        </form>
+      </div>
+      <div class="modal-body p-1 d-flex flex-column flex-1" style="overflow: auto; max-height:400px">
+        <div class="d-flex flex-column" style="min-height:min-content">
+          <div class="userCard d-flex flex-row p-0 pb-1">
+            <table class="w-100">
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer p-0">
+        <button id="send" type="button" class="btn btn-primary align-self-end m-1">Send Tickets</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 @endsection

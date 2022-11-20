@@ -40,7 +40,8 @@ Route::get('faq', 'StaticPageController@faq');
 Route::get('search', 'SearchController@searchEvent');
 Route::get('api/searchuser', 'SearchController@showUser');
 Route::post('vote', 'VoteController@vote')->name('vote');
-Route::post('api/invite', 'InviteController@invite')->name('invite');
+Route::post('api/invite', 'EventController@invite')->name('invite');
+Route::post('api/ticket', 'EventController@ticket')->name('ticket');
 
 // Admin
 Route::get('admin', 'AdminController@index');

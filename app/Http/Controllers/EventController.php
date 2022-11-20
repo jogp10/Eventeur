@@ -104,4 +104,38 @@ class EventController extends Controller
     public function destroy(Account $account)
     {
     }
+
+    public function invite(Request $request)
+    {
+        $users_id = $_POST['ids'];
+        $event = $_POST['event_id'];
+        $users_id = explode(',', $users_id);
+        foreach ($users_id as $user_id) {
+            $invite = Invite::create([
+                'user_id' => $user_id,
+                'event_id' => $event,
+            ]);
+            $invite->save();
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    public function ticket(Request $request)
+    {
+        $users_id = $_POST['ids'];
+        $event = $_POST['event_id'];
+        $users_id = explode(',', $users_id);
+        foreach ($users_id as $user_id) {
+            $ticket = Ticket::create([
+                'user_id' => $user_id,
+                'event_id' => $event,
+                'num_of_tickets' => 2,
+                'price' => 0
+            ]);
+            $ticket->save();
+        }
+
+        return response()->json(['success' => true]);
+    }
 }

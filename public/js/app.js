@@ -1,18 +1,29 @@
 function addEventListeners() {
-  let searchCard = document.querySelector('#searchuser');
+  let searchCard = document.querySelector('#searchuser_invite');
   if (searchCard != null) {
-    sendSearchUserRequest();
-    searchCard.addEventListener('input', sendSearchUserRequest);
+    searchCard.addEventListener('load', sendSearchUserInviteRequest);
+    searchCard.addEventListener('input', sendSearchUserInviteRequest);
   }
 
-  let searchCard2 = document.querySelector('#searchusers');
+  let searchCard2 = document.querySelector('#searchuser_ticket');
   if (searchCard2 != null) {
-    searchCard2.addEventListener('input', sendSearchUsersRequest);
+    searchCard2.addEventListener('load', sendSearchUserTicketRequest);
+    searchCard2.addEventListener('input', sendSearchUserTicketRequest);
   }
 
-  let submit = document.getElementById("send");
-  if (submit != null) {
-    submit.addEventListener('click', sendInvitesRequest);
+  let searchCard3 = document.querySelector('#searchusers');
+  if (searchCard3 != null) {
+    searchCard3.addEventListener('input', sendSearchUsersRequest);
+  }
+
+  let submitInvites = document.getElementById("send");
+  if (submitInvites != null) {
+    submitInvites.addEventListener('click', sendInvitesRequest);
+  }
+
+  let submitTickets = document.getElementById("send");
+  if (submitTickets != null) {
+    submitTickets.addEventListener('click', sendTicketsRequest);
   }
 }
 
@@ -33,10 +44,16 @@ function sendAjaxRequest(method, url, data, handler) {
   request.send(encodeForAjax(data));
 }
 
-function sendSearchUserRequest() {
+function sendSearchUserInviteRequest() {
   let search = this.value;
 
-  sendAjaxRequest('get', '/api/searchuser?search=' + search, {search:search}, searchUserHandler);
+  sendAjaxRequest('get', '/api/searchuser?search=' + search, {search:search}, searchUserInviteHandler);
+}
+
+function sendSearchUserTicketRequest() {
+  let search = this.value;
+
+  sendAjaxRequest('get', '/api/searchuser?search=' + search, {search:search}, searchUserTicketHandler);
 }
 
 function sendSearchUsersRequest() {
@@ -46,7 +63,7 @@ function sendSearchUsersRequest() {
 }
 
 function sendInvitesRequest(event) {
-  var checked = document.querySelectorAll("td div svg:not(.hidden)");
+  var checked = document.querySelectorAll("#inviteModal td div svg:not(.hidden)");
   var event_id = document.querySelector(".event").id;
 
   var checkedArray = [];
@@ -59,7 +76,21 @@ function sendInvitesRequest(event) {
     sendAjaxRequest('post', '/api/invite/', { ids: checkedArray, event_id:event_id }, sendInviteHandler);
 }
 
-function searchUserHandler() {
+function sendTicketsRequest(event) {
+  var checked = document.querySelectorAll("#giveticketModal td div svg:not(.hidden)");
+  var event_id = document.querySelector(".event").id;
+
+  var checkedArray = [];
+  for (var i = 0; i < checked.length; i++) {
+    let id = checked[i].parentElement.parentElement.parentElement.id;
+    checkedArray.push(Number(id));
+  }
+
+  if (checkedArray.length > 0)
+    sendAjaxRequest('post', '/api/ticket/', { ids: checkedArray, event_id:event_id }, sendTicketHandler);
+}
+
+function searchUserInviteHandler() {
   if (this.status != 200) window.location = '/';
 
   let users = JSON.parse(this.responseText);
@@ -70,7 +101,32 @@ function searchUserHandler() {
     new_rows += createRow(users[i]);
   }
 
-  let table = document.querySelector('tbody');
+  let table = document.querySelector('#inviteModal tbody');
+
+  if (users.length == 0) {
+    table.innerHTML = '<tr><td colspan="3">No users found</td></tr>';
+  } else {
+    table.innerHTML = new_rows;
+  }
+
+  var tr = document.getElementsByTagName("tr");
+  for (var i = 0; i < tr.length; i++) {
+    tr[i].addEventListener('click', checks, false);
+  }
+}
+
+function searchUserTicketHandler() {
+  if (this.status != 200) window.location = '/';
+
+  let users = JSON.parse(this.responseText);
+  let new_rows = [];
+
+
+  for (let i = 0; i < users.length; i++) {
+    new_rows += createRow(users[i]);
+  }
+
+  let table = document.querySelector('#giveticketModal tbody');
 
   if (users.length == 0) {
     table.innerHTML = '<tr><td colspan="3">No users found</td></tr>';
@@ -113,6 +169,15 @@ function sendInviteHandler() {
   modal.getElementsByClassName.display = "none";
 
   let invites = JSON.parse(this.responseText);
+}
+
+function sendTicketHandler() {
+  if (this.status != 200) window.location = '/';
+
+  var modal = document.getElementsByClassName("modal")[1];
+  modal.getElementsByClassName.display = "none";
+
+  let tickets = JSON.parse(this.responseText);
 }
 
 function createCard(card) {

@@ -1,16 +1,21 @@
 // Get the modal
 var modal = document.getElementsByClassName("modal")[0];
+var modal2 = document.getElementsByClassName("modal")[1];
 
 // Get the button that opens the modal
 var btn = document.getElementById("invite");
+var btn2 = document.getElementById("giveticket");
 
 // Get the <span> element that closes the modal
-//var span = document.getElementsByClassName("close")[0];
+// var span = document.getElementsByClassName("close")[0];
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function (event) {
   if (event.target == modal) {
     modal.style.display = "none";
+  }
+  if (event.target == modal2) {
+    modal2.style.display = "none";
   }
 }
 
@@ -18,6 +23,12 @@ window.onclick = function (event) {
 if (btn != null) {
   btn.onclick = function () {
     modal.style.display = "block";
+  }
+}
+
+if (btn2 != null) {
+  btn2.onclick = function () {
+    modal2.style.display = "block";
   }
 }
 
@@ -31,11 +42,15 @@ modal.addEventListener('shown.bs.modal', () => {
   span.focus()
 })*/
 
-var tr = document.getElementsByTagName("tr");
-
+var tr = document.getElementsByTagName("#inviteModal tr");
+var tr2 = document.getElementsByTagName("#giveticketModal tr");
 
 for (var i = 0; i < tr.length; i++) {
   tr[i].addEventListener('click', checks, false);
+}
+
+for (var i = 0; i < tr2.length; i++) {
+  tr2[i].addEventListener('click', checks, false);
 }
 
 function checks(e) {

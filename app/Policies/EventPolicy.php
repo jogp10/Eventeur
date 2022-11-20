@@ -75,7 +75,7 @@ class EventPolicy
     public function update(Account $account, Event $event)
     {
         //
-        return $event->manager === $account->id;
+        return $event->manager->id === $account->id;
     }
 
     /**
@@ -88,7 +88,7 @@ class EventPolicy
     public function delete(Account $account, Event $event)
     {
         //
-        return $event->manager === $account->id;
+        return $event->manager->id === $account->id;
     }
 
     /**
