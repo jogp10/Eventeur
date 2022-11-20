@@ -33,8 +33,8 @@ Route::get('event/{id}', 'EventController@show');
 //Static Pages
 Route::get('about', 'StaticPageController@about');
 Route::get('contact', 'StaticPageController@contact');
+Route::post('submitContact', 'StaticPageController@submitContact');
 Route::get('faq', 'StaticPageController@faq');
-Route::get('submitContact', 'StaticPageController@submitContact');
 
 // Actions
 Route::get('search', 'SearchController@searchEvent');

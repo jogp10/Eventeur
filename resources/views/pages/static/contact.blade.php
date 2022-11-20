@@ -6,7 +6,8 @@
     <div class="row align-items-center">
         <div class="col">
             <h1>Contact Us</h1>
-            <form method="GET" action=" {{ action('StaticPageController@submitContact') }} ">
+            <form method="POST" action=" {{ action('StaticPageController@submitContact') }} ">
+                @csrf
                 <label for="name">Name</label><br>
                 <input type="text" id="name" name="name"><br>
                 <label for="email">Email</label><br>
