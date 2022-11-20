@@ -53,7 +53,6 @@ class SearchController extends Controller
 
     public function showUser(Request $request)
     {
-        
         if ($_GET['search']!= '') {
             $users = Account::whereRaw('LOWER(name) LIKE ? ', ['%' . strtolower($_GET['search']) . '%'])
                             ->where('id', '<>', 1)
@@ -61,6 +60,14 @@ class SearchController extends Controller
         } else {
             $users = Account::All();
             $users->shift();
+        }
+        foreach($users as $user) {
+            $user->user;
+            $user->admin;
+            if($user->admin)$user->admin->bans;
+            $user->user->reports;
+            $user->user->events;
+
         }
         return $users;
     }

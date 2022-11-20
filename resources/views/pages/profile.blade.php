@@ -15,21 +15,20 @@
             @else
             <p class="pt-3 px-5 mx-5">{{$account->description}}</p>
             @endif
-            <a href="{{ url('/editProfile') }}" type="button" class="btn btn-primary btn-lg">Edit Profile</a>
+            @if (Auth::user() && $account->id === Auth::user()->id)
+            <a href="{{ url('/profile/' . $account->id . '/settings') }}" type="button" class="btn btn-primary btn-lg">Edit Profile</a>
+            @endif
         </div>
         <div class="col-8 d-flex flex-column m-5 p-0 w-50">
-            @include('partials.breadcrums', [ 
-                'pages' => [ 
-                    ['title' => "Invites", "href"=>"/profile/0"], 
-                    ['title' => "Events", "href"=>"/profile/1"]
-                ], 
-                'type' => $type
-            ])
-            @if($type == 0)
-                @include('partials.invites', ['invites' => $account->user->invites])
-            @else
-                @include('partials.ownedEvents', ['events' => $account->user->events])
-            @endif
+            <div class="">
+                <a id="see-invites-button" type="button" class="btn btn-link">Invites</a>
+                <a id="see-events-button" type="button" class="btn btn-link">Events</a>
+            </div>
+            <div id="content-events">
+                <div>
+                    @include('partials.invites', ['invites' => $account->user->invites])
+                </div>
+            </div>
             <div class="border border-grey m-0 mt-5 p-0">
                 <div class="calendar">
                     <div class="d-flex flex-row justify-content-around align-items-center text-center month">

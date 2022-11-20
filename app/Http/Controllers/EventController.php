@@ -32,6 +32,12 @@ class EventController extends Controller
      */
     public function index()
     {
+        $events = Event::inRandomOrder()
+            ->limit(8)
+            ->where('privacy', 'Public')
+            ->get();
+
+        return view('pages.home', ['events' => $events]);
     }
 
     /**
@@ -63,10 +69,7 @@ class EventController extends Controller
     {
         $event = Event::find($id);
 
-        if ($event->privacy == "Private") {
-
-            $this->authorize('view', $event);
-        }
+        $this->authorize('view', $event);
 
         return view('pages.event', ['event' => $event]);
     }

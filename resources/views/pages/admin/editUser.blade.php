@@ -23,7 +23,7 @@
             <h5>Profile Image</h5>
             <div class="d-flex flex-column flex-sm-row border border-3">
                 <div class="align-self-center mb-4">
-                    <img src="/images/perfil.png" class="rounded-circle img-fluid rounded-circle me-4" height="100" width="90"
+                    <img src="/images/perfil.png" class="img-fluid rounded-circle me-4" height="100" width="90"
                         alt="...">
                 </div>
                 <div class="align-self-center">
@@ -41,7 +41,7 @@
         </div>
     </div>
     <h5 class="ps-5 mt-5">Profile Settings</h5>
-    <form class="ps-5" method="POST" action="{{ route('editProfile', ['id' => $account->id]) }}">
+    <form class="ps-5" method="POST" action="{{ route('admin.updateUser', ['id' => $account->id]) }}">
         @method('PUT')
         @csrf
         <div class="row row-cols-2 border border-3 gx-0 py-4 px-3">
@@ -59,7 +59,7 @@
             </div>
             <div class="col-12 col-lg-10">
                 <div class="form-floating">
-                    <textarea class="form-control" name="description" id="floatingTextarea2" style="height: 300px">{{$account->description}}</textarea>
+                    <textarea class="form-control" name="description" id="floatingTextarea2" style="height: 300px"> {{$account->description}} </textarea>
                     <div id="nameHelpBlock" class="form-text pe-2">Must not exceed 200 characters</div>
                     <div class="clearfix">
                         <button type="submit" class="btn btn-primary btn-lg float-end">Save Settings</button>

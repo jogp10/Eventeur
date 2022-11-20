@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use App\Models\Account;
-use App\Models\Event;
+use App\Models\Comment;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class EventPolicy
+class CommentPolicy
 {
     use HandlesAuthorization;
 
@@ -28,7 +28,7 @@ class EventPolicy
      * @param  \App\Models\Account  $account
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(?Account $account)
+    public function viewAny(Account $account)
     {
         //
         return True;
@@ -38,19 +38,13 @@ class EventPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(?Account $account, Event $event)
+    public function view(Account $account, Comment $comment)
     {
         //
-        if ($event->privacy == 'Public') return True;
-        if ($account == null) return False;
-        if ($account->id == $event->account_id) return True;
-        if ($account->user->invites()->where('event_id', $event->id)->first() != null) return True;
-        if ($account->user->tickets()->where('event_id', $event->id)->first()) return True;
-        
-        return False;
+        return True;
     }
 
     /**
@@ -69,36 +63,36 @@ class EventPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(Account $account, Event $event)
+    public function update(Account $account, Comment $comment)
     {
         //
-        return $event->manager === $account->id;
+        return $comment->user === $account->id;
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(Account $account, Event $event)
+    public function delete(Account $account, Comment $comment)
     {
         //
-        return $event->manager === $account->id;
+        return $comment->user === $account->id;
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(Account $account, Event $event)
+    public function restore(Account $account, Comment $comment)
     {
         //
         return False;
@@ -108,10 +102,10 @@ class EventPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(Account $account, Event $event)
+    public function forceDelete(Account $account, Comment $comment)
     {
         //
         return False;

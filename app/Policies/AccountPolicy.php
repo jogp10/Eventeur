@@ -3,10 +3,11 @@
 namespace App\Policies;
 
 use App\Models\Account;
-use App\Models\Event;
+use App\Models\Accout;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Support\Facades\Auth;
 
-class EventPolicy
+class AccountPolicy
 {
     use HandlesAuthorization;
 
@@ -21,14 +22,13 @@ class EventPolicy
     {
         return $account->admin ? true : null;
     }
-
     /**
      * Determine whether the user can view any models.
      *
      * @param  \App\Models\Account  $account
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(?Account $account)
+    public function viewAny(Account $account)
     {
         //
         return True;
@@ -38,19 +38,13 @@ class EventPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\Account  $account2
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(?Account $account, Event $event)
+    public function view(?Account $account, Account $account2)
     {
         //
-        if ($event->privacy == 'Public') return True;
-        if ($account == null) return False;
-        if ($account->id == $event->account_id) return True;
-        if ($account->user->invites()->where('event_id', $event->id)->first() != null) return True;
-        if ($account->user->tickets()->where('event_id', $event->id)->first()) return True;
-        
-        return False;
+        return True;
     }
 
     /**
@@ -62,43 +56,43 @@ class EventPolicy
     public function create(Account $account)
     {
         //
-        return True;
+        return False;
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\Accout  $accout
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(Account $account, Event $event)
+    public function update(Account $account, Account $account2)
     {
         //
-        return $event->manager === $account->id;
+        return $account->id == $account2->id;
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\Accout  $accout
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(Account $account, Event $event)
+    public function delete(Account $account, Account $account2)
     {
         //
-        return $event->manager === $account->id;
+        return $account->id == $account2->id;
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\Account  $account2
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(Account $account, Event $event)
+    public function restore(Account $account, Account $account2)
     {
         //
         return False;
@@ -108,10 +102,10 @@ class EventPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\Account  $account2
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(Account $account, Event $event)
+    public function forceDelete(Account $account, Account $account2)
     {
         //
         return False;

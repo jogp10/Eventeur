@@ -16,7 +16,13 @@ class AuthServiceProvider extends ServiceProvider
   protected $policies = [
     Event::class => EventPolicy::class,
     User::class => ProfilePolicy::class,
-
+    Answer::class => AnswerPolicy::class,
+    Comment::class => CommentPolicy::class,
+    Invite::class => InvitePolicy::class,
+    Vote::class => VotePolicy::class,
+    Account::class => AccountPolicy::class,
+    Ban::class => BanPolicy::class,
+    Report::class => ReportPolicy::class,
   ];
 
   /**

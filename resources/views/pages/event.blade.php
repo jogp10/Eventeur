@@ -3,29 +3,29 @@
 @section('title', '{{$event->name}}')
 
 @section('content')
-<div id="{{$event->id}}" class="event container-md d-flex flex-column" style="width:100%">
-  <div class="d-flex flex-column border border-dark m-3 p-2 ps-4 pe-4 rounded" style="min-height: 500px">
-    <div class="event d-flex flex-row justify-content-start">
-      <div class="p-2 ps-4">
+<div id="{{$event->id}}" class="event container-md d-flex flex-column w-100">
+  <div class="d-flex flex-column border m-3 p-2 ps-4 rounded" style="min-height: 500px">
+    <div class="event d-flex flex-row justify-content-between">
+      <div class="pt-1">
         @include('partials.form', ['action' => 'up', 'id' => $event->id, 'type' => 'event'])
         <span class="d-flex justify-content-center">{{ $event->votes->count() }}</span>
         @include('partials.form', ['action' => 'down', 'id' => $event->id, 'type' => 'event'])
       </div>
-      <div class="p-2 pb-1 d-flex flex-column">
+      <div class="pt-2 ps-2 pe-2 pb-1 d-flex flex-column" style="max-width:800px">
         <h3 class="">{{ $event->name}}</h3>
         <div class="tags">
           @foreach($event->tags as $tag)
           <div class="badge bg-secondary">{{ $tag->name }}</div>
           @endforeach
         </div>
-        <button type="button" class="btn ps-0 align-self-start" style="text-decoration: none; color: black;">
+        <button type="button" class="btn ps-0 align-self-start text-decoration-none">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
             <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
           </svg>
           <span>Posted by {{$event->manager->account->name}}</span>
         </button>
         <h4 class="text-muted pb-3">{{ strtok($event->description, '.') }}</h4>
-        <p class=""> {{ substr($event->description, strpos($event->description, '.')+2) }}</p>
+        <p class="text-break" style="max-width: 700px"> {{ substr($event->description, strpos($event->description, '.')+2) }}</p>
       </div>
       <div class="p-2 pt-5 ms-auto">
         <img src="../../images/community-events.jpeg" class="img-fluid m-0 p-0" height="300" width="400" alt="...">
@@ -98,7 +98,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header d-flex flex-row">
-        <form class="d-none d-sm-flex w-20 align-self-center form-inline" action="" style="width:100%">
+        <form class="d-none d-sm-flex w-20 align-self-center form-inline w-100">
           <input type="text" class="form-control" id="searchuser" name="query" placeholder="Search people" aria-label="Search" aria-describedby="button-addon2" value="">
           <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">

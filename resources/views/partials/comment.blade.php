@@ -1,7 +1,7 @@
 <div class="p-2" >
-  <div class="border border-dark p-3 ps-4 d-flex flex-row justify-content-start" data-id="{{$comment->id}}">
+  <div class="border rounded p-3 ps-4 d-flex flex-row justify-content-start" data-id="{{$comment->id}}">
     <div class="pe-2">
-      <img src="../images/perfil.png" class="img-fluid m-0 p-0" height="80" width="120" alt="...">
+      <img src="../images/perfil.png" class="rounded-circle img-fluid m-0 p-0" height="80" width="120" alt="...">
     </div>
     <div class="flex-fill" style="width: 40rem;">
       <h4 style="margin-bottom: 0rem;">{{$comment->user->account->name}}</h4>
@@ -45,9 +45,9 @@
   </div>
   <div style="margin-left:10rem">
     @foreach ($comment->answers as $reply)
-    <div class="answer border border-dark mt-2 p-3 ps-4 d-flex flex-row justify-content-start" data-id="{{$reply['id']}}" style="">
+    <div class="answer border rounded mt-2 p-3 ps-4 d-flex flex-row justify-content-start" data-id="{{$reply['id']}}" style="">
       <div class="pe-2">
-        <img src="../images/perfil.png" class="img-fluid m-0 p-0" height="80" width="120" alt="...">
+        <img src="../images/perfil.png" class="rounded-circle img-fluid m-0 p-0" height="80" width="120" alt="...">
       </div>
       <div class="flex-fill">
         <h4 style="margin-bottom: 0rem;">{{$reply->user->account->name}}</h4>

@@ -10,11 +10,9 @@ class InviteController extends Controller
     //
     public function invite(Request $request)
     {
-        //$users_id = $_POST['ids'];
-        //$event = $_POST['event_id'];
-        //$users_id = explode(',', $users_id);
-
-        $user = 
+        $users_id = $_POST['ids'];
+        $event = $_POST['event_id'];
+        $users_id = explode(',', $users_id);
 
         foreach ($users_id as $user_id) {
             $invite = Invite::create([

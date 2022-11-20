@@ -3,20 +3,32 @@
 namespace App\Policies;
 
 use App\Models\Account;
-use App\Models\example;
+use App\Models\Vote;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class ExamplePolicy
+class VotePolicy
 {
     use HandlesAuthorization;
 
     /**
+     * Perform pre-authorization checks.
+     *
+     * @param  \App\Models\Account  $account
+     * @param  string  $ability
+     * @return void|bool
+     */
+    public function before(Account $account)
+    {
+        return $account->admin ? true : null;
+    }
+
+    /**
      * Determine whether the user can view any models.
      *
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\Account  $account
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user)
+    public function viewAny(Account $account)
     {
         //
         return True;
@@ -25,11 +37,11 @@ class ExamplePolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\example  $example
+     * @param  \App\Models\Account  $account
+     * @param  \App\Models\Vote  $vote
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(User $user, example $example)
+    public function view(Account $account, Vote $vote)
     {
         //
         return True;
@@ -38,10 +50,10 @@ class ExamplePolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\Account  $account
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function create(User  $user)
+    public function create(Account $account)
     {
         //
         return True;
@@ -50,11 +62,11 @@ class ExamplePolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\example  $example
+     * @param  \App\Models\Account  $account
+     * @param  \App\Models\Vote  $vote
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User  $user, example $example)
+    public function update(Account $account, Vote $vote)
     {
         //
         return True;
@@ -63,11 +75,11 @@ class ExamplePolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\example  $example
+     * @param  \App\Models\Account  $account
+     * @param  \App\Models\Vote  $vote
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User  $user, example $example)
+    public function delete(Account $account, Vote $vote)
     {
         //
         return True;
@@ -76,11 +88,11 @@ class ExamplePolicy
     /**
      * Determine whether the user can restore the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\example  $example
+     * @param  \App\Models\Account  $account
+     * @param  \App\Models\Vote  $vote
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User  $user, example $example)
+    public function restore(Account $account, Vote $vote)
     {
         //
         return True;
@@ -89,11 +101,11 @@ class ExamplePolicy
     /**
      * Determine whether the user can permanently delete the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\example  $example
+     * @param  \App\Models\Account  $account
+     * @param  \App\Models\Vote  $vote
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(Account $account, example $example)
+    public function forceDelete(Account $account, Vote $vote)
     {
         //
         return True;

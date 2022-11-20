@@ -73,7 +73,6 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        console_log('data');
         $account = Account::create([
             'name' => $data['name'],
             'email' => $data['email'],
