@@ -19,7 +19,7 @@ class InvitePolicy
      */
     public function before(Account $account)
     {
-        return $account->admin() ? true : null;
+        return $account->admin ? true : null;
     }
 
     /**

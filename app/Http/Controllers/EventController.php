@@ -67,10 +67,7 @@ class EventController extends Controller
     {
         $event = Event::find($id);
 
-        if ($event->privacy == "Private") {
-
-            $this->authorize('view', $event);
-        }
+        $this->authorize('view', $event);
 
         return view('pages.event', ['event' => $event]);
     }

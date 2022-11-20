@@ -19,7 +19,7 @@ class EventPolicy
      */
     public function before(Account $account)
     {
-        return $account->admin() ? true : null;
+        return $account->admin ? true : null;
     }
 
     /**
@@ -44,7 +44,13 @@ class EventPolicy
     public function view(?Account $account, Event $event)
     {
         //
-        return True;
+        if ($event->privacy == 'Public') return True;
+        if ($account == null) return False;
+        if ($account->id == $event->account_id) return True;
+        if ($account->user->invites()->where('event_id', $event->id)->first() != null) return True;
+        if ($account->user->tickets()->where('event_id', $event->id)->first()) return True;
+        
+        return False;
     }
 
     /**

@@ -7,7 +7,7 @@
                 @include('partials.form', ['action' => 'down', 'id' => $invite->event->id, 'type' => 'invite->event'])
             </div>
             <div class="col-8">
-                <h3><a style="text-decoration: none; color: black;" href="{{ url('/invite->event') . '/' . $invite->event->id }}">{{$invite->event->name}}</a></h3>
+                <h3><a style="text-decoration: none; color: black;" href="{{ url('/event') . '/' . $invite->event->id }}">{{$invite->event->name}}</a></h3>
                 <p class="mb-5">{{$invite->event->description}}</p>
                 <div class="d-flex flex-row justify-content-between align-items-end">
                     <button type="button" class="btn pb-4" style="text-decoration: none;">

@@ -19,8 +19,9 @@ class ExamplePolicy
      */
     public function before(Account $account)
     {
-        return $account->admin() ? true : null;
+        return $account->admin ? true : null;
     }
+    
     /**
      * Determine whether the account can view any models.
      *
