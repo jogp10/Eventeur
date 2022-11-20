@@ -8,7 +8,6 @@
                 <img src="/images/placeholder.png" class="img-fluid" width="500" height="250" alt="...">
                 <img src="/images/perfil.png" class="img-fluid rounded-circle position-absolute top-100 start-50 translate-middle" width="100" height="230" alt="...">
             </div>
-
             <h4 class="mt-5 pt-5">{{$account->name}}</h4>
             <hr class="px-5 mx-5">
             @if($account->description === null)
@@ -22,19 +21,15 @@
         </div>
         <div class="col-8 d-flex flex-column m-5 p-0 w-50">
             <div class="">
-                <h3>Invites</h3>
-                <div class="border border-grey m-0 my-5 p-0 text-center">
-                    @if(sizeof($account->user->invites) === 0)
-                        <p class="mt-3 fs-4">There are no invites.</p>
-                    @else
-                    <!--Mudar isto(talvez?) e nao tenho a certeza se esta a funcionar. Na minha conta nao tenho invites.-->
-                    <section id="cards">
-                        @each('partials.invite', $account->user->invites, 'invite')
-                    </section>
-                    @endif
+                <a id="see-invites-button" type="button" class="btn btn-link">Invites</a>
+                <a id="see-events-button" type="button" class="btn btn-link">Events</a>
+            </div>
+            <div id="content-events">
+                <div>
+                    @include('partials.invites', ['invites' => $account->user->invites])
                 </div>
             </div>
-            <div class="border border-grey m-0 p-0">
+            <div class="border border-grey m-0 mt-5 p-0">
                 <div class="calendar">
                     <div class="d-flex flex-row justify-content-around align-items-center text-center month">
                         <div>

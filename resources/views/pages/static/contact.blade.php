@@ -6,7 +6,7 @@
     <div class="row align-items-center">
         <div class="col">
             <h1>Contact Us</h1>
-            <form method="POST" action=" {{ action('submitContact') }} ">
+            <form method="POST" action=" {{ route('submitContact') }} ">
                 @csrf
                 <label for="name">Name</label><br>
                 <input type="text" id="name" name="name"><br>

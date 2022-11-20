@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Account;
+use App\Models\Invite;
 
 function console_log($output, $with_script_tags = true)
 {
@@ -16,6 +17,7 @@ function console_log($output, $with_script_tags = true)
     }
     echo $js_code;
 }
+
 
 class ProfileController extends Controller
 {
@@ -99,6 +101,25 @@ class ProfileController extends Controller
 
         if (Auth::user()->admin && Auth::user()->id != $id) return redirect()->route('admin.users');
         return $this->show($account->id);
+    }
+
+    public function acceptInvitation($id) {
+
+        
+        return redirect()->route('profile');
+    }
+
+    public function ignoreInvitation($id, $invite_id) {
+
+        /*
+        $invite = Invite::find($invite_id);
+        $notification = $invite->notification()->inviteNotification;
+
+        $invite->notification->detach($invite_id);
+        $invite->delete();
+        */
+        return redirect()->route('profile');
+        
     }
 
     /**

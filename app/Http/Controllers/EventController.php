@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Answer;
+use App\Models\Invite;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\Vote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\Event;
 use App\Models\Account;
@@ -73,14 +75,53 @@ class EventController extends Controller
         return view('pages.event', ['event' => $event]);
     }
 
+    public function showEditEvent($id) {
+        
+        $event = Event::find($id);
+
+        return view('pages.eventSettings', ['event' => $event]);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Account  $account
      * @return \Illuminate\Http\Response
      */
-    public function edit(Account $account)
-    {
+    public function edit(Request $request, $id) {
+
+        $event = Event::find($id);
+
+        $validated = $request->validate([
+            'name' => ['max:20'],
+            'description' => ['max:2000'],
+            'tags' => 'required'
+        ]);
+
+        //print_r($request['privacy']);
+
+        //if($request['privacy'] == 'on') {
+        //    $event->privacy = Privacy::public;
+        //}else {
+        //    $event->privacy = Privacy::private;
+        //}
+
+        //print_r($request->get('tags'));
+
+        //foreach($request->get('tags') as $tag) {
+        //    $event->tags()->attach($tag);
+        //}
+
+        
+        if ($request['name'] !== null) {
+            $event->name = $request['name'];
+        }
+        if ($request['description'] !== null) {
+            $event->description = $request['description'];
+        }
+
+        $event->save(); 
+        return $this->show($id);
     }
 
     /**
@@ -101,8 +142,21 @@ class EventController extends Controller
      * @param  \App\Models\Account  $account
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Account $account)
-    {
+    public function destroy($id) {
+        
+        /*
+        $event = Event::find($id);
+        $manager = User::find($event->manager->id);
+        
+        DB::table('event_tags')->where('event_id', $id)->delete();
+        $manager->detach($id);
+
+        $event->erase();
+        $event->save();
+        */
+        
+
+        return view('pages.profile');
     }
 
     public function invite(Request $request)
@@ -131,7 +185,7 @@ class EventController extends Controller
                 'user_id' => $user_id,
                 'event_id' => $event,
                 'num_of_tickets' => 2,
-                'price' => 0
+                'price' => 0,
             ]);
             $ticket->save();
         }

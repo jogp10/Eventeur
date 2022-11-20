@@ -62,6 +62,12 @@ function sendSearchUsersRequest() {
   sendAjaxRequest('get', '/api/searchuser?search=' + search, {search:search}, searchUsersHandler);
 }
 
+function sendSearchUsersRequest() {
+  let search = this.value;
+
+  sendAjaxRequest('get', '/api/searchuser?search=' + search, {search:search}, searchUsersHandler);
+}
+
 function sendInvitesRequest(event) {
   var checked = document.querySelectorAll("#inviteModal td div svg:not(.hidden)");
   var event_id = document.querySelector(".event").id;
@@ -255,3 +261,7 @@ function createUserRow(user, url) {
 }
 
 addEventListeners();
+
+
+
+

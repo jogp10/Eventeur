@@ -21,13 +21,18 @@ Route::get('register', 'Auth\RegisterController@showRegistrationForm');
 Route::post('register', 'Auth\RegisterController@register')->name('register');
 
 //User
-Route::get('profile/{id}', 'ProfileController@show');
+Route::get('profile/{id}', 'ProfileController@show')->name('profile');
 Route::get('profile/{id}/edit', 'ProfileController@showEditPage');
 Route::put('profile/{id}/edit', 'ProfileController@update')->name('editProfile');
 Route::get('profile/{id}/security', 'ProfileController@showSettingsPage');
+Route::get('profile/{id}/{invite_id}/accept_invitation', 'ProfileController@acceptInvitation')->name('AcceptInvitation');
+Route::get('profile/{id}/{invite_id}/ignore_invitation', 'ProfileController@ignoreInvitation')->name('IgnoreInvitation');
 
 //Event
 Route::get('event/{id}', 'EventController@show');
+Route::get('event/{id}/event_settings', 'EventController@showEditEvent')->name('eventSettings');
+Route::post('event/{id}/event_settings', 'EventController@edit')->name('editEvent');
+Route::get('event/{id}/delete_event', 'EventController@destroy')->name('deleteEvent');
 Route::post('api/invite', 'EventController@invite')->name('invite');
 Route::post('api/give_ticket', 'EventController@ticket')->name('ticket');
 
@@ -51,3 +56,5 @@ Route::delete('admin/users/{id}/delete', 'ProfileController@destroy')->name('adm
 Route::get('search', 'SearchController@searchEvent');
 Route::get('api/searchuser', 'SearchController@showUser');
 Route::post('vote', 'VoteController@vote')->name('vote');
+Route::post('api/invite/accept', 'InviteController@accept');
+Route::post('api/invite/ignore', 'InviteController@ignore');

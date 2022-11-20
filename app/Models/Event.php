@@ -5,8 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Event extends Model
-{
+
+
+class Event extends Model {
     use HasFactory;
 
     protected $fillable = [
@@ -14,6 +15,7 @@ class Event extends Model
     ];
 
     public function manager() { return $this->belongsTo(User::class, 'user_id'); }
+
     public function coverImage() { return $this->hasOne(CoverImage::class); }
 
     public function tags() { return $this->belongsToMany(Tag::class); }

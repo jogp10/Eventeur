@@ -47,6 +47,7 @@ let monhtDays = document.querySelector('.days')
 if (monhtDays != null) {
     renderCalendar()
 }
+<<<<<<< HEAD
 
 
 let prevButton = document.querySelector('.prev-month');
@@ -65,3 +66,50 @@ if (nextButton != null) {
         renderCalendar()
     })
 }
+=======
+  
+let prevButton = document.querySelector('.prev-month');
+if (prevButton != null) {
+    prevButton.addEventListener('click', () => {
+        date.setMonth(date.getMonth() - 1)
+        renderCalendar()
+    })
+}
+
+
+let nextButton = document.querySelector('.next-month');
+if (nextButton != null) {
+    nextButton.addEventListener('click', () => {
+        date.setMonth(date.getMonth() + 1)
+        renderCalendar()
+    })
+}
+
+
+let eventsButton = document.querySelector('#see-invites-button')
+let invitesButton = document.querySelector('#see-events-button')
+
+let eventsContent = document.getElementById('content-events')
+
+eventsButton.addEventListener('click', () => {
+    eventsContent.innerText = "@include('partials.ownedEvents', ['events' => $account->user->events])"
+})
+
+
+invitesButton.addEventListener('click', () => {
+    eventsContent.innerText = "@include('partials.invites', ['invites' => $account->user->invites])"
+})
+
+
+function truncateText(selector, maxLength) {
+    var element = document.querySelector(selector), truncated = element.innerText;
+  
+    if (truncated.length > maxLength) {
+        truncated = truncated.substr(0, maxLength) + '...';
+    }
+    
+    return truncated;
+    }
+  
+document.querySelector('#invite-event-description').innerText = truncateText('#invite-event-description', 150);
+>>>>>>> manage-events

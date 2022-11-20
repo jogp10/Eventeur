@@ -13,14 +13,24 @@ class InviteController extends Controller
         $users_id = $_POST['ids'];
         $event = $_POST['event_id'];
         $users_id = explode(',', $users_id);
+
         foreach ($users_id as $user_id) {
             $invite = Invite::create([
                 'user_id' => $user_id,
                 'event_id' => $event,
             ]);
+
             $invite->save();
         }
 
         return response()->json(['success' => true]);
+    }
+
+    public function accept($id) {
+
+
+
+
+        return view('pages.profile');
     }
 }
