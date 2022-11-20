@@ -11,6 +11,18 @@ class BanPolicy
     use HandlesAuthorization;
 
     /**
+     * Perform pre-authorization checks.
+     *
+     * @param  \App\Models\Account  $account
+     * @param  string  $ability
+     * @return void|bool
+     */
+    public function before(Account $account)
+    {
+        return $account->admin() ? true : null;
+    }
+
+    /**
      * Determine whether the user can view any models.
      *
      * @param  \App\Models\Account  $account

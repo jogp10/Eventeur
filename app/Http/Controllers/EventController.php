@@ -31,6 +31,11 @@ class EventController extends Controller
      */
     public function index()
     {
+        $events = Event::inRandomOrder()
+            ->limit(8)
+            ->get();
+
+        return view('pages.home', ['events' => $events]);
     }
 
     /**

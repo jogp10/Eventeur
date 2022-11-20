@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Account;
 use App\Models\Accout;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Support\Facades\Auth;
 
 class AccountPolicy
 {
@@ -19,9 +20,7 @@ class AccountPolicy
      */
     public function before(Account $account, $ability)
     {
-        if ($account->admin() != null) {
-            return True;
-        }
+        return $account->admin() ? true : null;
     }
 
     /**
@@ -40,10 +39,10 @@ class AccountPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\Accout  $accout
+     * @param  \App\Models\Account  $account2
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(Account $account, Accout $accout)
+    public function view(?Account $account, Account $account2)
     {
         //
         return True;
@@ -58,7 +57,7 @@ class AccountPolicy
     public function create(Account $account)
     {
         //
-        return True;
+        return False;
     }
 
     /**
@@ -91,10 +90,10 @@ class AccountPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\Accout  $accout
+     * @param  \App\Models\Account  $account2
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(Account $account, Accout $accout)
+    public function restore(Account $account, Account $account2)
     {
         //
         return False;
@@ -104,10 +103,10 @@ class AccountPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\Accout  $accout
+     * @param  \App\Models\Account  $account2
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(Account $account, Accout $accout)
+    public function forceDelete(Account $account, Account $account2)
     {
         //
         return False;

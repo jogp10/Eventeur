@@ -11,15 +11,15 @@ class ReportPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any models.
+     * Perform pre-authorization checks.
      *
      * @param  \App\Models\Account  $account
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param  string  $ability
+     * @return void|bool
      */
-    public function viewAny(Account $account)
+    public function before(Account $account)
     {
-        //
-        return True;
+        return $account->admin() ? true : null;
     }
 
     /**

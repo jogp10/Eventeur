@@ -22,7 +22,7 @@ class AdminController extends Controller
 {
     //
 
-    public function home()
+    public function index()
     {
         if (Auth::user()->admin) {
             return view('pages.admin.home');
@@ -31,29 +31,10 @@ class AdminController extends Controller
         }
     }
 
-    public function users()
-    {
-        if (Auth::user()->admin) {
-            $users = Account::all();
-            $users->shift();
-            return view('pages.admin.users', ['users' => $users]);
-        } else {
-            return redirect()->route('home');
-        }
-    }
-
-    public function user($id)
-    {
-        if (Auth::user()->admin) {
-            $user = Account::findOrFail($id);
-            return view('pages.admin.user', ['user' => $user]);
-        } else {
-            return redirect()->route('home');
-        }
-    }
-
     public function createAccount()
     {
+        $this->authorize('create', Account::class);
+
         if (Auth::user()->admin) {
             return view('pages.admin.createAccount');
         } else {
@@ -64,75 +45,35 @@ class AdminController extends Controller
     public function storeAccount(Request $request)
     {
 
-        if (Auth::user()->admin) {
-            $data = $request->all();
+        $this->authorize('create', Account::class);
 
-            $validator = Validator::make($data, [
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:accounts',
-                'password' => 'required|string|min:6',
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:accounts',
+            'password' => 'required|string|min:6',
+        ]);
+        $validator->validate();
+
+        $account = Account::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+        ]);
+
+        if (array_key_exists('admin', $data) != null) {
+            $admin = Admin::create([
+                'account_id' => $account['id']
             ]);
-            $validator->validate();
-
-            $account = Account::create([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'password' => bcrypt($data['password']),
-            ]);
-
-            if (array_key_exists('admin', $data) != null) {
-                $admin = Admin::create([
-                    'account_id' => $account['id']
-                ]);
-                $admin->save();
-            }
-
-            $account->save();
-
-            return redirect()->route('admin.users');
-        } else {
-            return redirect()->route('home');
+            $admin->save();
         }
+
+        $account->save();
+
+        return redirect()->route('admin.users');
     }
 
-    public function editUser($id)
-    {
-        if (Auth::user()->admin) {
-            $user = Account::findOrFail($id);
-            return view('pages.admin.editUser', ['account' => $user]);
-        } else {
-            return redirect()->route('home');
-        }
-    }
-
-    public function updateUser(Request $request, $id)
-    {
-        if (Auth::user()->admin) {
-            $validated = $request->validate([
-                'name' => ['max:20'],
-                'description' => ['max:200'],
-            ]);
-
-            $user = Account::findOrFail($id);
-            $user->name = $request->name;
-            $user->description = $request->description;
-            $user->save();
-            return redirect()->route('admin.users');
-        } else {
-            return redirect()->route('home');
-        }
-    }
-
-    public function deleteUser($id)
-    {
-        if (Auth::user()->admin) {
-            $user = Account::findOrFail($id);
-            $user->delete();
-            return redirect()->route('admin.users');
-        } else {
-            return redirect()->route('home');
-        }
-    }
 
     /**
      * Get a validator for an incoming registration request.

@@ -42,6 +42,7 @@
     </div>
     <h5 class="ps-5 mt-5">Profile Settings</h5>
     <form class="ps-5" method="POST" action="{{ route('admin.updateUser', ['id' => $account->id]) }}">
+        @method('PUT')
         @csrf
         <div class="row row-cols-2 border border-3 gx-0 py-4 px-3">
             <div class="col-12 col-lg-2">

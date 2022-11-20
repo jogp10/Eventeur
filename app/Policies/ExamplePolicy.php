@@ -17,13 +17,10 @@ class ExamplePolicy
      * @param  string  $ability
      * @return void|bool
      */
-    public function before(Account $account, $ability)
+    public function before(Account $account)
     {
-        if ($account->admin() != null) {
-            return true;
-        }
+        return $account->admin() ? true : null;
     }
-
     /**
      * Determine whether the account can view any models.
      *

@@ -17,11 +17,9 @@ class AnswerPolicy
      * @param  string  $ability
      * @return void|bool
      */
-    public function before(Account $account, $ability)
+    public function before(Account $account)
     {
-        if ($account->admin() != null) {
-            return true;
-        }
+        return $account->admin() ? true : null;
     }
 
     /**
