@@ -20,7 +20,6 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('register', 'Auth\RegisterController@showRegistrationForm');
 Route::post('register', 'Auth\RegisterController@register')->name('register');
 
-
 //User
 Route::get('profile/{id}', 'ProfileController@show');
 Route::get('profile/{id}/edit', 'ProfileController@showEditPage');
@@ -29,6 +28,8 @@ Route::get('profile/{id}/security', 'ProfileController@showSettingsPage');
 
 //Event
 Route::get('event/{id}', 'EventController@show');
+Route::post('api/invite', 'EventController@invite')->name('invite');
+Route::post('api/give_ticket', 'EventController@ticket')->name('ticket');
 
 //Static Pages
 Route::get('about', 'StaticPageController@about');
@@ -36,14 +37,7 @@ Route::get('contact', 'StaticPageController@contact');
 Route::post('submitContact', 'StaticPageController@submitContact')->name('submitContact');
 Route::get('faq', 'StaticPageController@faq');
 
-// Actions
-Route::get('search', 'SearchController@searchEvent');
-Route::get('api/searchuser', 'SearchController@showUser');
-Route::post('vote', 'VoteController@vote')->name('vote');
-Route::post('api/invite', 'EventController@invite')->name('invite');
-Route::post('api/give_ticket', 'EventController@ticket')->name('ticket');
-
-// Admin
+//Admin
 Route::get('admin', 'AdminController@index');
 Route::get('admin/create', 'AdminController@createAccount');
 Route::post('admin/create', 'AdminController@storeAccount')->name('admin.storeAccount');
@@ -52,3 +46,8 @@ Route::get('admin/users/{id}', 'ProfileController@show')->name('admin.user');
 Route::get('admin/users/{id}/edit', 'ProfileController@showEditPage')->name('admin.editUser');
 Route::put('admin/users/{id}/edit', 'ProfileController@update')->name('admin.updateUser');
 Route::delete('admin/users/{id}/delete', 'ProfileController@destroy')->name('admin.deleteUser');
+
+//Actions
+Route::get('search', 'SearchController@searchEvent');
+Route::get('api/searchuser', 'SearchController@showUser');
+Route::post('vote', 'VoteController@vote')->name('vote');

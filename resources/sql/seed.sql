@@ -350,15 +350,24 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION delete_invite() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    DELETE FROM invite_notifications WHERE invite_id = OLD.id;
+    RETURN OLD;
+END
+$BODY$
+LANGUAGE plpgsql;
+
 --Triggers
 Drop TRIGGER IF EXISTS delete_comment ON comments;
 Drop TRIGGER IF EXISTS cancel_event_notification ON events;
 Drop TRIGGER IF EXISTS invites_event_notification ON invites;
 Drop TRIGGER IF EXISTS check_attendee ON tickets;
-
 Drop TRIGGER IF EXISTS delete_account ON accounts;
 Drop TRIGGER IF EXISTS delete_user ON users;
 Drop TRIGGER IF EXISTS create_account ON account;
+Drop TRIGGER IF EXISTS delete_invite ON account;
 
 -- Trigger 1
 CREATE TRIGGER invites_event_notification_trigger 
@@ -401,6 +410,12 @@ CREATE TRIGGER create_account
     AFTER INSERT ON accounts
     FOR EACH ROW
     EXECUTE PROCEDURE create_user();
+
+-- Trigger 8
+CREATE TRIGGER delete_invite
+    BEFORE DELETE ON invites
+    FOR EACH ROW
+    EXECUTE PROCEDURE delete_invite();
 
 --Indexes
 Drop INDEX IF EXISTS event_name;
