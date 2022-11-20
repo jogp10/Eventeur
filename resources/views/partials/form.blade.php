@@ -1,4 +1,5 @@
-<form method="GET" class="d-flex justify-content-center" action="{{ action('VoteController@vote') }}">
+<form method="POST" class="d-flex justify-content-center" action="{{ route('vote') }}">
+    @csrf
     <input type="hidden" name="action" value="{{$action}}">
     <input type="hidden" name="id" value="{{$id}}">
     <input type="hidden" name="type" value="{{$type}}">

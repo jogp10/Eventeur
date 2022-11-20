@@ -14,8 +14,14 @@
             <div class="col-md-4 d-flex flex-column justify-content-center">
                 <p>Reports: {{$user->user->reports->count()}}</p>
                 @if($user->admin)<p> Bans: {{$user->admin->bans->count()}} </p>@endif
-                <a href="{{ url('/admin/users/' . $user->id . '/edit') }}">Edit</a>
-                <a href="{{ url('/admin/users/' . $user->id . '/delete') }}">Delete</a>
+                <form class="pb-1" action="{{ url('/admin/users/' . $user->id . '/edit') }}" method="GET">
+                    <button type="submit" class="btn btn-warning">Edit</button>
+                </form>
+                <form class="pb-1" action="{{ url('/admin/users/' . $user->id . '/delete') }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
             </div>
         </div>
     </div>

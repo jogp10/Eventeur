@@ -88,12 +88,12 @@ class VoteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function vote()
+    public function vote(Request $request)
     {
-        $action = $_GET['action'];
-        $id = $_GET['id'];
-        $user_id = $_GET['user_id'];
-        $type = $_GET['type'];
+        $action = $_POST['action'];
+        $id = $_POST['id'];
+        $user_id = $_POST['user_id'];
+        $type = $_POST['type'];
         
         Vote::where('user_id', $user_id)->where($type.'_id', $id)->count() > 0 ? $vote = Vote::where('user_id', $user_id)->where($type.'_id', $id)->first() 
                 : $vote = Vote::create(['user_id' => $user_id, $type.'_id' => $id]);

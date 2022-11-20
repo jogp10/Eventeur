@@ -17,7 +17,7 @@
             <p class="pt-3 px-5 mx-5">{{$account->description}}</p>
             @endif
             @if (Auth::user() && $account->id === Auth::user()->id)
-            <a href="{{ url('/profile/' . $account->id . '/settings') }}" type="button" class="btn btn-primary btn-lg">Edit Profile</a>
+            <a href="{{ url('/profile/' . $account->id . '/edit') }}" type="button" class="btn btn-primary btn-lg">Edit Profile</a>
             @endif
         </div>
         <div class="col-8 d-flex flex-column m-5 p-0 w-50">
