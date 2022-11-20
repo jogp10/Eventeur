@@ -16,12 +16,12 @@ function addEventListeners() {
     searchCard3.addEventListener('input', sendSearchUsersRequest);
   }
 
-  let submitInvites = document.getElementById("send");
+  let submitInvites = document.getElementById("sendInvite");
   if (submitInvites != null) {
     submitInvites.addEventListener('click', sendInvitesRequest);
   }
 
-  let submitTickets = document.getElementById("send");
+  let submitTickets = document.getElementById("sendTicket");
   if (submitTickets != null) {
     submitTickets.addEventListener('click', sendTicketsRequest);
   }

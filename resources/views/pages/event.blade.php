@@ -130,7 +130,7 @@
         </div>
       </div>
       <div class="modal-footer p-0">
-        <button id="send" type="button" class="btn btn-primary align-self-end m-1">Send Invites</button>
+        <button id="sendInvite" type="button" class="btn btn-primary align-self-end m-1">Send Invites</button>
       </div>
     </div>
   </div>
@@ -159,7 +159,7 @@
         </div>
       </div>
       <div class="modal-footer p-0">
-        <button id="send" type="button" class="btn btn-primary align-self-end m-1">Send Tickets</button>
+        <button id="sendTicket" type="button" class="btn btn-primary align-self-end m-1">Send Tickets</button>
       </div>
     </div>
   </div>

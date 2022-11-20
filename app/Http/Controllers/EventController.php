@@ -185,7 +185,6 @@ class EventController extends Controller
                 'user_id' => $user_id,
                 'event_id' => $event,
                 'num_of_tickets' => 2,
-                'price' => 0,
             ]);
             $ticket->save();
         }
