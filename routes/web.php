@@ -34,12 +34,11 @@ Route::get('event/{id}', 'EventController@show');
 Route::get('about', 'StaticPageController@about');
 Route::get('contact', 'StaticPageController@contact');
 Route::get('faq', 'StaticPageController@faq');
-
+Route::get('submitContact', 'StaticPageController@submitContact');
 
 // Actions
 Route::get('search', 'SearchController@searchEvent');
 Route::get('api/searchuser', 'SearchController@showUser');
-Route::get('submitContact', 'StaticPageController@submitContact');
 Route::get('vote', 'VoteController@vote');
 Route::post('api/invite', 'InviteController@invite');
 

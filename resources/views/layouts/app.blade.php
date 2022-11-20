@@ -21,11 +21,16 @@
     // Fix for Firefox autofocus CSS bug
     // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
   </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+  </style>
   <script src={{ asset('js/app.js') }} defer></script>
   <script src={{ asset('js/static.js') }} defer></script>
   <script src={{ asset('js/calendar.js') }} defer></script>
   <script src={{ asset('js/invite.js') }} defer></script>
 </head>
+<title></title>
+<link rel="icon" href="{!! asset('/images/logo.png') !!}" />
 
 <body>
   @include("partials.header")

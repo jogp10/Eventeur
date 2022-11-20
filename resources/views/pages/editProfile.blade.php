@@ -23,7 +23,7 @@
             <h5>Profile Image</h5>
             <div class="d-flex flex-column flex-sm-row border border-3">
                 <div class="align-self-center mb-4">
-                    <img src="images/perfil.png" class="rounded-circle img-fluid rounded-circle me-4" height="100" width="90"
+                    <img src="/images/perfil.png" class="rounded-circle img-fluid rounded-circle me-4" height="100" width="90"
                         alt="...">
                 </div>
                 <div class="align-self-center">
