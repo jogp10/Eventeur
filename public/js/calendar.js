@@ -68,17 +68,29 @@ if (nextButton != null) {
 
 let eventsButton = document.querySelector('#see-invites-button')
 let invitesButton = document.querySelector('#see-events-button')
+let profileInvites = document.getElementById('perfil-invites')
+let profileEvents = document.getElementById('perfil-events')
 
-let eventsContent = document.getElementById('content-events')
 
 eventsButton.addEventListener('click', () => {
-    eventsContent.innerText = "@include('partials.ownedEvents', ['events' => $account->user->events])"
+    profileInvites.className = ""
+    profileEvents.className = "visually-hidden"
+
+    eventsButton.style.color = "black"
+    invitesButton.style.color = "grey"
 })
 
 
 invitesButton.addEventListener('click', () => {
-    eventsContent.innerText = "@include('partials.invites', ['invites' => $account->user->invites])"
+
+    profileEvents.className = ""
+    profileInvites.className = "visually-hidden"
+    eventsButton.style.color = "grey"
+    invitesButton.style.color = "black"
 })
+
+
+
 
 
 function truncateText(selector, maxLength) {
@@ -89,6 +101,10 @@ function truncateText(selector, maxLength) {
     }
     
     return truncated;
-    }
+}
   
 document.querySelector('#invite-event-description').innerText = truncateText('#invite-event-description', 150);
+
+
+
+

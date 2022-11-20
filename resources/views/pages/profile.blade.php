@@ -21,12 +21,15 @@
         </div>
         <div class="col-8 d-flex flex-column m-5 p-0 w-50">
             <div class="">
-                <a id="see-invites-button" type="button" class="btn btn-link">Invites</a>
-                <a id="see-events-button" type="button" class="btn btn-link">Events</a>
+                <a id="see-invites-button" type="button" class="btn btn-link fs-5 ms-0 ps-0" style="text-decoration: none; color: black;">Invites</a>
+                <a id="see-events-button" type="button" class="btn btn-link fs-5" style="text-decoration: none; color:grey;">Events</a>
             </div>
             <div id="content-events">
-                <div>
+                <div id="perfil-invites" class="">
                     @include('partials.invites', ['invites' => $account->user->invites])
+                </div>
+                <div id="perfil-events" class="visually-hidden">
+                    @include('partials.ownedEvents', ['events' => $account->user->events])
                 </div>
             </div>
             <div class="border border-grey m-0 mt-5 p-0">

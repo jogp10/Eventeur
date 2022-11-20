@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\Account;
 use App\Models\Invite;
+use App\Models\User;
+use App\Models\Ticket;
 
 function console_log($output, $with_script_tags = true)
 {
@@ -103,23 +105,28 @@ class ProfileController extends Controller
         return $this->show($account->id);
     }
 
-    public function acceptInvitation($id) {
+    public function acceptInvitation($id, $invite_id) {
 
+        $user = User::find($id);
+        $invite = Invite::find($invite_id);
+        $event = $invite->event;
         
-        return redirect()->route('profile');
+        $ticket = Ticket::create([
+            'event_id' => $event->id,
+            'user_id' => $user->id,
+            'num_of_tickets' => 1
+        ]);
+
+        $invite->delete();
+        return redirect()->route('profile', $id);
     }
 
     public function ignoreInvitation($id, $invite_id) {
 
-        /*
         $invite = Invite::find($invite_id);
-        $notification = $invite->notification()->inviteNotification;
-
-        $invite->notification->detach($invite_id);
         $invite->delete();
-        */
-        return redirect()->route('profile');
-        
+
+        return redirect()->route('profile', $id);
     }
 
     /**

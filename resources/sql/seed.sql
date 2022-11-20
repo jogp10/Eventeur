@@ -362,6 +362,15 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION cancel_event() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    DELETE FROM event_tag WHERE event_id = OLD.id;
+    RETURN OLD;
+END
+$BODY$
+LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION create_user() RETURNS TRIGGER AS
 $BODY$
 BEGIN
@@ -380,6 +389,7 @@ Drop TRIGGER IF EXISTS delete_account ON accounts;
 Drop TRIGGER IF EXISTS delete_user ON users;
 Drop TRIGGER IF EXISTS create_account ON accounts;
 Drop TRIGGER IF EXISTS delete_invite ON invites;
+Drop TRIGGER IF EXISTS cancel_event ON events;
 
 -- Trigger 1
 CREATE TRIGGER invites_event_notification_trigger 
@@ -428,6 +438,13 @@ CREATE TRIGGER delete_invite
     BEFORE DELETE ON invites
     FOR EACH ROW
     EXECUTE PROCEDURE delete_invite();
+
+
+-- Trigger 9
+CREATE TRIGGER cancel_event
+    BEFORE DELETE ON events
+    FOR EACH ROW
+    EXECUTE PROCEDURE cancel_event();
 
 --Indexes
 Drop INDEX IF EXISTS event_name;

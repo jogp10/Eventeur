@@ -144,17 +144,8 @@ class EventController extends Controller
      */
     public function destroy($id) {
         
-        /*
-        $event = Event::find($id);
-        $manager = User::find($event->manager->id);
-        
-        DB::table('event_tags')->where('event_id', $id)->delete();
-        $manager->detach($id);
-
-        $event->erase();
-        $event->save();
-        */
-        
+        //$event = Event::find($id);
+        //$event->delete();
 
         return redirect()->route('home');
     }
