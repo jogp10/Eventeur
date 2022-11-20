@@ -33,6 +33,7 @@ class EventController extends Controller
     {
         $events = Event::inRandomOrder()
             ->limit(8)
+            ->where('privacy', 'Public')
             ->get();
 
         return view('pages.home', ['events' => $events]);
