@@ -44,7 +44,8 @@ class InvitePolicy
     public function view(Account $account, Invite $invite)
     {
         //
-        return True;
+        if ($account->id == $invite->account_id) return True;
+        return False;
     }
 
     /**
@@ -69,7 +70,7 @@ class InvitePolicy
     public function update(Account $account, Invite $invite)
     {
         //
-        return True;
+        return False;
     }
 
     /**
@@ -82,7 +83,7 @@ class InvitePolicy
     public function delete(Account $account, Invite $invite)
     {
         //
-        return True;
+        return False;
     }
 
     /**
@@ -95,7 +96,7 @@ class InvitePolicy
     public function restore(Account $account, Invite $invite)
     {
         //
-        return True;
+        return False;
     }
 
     /**
@@ -108,6 +109,6 @@ class InvitePolicy
     public function forceDelete(Account $account, Invite $invite)
     {
         //
-        return True;
+        return False;
     }
 }
