@@ -27,8 +27,16 @@
         <h4 class="text-muted pb-3">{{ strtok($event->description, '.') }}</h4>
         <p class="text-break" style="max-width: 700px"> {{ substr($event->description, strpos($event->description, '.')+2) }}</p>
       </div>
-      <div class="p-3 justify-content-center d-flex">
+      <div class="p-3 justify-content-center d-flex flex-column">
         <img src="../images/community-events.jpeg" class="rounded img-fluid m-0 p-0" height="300" width="400" alt="...">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+            <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z" />
+            <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+          </svg>
+          <?php $maps = str_replace(' ', '%20', str_replace('#', ' ', str_replace(',', '%2C', $event->location))); ?>
+          <a href="{{ 'https://www.google.com/maps/search/?api=1&query=' . $maps }}">{{$event->location}}</a>
+        </div>
       </div>
     </div>
     <div class="d-flex flex-row mt-auto justify-content-between pb-3 ps-4 pe-4">
