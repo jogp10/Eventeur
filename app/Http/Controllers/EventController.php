@@ -162,11 +162,11 @@ class EventController extends Controller
 
         //print_r($request['privacy']);
 
-        //if($request['privacy'] == 'on') {
-        //    $event->privacy = Privacy::public;
-        //}else {
-        //    $event->privacy = Privacy::private;
-        //}
+        if($request['privacy'] == 'on') {
+            $event->privacy = 'Private';
+        }else {
+            $event->privacy = 'Public';
+        }
 
         //print_r($request->get('tags'));
 
@@ -183,7 +183,7 @@ class EventController extends Controller
         }
 
         $event->save(); 
-        return view('pages.event', ['event' => $event]);
+        return redirect()->route('event.show', ['id' => $event]);
     }
 
     /**
