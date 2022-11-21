@@ -224,7 +224,7 @@ CREATE TABLE votes (
     answer_id      INTEGER,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
     CONSTRAINT fk_polloption_id FOREIGN KEY(poll_option_id) REFERENCES poll_options(id) ON DELETE CASCADE ON UPDATE CASCADE,
     CHECK (poll_option_id IS NOT NULL OR event_id IS NOT NULL OR comment_id IS NOT NULL OR answer_id IS NOT NULL)
 );
@@ -290,6 +290,7 @@ BEGIN
     UPDATE comments SET user_id = 1 WHERE user_id = OLD.id;
     UPDATE events SET user_id = 1 WHERE user_id = OLD.id;
     UPDATE answers SET user_id = 1 WHERE user_id = OLD.id;
+    UPDATE votes SET user_id = 1 WHERE user_id = OLD.id;
     RETURN OLD;
 END
 $BODY$

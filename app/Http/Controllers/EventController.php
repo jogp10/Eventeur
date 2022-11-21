@@ -75,27 +75,54 @@ class EventController extends Controller
         return view('pages.event', ['event' => $event]);
     }
 
-    public function showEditEvent($id) {
+    public function showParticipantsEvent($id) {
         
         $event = Event::find($id);
 
-        return view('pages.eventSettings', ['event' => $event]);
+        $this->authorize('update', $event);
+
+        foreach($event->invites as $invite) {
+            $invite->user;
+            $invite->user->account;
+        }
+
+        foreach($event->tickets as $ticket) {
+            $ticket->user;
+            $ticket->user->account;
+        }
+
+        return view('pages.eventParticipants', ['event' => $event]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Account  $account
+     * @param  \App\Models\Event  $event
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request, $id) {
+        $event = Event::find($id);
 
+        $this->authorize('update', $event);
+
+        return view('pages.eventSettings', ['event' => $event]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Event  $event
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
         $event = Event::find($id);
 
         $validated = $request->validate([
-            'name' => ['max:20'],
+            'name' => ['max:100'],
             'description' => ['max:2000'],
-            'tags' => 'required'
         ]);
 
         //print_r($request['privacy']);
@@ -121,19 +148,7 @@ class EventController extends Controller
         }
 
         $event->save(); 
-        return $this->show($id);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Account  $account
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Account $account)
-    {
-        //
+        return view('pages.event', ['event' => $event]);
     }
 
     /**
@@ -168,6 +183,15 @@ class EventController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function deleteInvite(Request $request)
+    {
+        $invite = Invite::find($request['id']);
+        
+        $invite->delete();
+
+        return redirect()->back();
+    }
+
     public function ticket(Request $request)
     {
         $users_id = $_POST['ids'];
@@ -183,5 +207,14 @@ class EventController extends Controller
         }
 
         return response()->json(['success' => true]);
+    }
+
+    public function deleteTicket(Request $request)
+    {
+        $ticket = Ticket::find($request['id']);
+        
+        $ticket->delete();
+
+        return redirect()->back();
     }
 }

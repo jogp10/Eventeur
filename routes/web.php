@@ -30,11 +30,14 @@ Route::get('profile/{id}/{invite_id}/ignore_invitation', 'ProfileController@igno
 
 //Event
 Route::get('event/{id}', 'EventController@show');
-Route::get('event/{id}/event_settings', 'EventController@showEditEvent')->name('eventSettings');
-Route::post('event/{id}/event_settings', 'EventController@edit')->name('editEvent');
+Route::get('event/{id}/event_settings', 'EventController@edit')->name('eventSettings');
+Route::get('event/{id}/event_participants', 'EventController@showParticipantsEvent')->name('eventParticipants');
+Route::post('event/{id}/event_settings', 'EventController@update')->name('editEvent');
 Route::delete('event/{id}/delete_event', 'EventController@destroy')->name('deleteEvent');
 Route::post('api/invite', 'EventController@invite')->name('invite');
+Route::delete('api/invite/delete', 'EventController@deleteInvite')->name('deleteInvite');
 Route::post('api/give_ticket', 'EventController@ticket')->name('ticket');
+Route::delete('api/give_ticket/delete', 'EventController@deleteTicket')->name('deleteTicket');
 
 //Static Pages
 Route::get('about', 'StaticPageController@about');

@@ -33,4 +33,8 @@ class InviteController extends Controller
 
         return view('pages.profile');
     }
+
+    public function ignore($id) {
+        return redirect()->back();
+    }
 }
