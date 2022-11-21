@@ -9,7 +9,7 @@
                     <h5 class="card-title"> {{$user->name}} </h5>
                 </a>
                 <p class="card-text"> {{ $user->email }}</p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                <p class="card-text"><small class="text-muted">Last updated {{$user->updated_at}}</small></p>
             </div>
             <div class="col-md-4 d-flex flex-column justify-content-center">
                 <p>Reports: {{$user->user->reports->count()}}</p>

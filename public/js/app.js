@@ -151,6 +151,7 @@ function searchUsersHandler() {
 
   let users = JSON.parse(this.responseText);
   let new_rows = [];
+  console.log(users);
 
   let url = window.location.href;
   url = url.substring(0, url.indexOf('/'));
@@ -234,6 +235,9 @@ function createRow(user) {
 }
 
 function createUserRow(user, url) {
+  const csrf = document.querySelector('meta[name="csrf-token"]').content;
+  user['updated_at'] = user['updated_at'].substring(0, 10) + ' ' + user['updated_at'].substring(11, 19);
+  
   let htmlView = '';
   htmlView += '<div class="card mb-3" style="max-width: 540px;">';
   htmlView += '  <div class="row g-0">';
@@ -245,13 +249,18 @@ function createUserRow(user, url) {
   htmlView += '        <a href="' + url + '/profile/' + user['id'] + '">';
   htmlView += '        <h5 class="card-title">' + user['name'] + '</h5></a>';
   htmlView += '        <p class="card-text">' + user['email'] + '</p>';
-  htmlView += '        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>';
+  htmlView += '        <p class="card-text"><small class="text-muted">Last updated ' + user['updated_at'] + '</small></p>';
   htmlView += '      </div>';
   htmlView += '      <div class="col-md-4 d-flex flex-column justify-content-center">';
   htmlView += '        <p>Reports:' + user['user']['reports'].length + '</p>';
-  if (user['admin'] != null) {htmlView += '        <p>Bans:' + user['admin']['bans'].length + '</p>';};
-  htmlView += '      <a href="' + url + '/admin/users/' + user['id'] + '/edit">Edit</a>';
-  htmlView += '      <a href="' + url + '/admin/users/' + user['id'] + '/delete">Delete</a>';
+  if (user['admin'] != null) {htmlView += '        <p>Bans:' + user['admin']['bans'].length + '</p>';};  
+  htmlView += '      <form class="pb-1" action="' + url + '/admin/users/' + user['id'] + '/edit" method="GET">'
+  htmlView += '         <button type="submit" class="btn btn-warning">Edit</button></form>'
+
+  htmlView += '      <form class="pb-1" action="' + url + '/admin/users/' + user['id'] + '/delete" method="POST">'
+  htmlView += '<input type="hidden" name="_method" value="DELETE">'
+  htmlView += '<input type="hidden" name="_token" value="' + csrf + '">'
+  htmlView += '         <button type="submit" class="btn btn-danger">Delete</button></form>'
   htmlView += '    </div>';
   htmlView += '  </div>';
   htmlView += '</div>';

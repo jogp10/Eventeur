@@ -67,7 +67,7 @@ class SearchController extends Controller
             if($user->admin)$user->admin->bans;
             $user->user->reports;
             $user->user->events;
-
+            $user->updated_at;
         }
         return $users;
     }
