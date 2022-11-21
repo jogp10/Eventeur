@@ -270,9 +270,9 @@ You should keep your git master branch always functional and frequently build an
 DB_CONNECTION=pgsql
 DB_HOST=db.fe.up.pt
 DB_PORT=5432
-DB_SCHEMA=lbaw21XX
-DB_DATABASE=lbaw21XX
-DB_USERNAME=lbaw21XX
+DB_SCHEMA=lbaw
+DB_DATABASE=lbaw2224
+DB_USERNAME=lbaw2224
 DB_PASSWORD=password
 ```
 
@@ -304,7 +304,7 @@ There should be only one image per group. All team members should be able to upd
 You can test locally the image by running:
 
 ```
-docker run -it -p 8000:80 --name=lbaw21XX -e DB_DATABASE="lbaw21XX" -e DB_SCHEMA="lbaw21XX" -e DB_USERNAME="lbaw21XX" -e DB_PASSWORD="PASSWORD" git.fe.up.pt:5050/lbaw/lbaw2122/lbaw21XX # Replace with your group's image name
+docker run -it -p 8000:80 --name=lbaw2224 -e DB_DATABASE="lbaw2224" -e DB_SCHEMA="lbaw" -e DB_USERNAME="lbaw2224" -e DB_PASSWORD="PASSWORD" git.fe.up.pt:5050/lbaw/lbaw2223/lbaw2224 
 ```
 
 The above command exposes your application on http://localhost:8000.
@@ -316,7 +316,7 @@ Your database configuration will be provided as an environment variable to your 
 While running your container, you can use another terminal to run a shell inside the container by executing:
 
 ```bash
-docker exec -it lbaw21XX bash
+docker exec -it lbaw2224 bash
 ```
 
 Inside the container you may, for example, see the content of the Web server logs by executing:
@@ -326,5 +326,5 @@ root@2804d54698c0:/# tail -f /var/log/nginx/error.log    # follow the errors
 root@2804d54698c0:/# tail -f /var/log/nginx/access.log   # follow the accesses
 ```
 
-You can stop the container with `ctrl+c` on the terminal running it, or with `docker stop lbaw21XX` on another terminal.
+You can stop the container with `ctrl+c` on the terminal running it, or with `docker stop lbaw2224` on another terminal.
 -- LBAW, 2022
