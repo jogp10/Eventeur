@@ -46,7 +46,7 @@ CREATE TABLE accounts (
 
 CREATE TABLE users (
     id          SERIAL PRIMARY KEY,
-    account_id  INTEGER DEFAULT -1,
+    account_id  INTEGER DEFAULT 1,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_accounts_id  FOREIGN KEY(account_id) REFERENCES accounts(id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -54,7 +54,7 @@ CREATE TABLE users (
 
 CREATE TABLE admins (
     id         SERIAL PRIMARY KEY,
-    account_id  INTEGER DEFAULT -1,
+    account_id  INTEGER DEFAULT 1,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_account_id  FOREIGN KEY(account_id) REFERENCES accounts(id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -90,7 +90,7 @@ CREATE TABLE cover_images (
 
 CREATE TABLE profile_images (
     id SERIAL PRIMARY KEY,
-    account_id  INTEGER DEFAULT -1,
+    account_id  INTEGER DEFAULT 1,
     path        TEXT NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -132,7 +132,7 @@ CREATE TABLE tickets (
 
 CREATE TABLE invites (
     id          SERIAL PRIMARY KEY,
-    user_id     INTEGER DEFAULT -1,
+    user_id     INTEGER NOT NULL,
     event_id    INTEGER NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -162,7 +162,7 @@ CREATE TABLE invite_notifications (
 
 CREATE TABLE comments (
     id              SERIAL PRIMARY KEY,
-    user_id         INTEGER DEFAULT -1,
+    user_id         INTEGER DEFAULT 1,
     event_id        INTEGER NOT NULL,
     content         TEXT NOT NULL,
     edited          BOOLEAN DEFAULT '0',
@@ -186,7 +186,7 @@ CREATE TABLE comment_notifications (
 CREATE TABLE answers (
     id              SERIAL PRIMARY KEY,
     comment_id      INTEGER NOT NULL,
-    user_id         INTEGER DEFAULT -1,
+    user_id         INTEGER DEFAULT 1,
     content         TEXT NOT NULL,
     edited          BOOLEAN DEFAULT '0',
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -217,7 +217,7 @@ CREATE TABLE poll_options (
 
 CREATE TABLE votes (
     id              SERIAL PRIMARY KEY,
-    user_id         INTEGER DEFAULT -1,
+    user_id         INTEGER DEFAULT 1,
     poll_option_id  INTEGER,
     event_id        INTEGER,
     comment_id      INTEGER,
@@ -231,7 +231,7 @@ CREATE TABLE votes (
 
 CREATE TABLE reports (
     id              SERIAL PRIMARY KEY,
-    user_id         INTEGER DEFAULT -1,
+    user_id         INTEGER DEFAULT 1,
     event_id        INTEGER NOT NULL,
     content         TEXT NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -243,7 +243,7 @@ CREATE TABLE reports (
 CREATE TABLE bans (
     id              SERIAL PRIMARY KEY,
     admin_id        INTEGER NOT NULL,
-    user_id         INTEGER DEFAULT -1,
+    user_id         INTEGER DEFAULT 1,
     ban_type        INTEGER NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
