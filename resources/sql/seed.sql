@@ -369,7 +369,7 @@ BEGIN
  END IF;
  IF TG_OP = 'UPDATE' THEN
          IF (NEW.name <> OLD.name OR NEW.description <> OLD.description OR NEW.location <> OLD.location) THEN
-           NEW.tsvectors = (
+           NEW.search = (
              setweight(to_tsvector('english', NEW.name), 'A') ||
              setweight(to_tsvector('english', NEW.description), 'B') ||
              setweight(to_tsvector('english', NEW.location), 'C')

@@ -11,7 +11,7 @@
         <span class="d-flex justify-content-center">{{ $event->votes->count() }}</span>
         @include('partials.form', ['action' => 'down', 'id' => $event->id, 'type' => 'event'])
       </div>
-      <div class="pt-2 ps-2 pe-2 pb-1 d-flex flex-column" style="max-width:800px">
+      <div class="pt-2 ps-2 pe-2 pb-1 d-flex flex-column flex-fill" style="max-width:800px">
         <h3 class="">{{ $event->name}}</h3>
         <div class="tags">
           @foreach($event->tags as $tag)
