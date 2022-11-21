@@ -22,6 +22,7 @@ class AccountPolicy
     {
         return $account->admin ? true : null;
     }
+
     /**
      * Determine whether the user can view any models.
      *
@@ -43,8 +44,7 @@ class AccountPolicy
      */
     public function view(?Account $account, Account $account2)
     {
-        //
-        return True;
+        return $account2->id != 1;
     }
 
     /**

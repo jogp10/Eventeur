@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use App\Models\Account;
-use App\Models\Answer;
+use App\Models\Ticket;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class AnswerPolicy
+class TicketPolicy
 {
     use HandlesAuthorization;
 
@@ -31,20 +31,20 @@ class AnswerPolicy
     public function viewAny(Account $account)
     {
         //
-        return True;
+        return False;
     }
 
     /**
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\Answer  $answer
+     * @param  \App\Models\Ticket  $ticket
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(Account $account, Answer $answer)
+    public function view(Account $account, Ticket $ticket)
     {
         //
-        return True;
+        return $account->id == $ticket->user_id || $ticket->event->user_id == $account->id;
     }
 
     /**
@@ -56,43 +56,43 @@ class AnswerPolicy
     public function create(Account $account)
     {
         //
-        return False;
+        return True;
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\Answer  $answer
+     * @param  \App\Models\Ticket  $ticket
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(Account $account, Answer $answer)
+    public function update(Account $account, Ticket $ticket)
     {
         //
-        return False;
+        return $account->id == $ticket->event->user_id;
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\Answer  $answer
+     * @param  \App\Models\Ticket  $ticket
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(Account $account, Answer $answer)
+    public function delete(Account $account, Ticket $ticket)
     {
         //
-        return False;
+        return $account->id == $ticket->event->user_id || $account->id == $ticket->user_id;
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\Answer  $answer
+     * @param  \App\Models\Ticket  $ticket
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(Account $account, Answer $answer)
+    public function restore(Account $account, Ticket $ticket)
     {
         //
         return False;
@@ -102,10 +102,10 @@ class AnswerPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\Account  $account
-     * @param  \App\Models\Answer  $answer
+     * @param  \App\Models\Ticket  $ticket
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(Account $account, Answer $answer)
+    public function forceDelete(Account $account, Ticket $ticket)
     {
         //
         return False;

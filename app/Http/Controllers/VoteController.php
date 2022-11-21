@@ -25,6 +25,24 @@ class VoteController extends Controller
     public function create()
     {
         //
+        $vote = new Vote();
+
+        $this->authorize('create', $vote);
+
+        $action = $_POST['action'];
+        $id = $_POST['id'];
+        $user_id = $_POST['user_id'];
+        $type = $_POST['type'];
+
+        Vote::where('user_id', $user_id)->where($type . '_id', $id)->count() > 0 ? $vote = Vote::where('user_id', $user_id)->where($type . '_id', $id)->first()
+            : $vote = Vote::create(['user_id' => $user_id, $type . '_id' => $id]);
+
+
+        if ($action == 'down') {
+            $vote->delete();
+        }
+
+        return redirect()->back()->with('message', 'Your vote has been set successfully!');;
     }
 
     /**
@@ -81,29 +99,5 @@ class VoteController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    /**
-     * Submit a Vote.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function vote(Request $request)
-    {
-        $action = $_POST['action'];
-        $id = $_POST['id'];
-        $user_id = $_POST['user_id'];
-        $type = $_POST['type'];
-        
-        Vote::where('user_id', $user_id)->where($type.'_id', $id)->count() > 0 ? $vote = Vote::where('user_id', $user_id)->where($type.'_id', $id)->first() 
-                : $vote = Vote::create(['user_id' => $user_id, $type.'_id' => $id]);
-
-
-        if ($action == 'down')
-        {
-            $vote->delete();
-        }
-
-        return redirect()->back()->with('message', 'Your vote has been set successfully!');;
     }
 }

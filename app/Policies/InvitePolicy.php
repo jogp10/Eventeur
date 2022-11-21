@@ -31,7 +31,7 @@ class InvitePolicy
     public function viewAny(Account $account)
     {
         //
-        return True;
+        return False;
     }
 
     /**
@@ -44,8 +44,7 @@ class InvitePolicy
     public function view(Account $account, Invite $invite)
     {
         //
-        if ($account->id == $invite->account_id) return True;
-        return False;
+        return $account->id == $invite->user_id || $invite->event->user_id == $account->id;
     }
 
     /**
@@ -70,7 +69,7 @@ class InvitePolicy
     public function update(Account $account, Invite $invite)
     {
         //
-        return False;
+        return $account->id == $invite->user_id || $invite->event->user_id == $account->id;
     }
 
     /**
@@ -83,7 +82,7 @@ class InvitePolicy
     public function delete(Account $account, Invite $invite)
     {
         //
-        return False;
+        return $account->id == $invite->user_id || $invite->event->user_id == $account->id;
     }
 
     /**

@@ -28,10 +28,10 @@ class EventPolicy
      * @param  \App\Models\Account  $account
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(?Account $account)
+    public function viewAny(Account $account)
     {
         //
-        return True;
+        return False;
     }
 
     /**
@@ -75,7 +75,7 @@ class EventPolicy
     public function update(Account $account, Event $event)
     {
         //
-        return $event->manager->id === $account->id;
+        return $event->manager->id == $account->id;
     }
 
     /**
@@ -88,7 +88,7 @@ class EventPolicy
     public function delete(Account $account, Event $event)
     {
         //
-        return $event->manager->id === $account->id;
+        return $event->manager->id == $account->id;
     }
 
     /**

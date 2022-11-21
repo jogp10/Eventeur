@@ -28,7 +28,7 @@ class VotePolicy
      * @param  \App\Models\Account  $account
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(Account $account)
+    public function viewAny(?Account $account)
     {
         //
         return True;
@@ -41,7 +41,7 @@ class VotePolicy
      * @param  \App\Models\Vote  $vote
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(Account $account, Vote $vote)
+    public function view(?Account $account, Vote $vote)
     {
         //
         return True;
@@ -69,7 +69,7 @@ class VotePolicy
     public function update(Account $account, Vote $vote)
     {
         //
-        return True;
+        return $account->id == $vote->account_id;
     }
 
     /**
@@ -82,7 +82,7 @@ class VotePolicy
     public function delete(Account $account, Vote $vote)
     {
         //
-        return True;
+        return $account->id == $vote->account_id;
     }
 
     /**
@@ -95,7 +95,7 @@ class VotePolicy
     public function restore(Account $account, Vote $vote)
     {
         //
-        return True;
+        return False;
     }
 
     /**
@@ -108,6 +108,6 @@ class VotePolicy
     public function forceDelete(Account $account, Vote $vote)
     {
         //
-        return True;
+        return False;
     }
 }

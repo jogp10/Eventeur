@@ -120,6 +120,8 @@ class EventController extends Controller
         //
         $event = Event::find($id);
 
+        $this->authorize('update', $event);
+
         $validated = $request->validate([
             'name' => ['max:100'],
             'description' => ['max:2000'],
@@ -169,6 +171,8 @@ class EventController extends Controller
 
     public function invite(Request $request)
     {
+        $this->authorize('create', Invite::class);
+
         $users_id = $_POST['ids'];
         $event = $_POST['event_id'];
         $users_id = explode(',', $users_id);
@@ -186,6 +190,8 @@ class EventController extends Controller
     public function deleteInvite(Request $request)
     {
         $invite = Invite::find($request['id']);
+
+        $this->authorize('delete', $invite);
         
         $invite->delete();
 
@@ -194,6 +200,8 @@ class EventController extends Controller
 
     public function ticket(Request $request)
     {
+        $this->authorize('create', Ticket::class);
+
         $users_id = $_POST['ids'];
         $event = $_POST['event_id'];
         $users_id = explode(',', $users_id);
@@ -212,6 +220,8 @@ class EventController extends Controller
     public function deleteTicket(Request $request)
     {
         $ticket = Ticket::find($request['id']);
+
+        $this->authorize('delete', $ticket);
         
         $ticket->delete();
 

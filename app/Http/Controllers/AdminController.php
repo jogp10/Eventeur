@@ -24,6 +24,8 @@ class AdminController extends Controller
 
     public function index()
     {
+        $this->authorize('viewAny', Account::class);
+
         if (Auth::user()->admin) {
             return view('pages.admin.home');
         } else {

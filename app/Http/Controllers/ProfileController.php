@@ -50,6 +50,8 @@ class ProfileController extends Controller
     {
         $account_user = Account::find($id);
 
+        $this->authorize('view', $account_user);
+
         return view('pages.profile', ['account' => $account_user]);
     }
 
@@ -101,7 +103,7 @@ class ProfileController extends Controller
 
         $account->save();
 
-        if (Auth::user()->admin && Auth::user()->id != $id) return redirect()->route('admin.users');
+        if (Auth::user()->admin && Auth::id() != $id) return redirect()->route('admin.users');
         return $this->show($account->id);
     }
 
@@ -110,6 +112,10 @@ class ProfileController extends Controller
         $user = User::find($id);
         $invite = Invite::find($invite_id);
         $event = $invite->event;
+
+        console_log($invite);
+        console_log(Auth::user());
+        $this->authorize('delete', $invite);
         
         $ticket = Ticket::create([
             'event_id' => $event->id,
@@ -124,6 +130,9 @@ class ProfileController extends Controller
     public function ignoreInvitation($id, $invite_id) {
 
         $invite = Invite::find($invite_id);
+
+        $this->authorize('delete', $invite);
+
         $invite->delete();
 
         return redirect()->route('profile', $id);
