@@ -142,10 +142,12 @@ class EventController extends Controller
      * @param  \App\Models\Account  $account
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
-        
-        //$event = Event::find($id);
-        //$event->delete();
+    public function destroy(Request $request, $id) {
+        $event = Event::find($id);
+
+        $this->authorize('delete', $event);
+
+        $event->delete();
 
         return redirect()->route('home');
     }
