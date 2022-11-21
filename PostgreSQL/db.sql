@@ -49,7 +49,7 @@ CREATE TABLE users (
     account_id  INTEGER DEFAULT -1,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_accounts_id  FOREIGN KEY(account_id) REFERENCES accounts(id)
+    CONSTRAINT fk_accounts_id  FOREIGN KEY(account_id) REFERENCES accounts(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE admins (
@@ -57,7 +57,7 @@ CREATE TABLE admins (
     account_id  INTEGER DEFAULT -1,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_account_id  FOREIGN KEY(account_id) REFERENCES accounts(id)
+    CONSTRAINT fk_account_id  FOREIGN KEY(account_id) REFERENCES accounts(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE events (
@@ -84,7 +84,7 @@ CREATE TABLE cover_images (
     path        TEXT NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES events(id),
+    CONSTRAINT fk_event_id FOREIGN KEY(event_id) references events(id) ON DELETE CASCADE ON UPDATE CASCADE,
     UNIQUE(event_id)
 );
 
@@ -94,7 +94,7 @@ CREATE TABLE profile_images (
     path        TEXT NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_account_id FOREIGN KEY(account_id) REFERENCES accounts(id),
+    CONSTRAINT fk_account_id FOREIGN KEY(account_id) REFERENCES accounts(id) ON DELETE CASCADE ON UPDATE CASCADE,
     UNIQUE(account_id)
 );
 
@@ -112,8 +112,8 @@ CREATE TABLE event_tag (
     tag_id      INTEGER NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_event_id  FOREIGN KEY(event_id) REFERENCES events(id),
-    CONSTRAINT fk_tag_id  FOREIGN KEY(tag_id) REFERENCES tags(id),
+    CONSTRAINT fk_event_id  FOREIGN KEY(event_id) references events(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_tag_id  FOREIGN KEY(tag_id) REFERENCES tags(id) ON DELETE CASCADE ON UPDATE CASCADE,
     UNIQUE(event_id, tag_id)
 );
 
@@ -125,8 +125,8 @@ CREATE TABLE tickets (
     price       REAL DEFAULT 0,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_event_id  FOREIGN KEY(event_id) REFERENCES events(id),
-    CONSTRAINT fk_user_id  FOREIGN KEY(user_id) REFERENCES users(id),
+    CONSTRAINT fk_event_id  FOREIGN KEY(event_id) references events(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_user_id  FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
     UNIQUE(event_id, user_id)
 );
 
@@ -136,8 +136,8 @@ CREATE TABLE invites (
     event_id    INTEGER NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
-    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES events(id),
+    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_event_id FOREIGN KEY(event_id) references events(id) ON DELETE CASCADE ON UPDATE CASCADE,
     UNIQUE(user_id, event_id)
 );
 
@@ -155,8 +155,8 @@ CREATE TABLE invite_notifications (
     invite_id       INTEGER NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_notification_id FOREIGN KEY(notification_id) REFERENCES notifications(id),
-    CONSTRAINT fk_invite_id FOREIGN KEY(invite_id) REFERENCES invites(id),
+    CONSTRAINT fk_notification_id FOREIGN KEY(notification_id) REFERENCES notifications(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_invite_id FOREIGN KEY(invite_id) REFERENCES invites(id) ON DELETE CASCADE ON UPDATE CASCADE,
     UNIQUE(notification_id, invite_id)
 );
 
@@ -169,7 +169,7 @@ CREATE TABLE comments (
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
-    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES events(id)
+    CONSTRAINT fk_event_id FOREIGN KEY(event_id) references events(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE comment_notifications (
@@ -178,8 +178,8 @@ CREATE TABLE comment_notifications (
     comment_id      INTEGER NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_notification_id FOREIGN KEY(notification_id) REFERENCES notifications(id),
-    CONSTRAINT fk_comment_id FOREIGN KEY(comment_id) REFERENCES comments(id),
+    CONSTRAINT fk_notification_id FOREIGN KEY(notification_id) REFERENCES notifications(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_comment_id FOREIGN KEY(comment_id) REFERENCES comments(id) ON DELETE CASCADE ON UPDATE CASCADE,
     UNIQUE(notification_id, comment_id)
 );
 
@@ -192,7 +192,7 @@ CREATE TABLE answers (
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
-    CONSTRAINT fk_comment_id FOREIGN KEY(comment_id) REFERENCES comments(id)
+    CONSTRAINT fk_comment_id FOREIGN KEY(comment_id) REFERENCES comments(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE polls (
@@ -201,7 +201,7 @@ CREATE TABLE polls (
     question        TEXT NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES events(id)
+    CONSTRAINT fk_event_id FOREIGN KEY(event_id) references events(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE poll_options (
@@ -211,7 +211,7 @@ CREATE TABLE poll_options (
     votes           INTEGER DEFAULT 0,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_poll_id FOREIGN KEY(poll_id) REFERENCES polls(id),
+    CONSTRAINT fk_poll_id FOREIGN KEY(poll_id) REFERENCES polls(id) ON DELETE CASCADE ON UPDATE CASCADE,
     UNIQUE(id, poll_id)
 );
 
@@ -224,8 +224,8 @@ CREATE TABLE votes (
     answer_id      INTEGER,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
-    CONSTRAINT fk_polloption_id FOREIGN KEY(poll_option_id) REFERENCES poll_options(id),
+    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_polloption_id FOREIGN KEY(poll_option_id) REFERENCES poll_options(id) ON DELETE CASCADE ON UPDATE CASCADE,
     CHECK (poll_option_id IS NOT NULL OR event_id IS NOT NULL OR comment_id IS NOT NULL OR answer_id IS NOT NULL)
 );
 
@@ -236,8 +236,8 @@ CREATE TABLE reports (
     content         TEXT NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
-    CONSTRAINT fk_event_id FOREIGN KEY(event_id) REFERENCES events(id)
+    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_event_id FOREIGN KEY(event_id) references events(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE bans (
@@ -247,7 +247,7 @@ CREATE TABLE bans (
     ban_type        INTEGER NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id)
+    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 --Functions
@@ -264,41 +264,11 @@ CREATE OR REPLACE FUNCTION
     END;
 $BODY$ LANGUAGE 'plpgsql';
 
-
-
-
-CREATE OR REPLACE FUNCTION
-    cancel_event_notification_function() RETURNS TRIGGER AS $cancel_event$
-    DECLARE
-        u record;
-    BEGIN
-        FOR 
-            u 
-        IN
-            SELECT DISTINCT user_id
-            FROM (
-                SELECT user_id
-                FROM tickets
-                WHERE event_id = OLD.id
-                UNION
-                SELECT user_id
-                FROM events
-                WHERE event_id = OLD.id
-            ) AS users
-        LOOP
-            INSERT INTO notifications(content, user_id, event_id, sent_date)
-            VALUES ('eventCancellation', u.user_id, OLD.id, NOW());
-        END LOOP;
-
-        RETURN OLD;
-    END;
-$cancel_event$ LANGUAGE 'plpgsql';
-
-CREATE OR REPLACE FUNCTION delete_comment() RETURNS TRIGGER AS
+CREATE OR REPLACE FUNCTION create_account() RETURNS TRIGGER AS
 $BODY$
-BEGIN 
-    DELETE FROM content WHERE content.id = OLD.content_id;
-    RETURN OLD;
+BEGIN
+    INSERT INTO users(account_id) VALUES (NEW.id);
+    RETURN NEW;
 END
 $BODY$
 LANGUAGE plpgsql;
@@ -314,51 +284,22 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION delete_account() RETURNS TRIGGER AS
-$BODY$
-BEGIN
-    DELETE FROM profile_images WHERE profile_images.account_id = OLD.id;
-    DELETE FROM users WHERE users.account_id = OLD.id;
-    DELETE FROM admins WHERE admins.account_id = OLD.id;
-    RETURN OLD;
-END
-$BODY$
-LANGUAGE plpgsql;
-
 CREATE OR REPLACE FUNCTION delete_user() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     UPDATE comments SET user_id = 1 WHERE user_id = OLD.id;
-    UPDATE answers SET user_id = 1 WHERE user_id = OLD.id;
-    UPDATE votes SET user_id = 1 WHERE user_id = OLD.id;
-    UPDATE invites SET user_id = 1 WHERE user_id = OLD.id;
     UPDATE events SET user_id = 1 WHERE user_id = OLD.id;
-    UPDATE tickets SET user_id = 1 WHERE user_id = OLD.id;
-    UPDATE reports SET user_id = 1 WHERE user_id = OLD.id;
-    UPDATE bans SET user_id = 1 WHERE user_id = OLD.id;
+    UPDATE answers SET user_id = 1 WHERE user_id = OLD.id;
     RETURN OLD;
-END
-$BODY$
-LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION create_user() RETURNS TRIGGER AS
-$BODY$
-BEGIN
-    INSERT INTO users(account_id) VALUES (NEW.id);
-    RETURN NEW;
 END
 $BODY$
 LANGUAGE plpgsql;
 
 --Triggers
-Drop TRIGGER IF EXISTS delete_comment ON comments;
-Drop TRIGGER IF EXISTS cancel_event_notification ON events;
 Drop TRIGGER IF EXISTS invites_event_notification ON invites;
 Drop TRIGGER IF EXISTS check_attendee ON tickets;
-
-Drop TRIGGER IF EXISTS delete_account ON accounts;
+Drop TRIGGER IF EXISTS create_account ON accounts;
 Drop TRIGGER IF EXISTS delete_user ON users;
-Drop TRIGGER IF EXISTS create_account ON account;
 
 -- Trigger 1
 CREATE TRIGGER invites_event_notification_trigger 
@@ -367,40 +308,23 @@ CREATE TRIGGER invites_event_notification_trigger
     EXECUTE PROCEDURE invites_event_notification_function();
 
 -- Trigger 2
-CREATE TRIGGER cancel_event_notification_trigger 
-    AFTER DELETE ON events
-    FOR EACH ROW 
-    EXECUTE PROCEDURE cancel_event_notification_function();
-
--- Trigger 3
-CREATE TRIGGER delete_comment
-    AFTER DELETE ON comments
-    FOR EACH ROW
-    EXECUTE PROCEDURE delete_comment();
-
--- Trigger 4
 CREATE TRIGGER check_attendee
     BEFORE INSERT ON comments
     FOR EACH ROW
     EXECUTE PROCEDURE check_attendee();
 
--- Trigger 5
-CREATE TRIGGER delete_account
-    BEFORE DELETE ON accounts
+-- Trigger 3
+CREATE TRIGGER create_account
+    AFTER INSERT ON accounts
     FOR EACH ROW
-    EXECUTE PROCEDURE delete_account();
+    EXECUTE PROCEDURE create_account();
 
--- Trigger 6
+-- Trigger 4
 CREATE TRIGGER delete_user
     BEFORE DELETE ON users
     FOR EACH ROW
     EXECUTE PROCEDURE delete_user();
 
--- Trigger 7
-CREATE TRIGGER create_account
-    AFTER INSERT ON accounts
-    FOR EACH ROW
-    EXECUTE PROCEDURE create_user();
 
 --Indexes
 Drop INDEX IF EXISTS event_name;
@@ -458,9 +382,9 @@ LANGUAGE plpgsql;
 
 
 CREATE TRIGGER event_search_update
- BEFORE INSERT OR UPDATE ON events
- FOR EACH ROW
- EXECUTE PROCEDURE event_search_update();
+BEFORE INSERT OR UPDATE ON events
+FOR EACH ROW
+EXECUTE PROCEDURE event_search_update();
 
 --CREATE INDEX search_event ON events USING GIN (searchs);
 
