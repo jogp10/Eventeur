@@ -48,6 +48,11 @@ class EventController extends Controller
      */
     public function create()
     {
+        $event = new Event();
+
+        $this->authorize('create', $event);
+
+        return view('pages.createEvent');
     }
 
     /**
@@ -58,6 +63,34 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
+        $event = new Event();
+
+        $this->authorize('create', $event);
+
+        
+
+        $event->name = $request->name;
+        $event->description = $request->description;
+        $event->location = $request->location;
+        $event->start_date = $request->start_date;
+        $event->end_date = $request->end_date;
+        $event->capacity = $request->capacity;
+        $event->privacy = $request->privacy;
+        $event->user_id = Auth::user()->id;
+
+        if($request->hasFile('image')) {
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $file->move('uploads/events/', $filename);
+            $event->image = $filename;
+        }
+
+        if($request->price) $event->price = $request->price;
+        console_log($event);
+        $event->save();
+
+        return redirect()->route('event.show', ['id' => $event->id]);
     }
 
     /**

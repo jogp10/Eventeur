@@ -74,7 +74,7 @@ CREATE TABLE events (
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id),
-    CHECK (start_date < end_date),
+    CHECK (start_date <= end_date),
     CHECK (capacity > 0)
 );
 

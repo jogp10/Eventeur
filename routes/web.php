@@ -29,7 +29,7 @@ Route::get('profile/{id}/{invite_id}/accept_invitation', 'ProfileController@acce
 Route::get('profile/{id}/{invite_id}/ignore_invitation', 'ProfileController@ignoreInvitation')->name('IgnoreInvitation');
 
 //Event
-Route::get('event/{id}', 'EventController@show');
+Route::get('event/{id}', 'EventController@show')->name('event.show');
 Route::get('event/{id}/event_settings', 'EventController@edit')->name('eventSettings');
 Route::get('event/{id}/event_participants', 'EventController@showParticipantsEvent')->name('eventParticipants');
 Route::post('event/{id}/event_settings', 'EventController@update')->name('editEvent');
@@ -38,6 +38,8 @@ Route::post('api/invite', 'EventController@invite')->name('invite');
 Route::delete('api/invite/delete', 'EventController@deleteInvite')->name('deleteInvite');
 Route::post('api/give_ticket', 'EventController@ticket')->name('ticket');
 Route::delete('api/give_ticket/delete', 'EventController@deleteTicket')->name('deleteTicket');
+Route::get('create_event', 'EventController@create')->name('createEvent');
+Route::put('create_event', 'EventController@store')->name('storeEvent');
 
 //Static Pages
 Route::get('about', 'StaticPageController@about');
