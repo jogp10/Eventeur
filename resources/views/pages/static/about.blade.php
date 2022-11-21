@@ -36,7 +36,7 @@
                 </div>
                 <div class="col">
                     <h3>Bernardo Ferreira</h3>
-                    <p>up20XXXXXXX@up.pt</p>
+                    <p>up20180658@up.pt</p>
                 </div>
             </div>
             <div class="d-flex flex-row ps-1 pe-1 w-75">
@@ -45,7 +45,7 @@
                 </div>
                 <div class="col">
                     <h3>João Pinheiro</h3>
-                    <p>up20XXXXXXX@up.pt</p>
+                    <p>up202008133@up.pt</p>
                 </div>
             </div>
 
@@ -57,7 +57,7 @@
                 </div>
                 <div class="col">
                     <h3>João Rodrigo</h3>
-                    <p>up20XXXXXXX@up.pt</p>
+                    <p>up201705110@up.pt</p>
                 </div>
             </div>
             <div class="d-flex flex-row ps-3 pe-5 w-75">
@@ -66,7 +66,7 @@
                 </div>
                 <div class="col">
                     <h3>Telmo Botelho</h3>
-                    <p>up20XXXXXXX@up.pt</p>
+                    <p>up201806821@up.pt</p>
                 </div>
             </div>
 
