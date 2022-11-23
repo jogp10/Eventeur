@@ -304,7 +304,10 @@ There should be only one image per group. All team members should be able to upd
 You can test locally the image by running:
 
 ```
-docker run -it -p 8000:80 --name=lbaw2224 -e DB_DATABASE="lbaw2224" -e DB_SCHEMA="lbaw" -e DB_USERNAME="lbaw2224" -e DB_PASSWORD="PASSWORD" git.fe.up.pt:5050/lbaw/lbaw2223/lbaw2224 
+docker run -it -p 8000:80 --name=lbaw2224 -e DB_DATABASE="lbaw2224" -e DB_SCHEMA="lbaw2224" -e DB_USERNAME="lbaw2224" -e DB_PASSWORD="PASSWORD" git.fe.up.pt:5050/lbaw/lbaw2223/lbaw2224 
+```
+```
+docker run -it -p 8000:80 --name=lbaw2224 git.fe.up.pt:5050/lbaw/lbaw2223/lbaw2224 
 ```
 
 The above command exposes your application on http://localhost:8000.
