@@ -32,12 +32,15 @@ function renderCalendar() {
         if (i < 10) {
             day = '0' + i
         }
+
+        let id = i + "-" + date.getMonth()
+
         if (i == date.getUTCDate()) {
-            days += `<div class="today border border-grey m-0 p-4">${day}</div>`
+            days += `<div id=${id} class="today border border-grey m-0 p-4">${day}</div>`
             continue
         }
 
-        days += `<div class="border border-grey m-0 p-4">${day}</div>`
+        days += `<div id=${id} class="border border-grey m-0 p-4">${day}</div>`
     }
 
     monhtDays.innerHTML = days
@@ -75,22 +78,17 @@ let profileEvents = document.getElementById('perfil-events')
 eventsButton.addEventListener('click', () => {
     profileInvites.className = ""
     profileEvents.className = "visually-hidden"
-
     eventsButton.style.color = "black"
     invitesButton.style.color = "grey"
 })
 
 
 invitesButton.addEventListener('click', () => {
-
     profileEvents.className = ""
     profileInvites.className = "visually-hidden"
     eventsButton.style.color = "grey"
     invitesButton.style.color = "black"
 })
-
-
-
 
 
 function truncateText(selector, maxLength) {

@@ -1,0 +1,818 @@
+openapi: '3.0.2'
+info:
+  title: LBAW Eventeur Web API
+  version: '1.0'
+  description: 'Web Resources Specification (A7) Eventeur'
+
+servers:
+  - url: https://api.server.test/v1
+    description: Production server
+
+tags:
+  - name: 'M01: Authentication and Profile'
+  - name: 'M02: Events'
+  - name: 'M03: Users'
+  - name: 'M04: Administration'
+  - name: "M05: Static Pages"
+  
+paths:
+
+  # M01: Authentication and Profile
+
+  /login:
+    get:
+     operationId: R101
+     summary: 'R101: Login Form'
+     description: 'Provide login form. Access: PUB'
+     tags:
+       - 'M01: Authentication and Profile'
+     responses:
+       '200':
+         description: 'Ok. Show [UI11: Sign in](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/5b9a4b8a8a29cd50714517b2f9fb3f8e/login.png)'
+
+    post:
+      operationId: R102
+      summary: 'R102: Login Action'
+      description: 'Processes the login form submission. Access: PUB'
+      tags:
+        - 'M01: Authentication and Profile'
+      
+      requestBody:
+       required: true
+       content:
+         application/x-www-form-urlencoded:
+           schema:
+             type: object
+             properties:
+               username:          
+                 type: string
+               password:    
+                 type: string
+             required:
+                  - username
+                  - password
+      responses:
+        '302':
+          description: 'Redirect after processing the login credentials.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful authentication. Redirect to [UI02: Homepage Authenticated user](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/8d65ae9b518826f462eabc60eeec63a2/homepage_auth.png).'
+                  value: '/users/{id}'
+                302Error:
+                  description: 'Failed authentication. Redirect to [UI11: Sign in](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/5b9a4b8a8a29cd50714517b2f9fb3f8e/login.png).'
+                  value: '/login'
+
+  /logout:
+   post:
+     operationId: R103
+     summary: 'R103: Logout Action'
+     description: 'Logout the current authenticated user. Access: USR, ADM'
+     tags:
+       - 'M01: Authentication and Profile'
+     responses:
+       '302':
+         description: 'Redirect after processing logout.'
+         headers:
+           Location:
+             schema:
+               type: string
+             examples:
+               302Success:
+                 description: 'Successful logout. Redirect to[UI11: Sign in](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/5b9a4b8a8a29cd50714517b2f9fb3f8e/login.png).'
+                 value: '/login'     
+
+  /register:
+    get:
+      operationId: R104
+      summary: 'R104: Register Form'
+      description: 'Provide new user registration form. Access: PUB'
+      tags:
+        - 'M01: Authentication and Profile'
+      responses:
+        '200':
+          description: 'Ok. Show [UI12: Sign up](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/2da94ebbbad5e5d11b72c8c81366eee2/signup.png).'
+
+    post:
+      operationId: R105
+      summary: 'R105: Register Action'
+      description: 'Processes the new user registration form submission. Access: PUB'
+      tags:
+       - 'M01: Authentication and Profile'
+    
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password: 
+                  type: string
+                age:
+                  type: integer
+              required:
+                - name
+                - email
+                - password
+                - age
+      
+      responses:
+       '302':
+         description: 'Redirect after processing the new user information.'
+         headers:
+           Location:
+             schema:
+               type: string
+             examples:
+               302Success:
+                 description: 'Successful authentication. Redirect to [UI31: User Profile](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/ce8004f0e65cfe58c0246c864cb66ecf/profile.png).'
+                 value: '/users/{id}'
+               302Failure:
+                 description: 'Failed authentication. Redirect to [UI11: Sign in](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/5b9a4b8a8a29cd50714517b2f9fb3f8e/login.png).'
+                 value: '/register'
+
+  
+  /profile/{id}:
+    get:
+      operationId: R106
+      summary: 'R106: View user profile'
+      description: 'Show the individual user profile. Access: USR'
+      tags:
+        - 'M01: Authentication and Profile'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Ok. Show [UI31: User Profile](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/ce8004f0e65cfe58c0246c864cb66ecf/profile.png)'
+
+
+  /profile/{id}/edit:
+    get:
+      operationId: R107
+      summary: "R107: Edit user profile"
+      description: "Provide a form with the user's data to be edited. Access: USR"
+      tags:
+        - "M01: Authentication and Profile"
+      responses:
+        "200":
+          description: "Ok. Redirect to [UI32: User Settings Profile](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/90a1077b0d62a7ed3dc6e3448dff3a3f/setprof.png)."
+    
+    post:
+        operationId: R108
+        summary: "R108: Edit user profile"
+        description: "Processes the form information to update user information. Acess: USR"
+        tags:
+          - "M01: Authentication and Profile"
+        requestBody:
+          required: true
+          content:
+            application/x-www-form-urlencoded:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  username:
+                    type: string
+                  email:
+                    type: string
+                    format: email
+                  image:
+                    type: string
+                    format: binary
+                  age:
+                    type: integer
+        responses:
+          "302":
+            description: 'Redirect after processing new account settings.'
+            headers:
+              Location:
+                schema:
+                  type: string
+                examples:
+                  302Success:
+                    description: "Account settings saved. Redirect to [UI31: User Profile](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/ce8004f0e65cfe58c0246c864cb66ecf/profile.png)."
+                    value: "/profile/{id}"
+                  302Failure:
+                    description: "Couldn't save settings. Redirect to [UI32: User Settings Profile](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/90a1077b0d62a7ed3dc6e3448dff3a3f/setprof.png)."
+                    value: "/profile/profile_settings"
+
+  /profile/{id}/{invite_id}/accept_invitation:
+    get:
+      operationId: R109
+      summary: "R109: Accept Invitation."
+      description: "Accept invitation sent by an event manager."
+      tags:
+        - 'M01: Authentication and Profile'
+      responses:
+        "200":
+          description: "Ok. Show [UI31: User Profile](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/ce8004f0e65cfe58c0246c864cb66ecf/profile.png)."
+  
+  
+  /profile/{id}/{invite_id}/ignore_invitation:
+    get:
+      operationId: R110
+      summary: "R110: Ignore Invitation."
+      description: "Ignore invitation sent by an event manager."
+      tags:
+        - 'M01: Authentication and Profile'
+      responses:
+        "200":
+          description: "Ok. Show [UI31: User Profile](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/ce8004f0e65cfe58c0246c864cb66ecf/profile.png)."
+
+  # M02: Events
+  
+  /:
+    get:
+      operationId: R201
+      summary: "R201: View events in homepage."
+      description: "Get events display on the homepage. Acess: PUB."
+      tags:
+        - "M02: Events."
+      responses:
+        "200":
+          description: "Ok. Show homepage with events."
+  
+  /event/{id}:
+    get:
+      operationId: R202
+      summary: "R202: View event."
+      description: "Get the page of an event. Acess: PUB."
+      tags:
+        - "M02: Events."
+      responses:
+        "200":
+          description: "Ok. Show [UI21: Event](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/87338724ad3f9faaa79c7cdadc14df96/event.png)."
+
+  /search:
+    get:
+      operationId: R203
+      summary: "R203: Search events."
+      description: "Searches for events using keywords and filters. Acess: PUB."
+      tags:
+        - "M02: Events."
+ 
+      parameters:
+        - in: query
+          name: keyword
+          description: "String to user for full-text search."
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: tags
+          description: "Tags to serach for"
+          schema: 
+            type: string
+          required: false
+      
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  start_date:
+                    type: string
+                    format: date
+                  end_date:
+                    type: string
+                    format: date
+                  num_tickets:
+                    type: integer
+                  description:
+                    type: string
+                  privacy:
+                    type: string
+                    enum:
+                      - public
+                      - private
+
+  /api/vote:
+    post:
+      operationId: R204
+      summary: "R204: Vote for an event that you have access. Access USR."
+      description: "Upvote an event."
+      tags:
+        - "M02: Events."
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: OK
+        default:
+          description: Unexpected error
+
+
+  /event/{id}/delete_event:
+    post:
+      operationId: R205
+      summary: "R205: Cancel an event."
+      description: "Set event as cancel and delete it. Access OWR."
+      tags:
+        - "M02: Events"
+      responses:
+        "302":
+          description: "Redirect after deltetion of event."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Event deleted with success. Redirect to [UI22: Create Event](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/ad6bfb93c25979ce4271c6f0577b215c/createvent.png)."
+                  value: "/profile/{id}/created_events"
+                302Failure:
+                  description: "Couldn't delete the event. Redirect to [UI21: Event](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/87338724ad3f9faaa79c7cdadc14df96/event.png)."
+                  value: "/event/{id}"
+
+
+  /event/{id}/event_settings:
+    get:
+     operationId: R206
+     summary: 'R206: Edit Event Form'
+     description: 'Provide a form to edit the event. Access: OWR'
+     tags:
+       - "M02: Events"
+     responses:
+       '200':
+         description: 'Ok. Show edit event form.'
+    
+    post:
+      operationId: R207
+      summary: "R207: Edit Event Action"
+      description: "Process information give to change information about the event. Access OWR"
+      tags:
+        - "M02: Events"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                summary:
+                  type: string
+                tags:
+                  type: array
+                description:
+                  type: string
+
+      responses:
+        "302":
+          description: "Redirect after edition."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Event edited with success. Redirect [UI21: Event](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/87338724ad3f9faaa79c7cdadc14df96/event.png)."
+                  value: "/event/{id}"
+                302Failure:
+                  description: "Couldn't edit the event. Redirect event edit form."
+                  value: "/event/{id}/event_settings"
+      
+
+  /event/{id}/event_participants:
+    get:
+      operationId: R208
+      summary: "R208: Manage Event Attendees"
+      description: "Show the event participants of the event."
+      tags: 
+        - "M02: Events"
+      responses:
+        "200":
+          description: "OK. Show page with event attendes."
+
+
+  /create_event:
+    get:
+      operationId: R209
+      summary: "R209: Create event form"
+      description: "Provide a create event form. Access USR."
+      tags:
+        - "M02: events"
+      responses:
+        "200":
+          description: "OK. Show [UI22: Create Event](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/ad6bfb93c25979ce4271c6f0577b215c/createvent.png)."
+
+    post:
+      operationId: R210
+      summary: "R210. Create an event."
+      tags:
+        - "M02: Events"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                num_tickets:
+                  type: integer
+                description:
+                  type: string
+                start_date:
+                  type: string
+                  format: date
+                  example: "2022-10-29"
+                end_date:
+                  type: string
+                  format: date
+                  example: "2022-10-31"
+                privacy:
+                  type: string
+                  enum:
+                    - public
+                    - private
+              required:
+                - name
+                - description
+                - start_date
+                - end_start
+      
+      responses:
+        "302":
+          description: "Redirect after processing the new user information."
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Success:
+                  description: "Successful event creation. Redirect to [UI31: User Profile](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/ce8004f0e65cfe58c0246c864cb66ecf/profile.png)."
+                  value: "/users/{id}"
+                302Failure:
+                  description: "Event creation failed. Redirect to [UI22: Create Event](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/ad6bfb93c25979ce4271c6f0577b215c/createvent.png)."
+                  value: "/create_event"    
+
+
+  # M03: Users
+
+  /api/invite:
+    post:
+      operationId: R301
+      summary: "R301: Invite a person."
+      description: "Invite a person to participate in an event."
+      tags:
+        - "M03: Users"
+      responses:
+        '200':
+          description: Ok
+        default:
+          description: Unexpected error
+
+  /api/give_ticket:
+    post:
+      operationId: R302
+      summary: "R302: Give a ticket to a user to ba able to attend to your event."
+      description: "R: Give ticket to a user."
+      tags: 
+        - "M03: Users"
+      responses:
+        '200':
+          description: Ok
+        default:
+          description: Unexpected error
+
+
+  /api/invite/delete:
+    delete:
+      operationId: R303
+      summary: "R304: Cancel Invitation Action."
+      description: "Cancel Invitation sent by a event manager."
+      tags:
+        - "M03: Users"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: OK
+        default:
+          description: Unexpected error
+
+
+  /api/give_ticket/delete:
+    post:
+      operationId: R305
+      summary: "R305: Cancel a ticket."
+      description: "Cancel a ticket that was sent to a user. Access OWR."
+      tags:
+        - "M03: Users"
+      responses:
+        "302":
+          description: "Redirect after cancelation."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Event deleted with success. Redirect [UI21: Event](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/87338724ad3f9faaa79c7cdadc14df96/event.png)."
+                  value: "/event/{id}"
+                302Failure:
+                  description: "Couldn't delete the event. Redirect [UI21: Event](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/87338724ad3f9faaa79c7cdadc14df96/event.png)."
+                  value: "/event/{id}"
+
+
+  # M04: Administration
+
+  /admin:
+    get:
+      operationId: R401
+      summary: "R401: View Admin dashboard."
+      description: "Display admin dashboard"
+      tags: 
+        - "M04: Administration"
+      responses:
+        "200":
+          description: "OK. Show dashboard page."
+
+  /admin/users:
+    get:
+      operationId: R402
+      summary: "R402: View users."
+      description: "Display users for the admin."
+      tags: 
+        - "M04: Administration"
+      responses:
+        "200":
+          description: "OK. Show page with users."
+  
+  /admin/users/{id}:
+    get:
+      operationId: R403
+      summary: "R403: View a specific user."
+      description: "See a user profile."
+      tags: 
+        - "M04: Administration"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        "200":
+          description: "OK. Show page with users."
+
+  /admin/users/{id}/edit:
+    get:
+      operationId: R404
+      summary: "R404: Get a form to edit user profile."
+      description: "Get user profile."
+      tags: 
+        - "M04: Administration"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        "200":
+          description: "OK. Show page with users."
+
+    put:
+      operationId: R405
+      summary: "R405: Edit user profile."
+      description: "Process the form information to edit the profile of a user."
+      tags:
+        - "M04: Administration"
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                image:
+                  type: string
+                  format: binary
+      responses:
+        "302":
+          description: "Redirect after processing user profile edition."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Profile changes saved. Redirect to user profile page."
+                  value: /admin/users/{id}
+                302Failure: 
+                  description: "Couldn't dave settings. Redirect to settings page."
+                  value: /admin/users/{id}/edit
+
+
+  /admin/users/{id}/delete:
+    delete:
+      operationId: R406
+      summary: "R406: Delete user account."
+      description: "Remove user from the system."
+      tags:
+        - "M04: Administration"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: OK
+        default:
+          description: Unexpected error
+
+  /admin/create:
+    get:
+      operationId: R407
+      summary: "R407: Get create admin account form."
+      description: "Get form to create a new admin."
+      tags:
+        - "M04: AAdministration"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        "200":
+          description: "Ok. Show admin creation account form."
+    
+    post:
+      operationId: R408
+      summary: "R408: Create admin account"
+      description: "Processes the form information to create a new admin. Access: USR"
+      tags:
+        - "M04: Administration"
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                admin:
+                  type: boolean
+              required:
+                - name
+                - password
+                - admin
+
+      responses:
+        "302":
+          description: 'Redirect after processing the account information.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Admin account create. Redirect to admin dashboard page."
+                  value: "/admin"
+                302Failure:
+                  description: "Couldn't create admin account. Redirect to creation admin acount page."
+                  value: "/admin/create"
+
+  # Static Pages  
+  /about:
+    get:
+      operationId: R504
+      summary: "R504: Display about page"
+      description: "Display about page. Access: PUB"
+      tags:
+        - "M05: Static Pages"
+      responses:
+        "200":
+          description: "Ok. Show [UI51: About](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/bbe325c81b38fa66bfc5aefa5519edb1/about.png)."
+
+  /faq:
+    get:
+      operationId: R502
+      summary: "R502: Display faq page"
+      description: "Display help page. Access: PUB"
+      tags:
+        - "M05: Static Pages"
+      responses:
+        "200":
+          description: "Ok. Show [UI52: FAQs](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/e2914cb42eba85596b1f118ab07ac026/faqs.png)."
+
+  /contact:
+    get:
+      operationId: R505
+      summary: "R505: Display contacts page."
+      description: "Display contacts page. Access: PUB"
+      tags:
+        - "M05: Static Pages"
+      responses:
+        "200":
+          description: "Ok. Show [UI53: Contacts](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/1f92f5d7788448f032927bd2bb4e899f/contacts.png)."
+    
+    post:
+      operationId: R506
+      summary: "R506: Process information used in the contacts page."
+      tags:
+        - "M05: Static Pages"
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                subject:
+                  type: string
+                content:
+                  type: string
+              required:
+                - name
+                - email
+                - content
+
+      responses:
+        "302":
+          description: 'Redirect after processing the contanct us information.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Information sent. Redirect to [UI02: Homepage Authenticated user](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/8d65ae9b518826f462eabc60eeec63a2/homepage_auth.png)."
+                  value: "/"
+                302Failure:
+                  description: "Couldn't sent information. Redirect [UI53: Contacts](https://git.fe.up.pt/lbaw/lbaw2223/lbaw2224/-/wikis/uploads/1f92f5d7788448f032927bd2bb4e899f/contacts.png)."
+                  value: "/contact"  
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+

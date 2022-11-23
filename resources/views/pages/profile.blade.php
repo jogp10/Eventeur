@@ -68,7 +68,6 @@
                         </div>
                     </div>
                     <div class="days d-flex flex-wrap m-0 p-4">
-
                     </div>
                 </div>
             </div>
