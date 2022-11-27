@@ -1,5 +1,5 @@
 <div class="row border border-dark my-2 mx-0 rounded" data-id="{{$event->id}}">
-    <div class="container">
+    <div class="container align-self-center">
         <div class="row gx-0">
             @if($event->user_id == Auth::id())
             <div class="col-4 align-self-center m-0">

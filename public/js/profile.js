@@ -1,4 +1,31 @@
 let date = new Date();
+var days_aux = document.querySelector('.days').childNodes;
+localStorage.setItem("days_aux", days_aux)
+
+console.log(">>>", days_aux)
+
+function check_element_in_array(array, elem) {
+
+    for(let i=0; i<array.length; i++) {
+        if(elem == array[i].innerHTML) {
+            return true
+        }
+    }
+
+    return false;
+}
+
+
+function get_element_in_array(array, elem) {
+
+    for(let i=0; i<array.length; i++) {
+        if(elem == array[i].innerHTML) {
+            return array[i]
+        }
+    }
+
+    return null;
+}
 
 function renderCalendar() {
     
@@ -23,30 +50,59 @@ function renderCalendar() {
     document.querySelector('.date > h3').innerHTML = months[date.getUTCMonth()]
     document.querySelector('.date > p').innerHTML = date.toDateString()
 
+
     let days = ""
 
     for (let i = 1; i <= lastDay; i++) {
 
-        let day = i
+        let day_aux = get_element_in_array(days_aux, i)
+        let splited_date = null
 
-        if (i < 10) {
-            day = '0' + i
+        
+
+        if(day_aux != null) {
+            splited_date = day_aux.getAttribute("id")
+            if(splited_date != null) {
+                splited_date.split("-");
+            }
         }
 
-        let id = i + "-" + date.getMonth()
+        //console.log(">", day_aux)
 
-        if (i == date.getUTCDate()) {
-            days += `<div id=${id} class="today border border-grey m-0 p-4">${day}</div>`
-            continue
+        //console.log(date)
+        //console.log(">", date.getFullYear())
+        //console.log(">", date.getMonth())
+
+        if(splited_date != null && splited_date[0] == date.getFullYear() && splited_date[1] == date.getMonth()) {
+            days += day_aux.outerHTML
+        }
+        else {
+
+            let day = i
+
+            if (i < 10) {
+                day = '0' + i
+            }
+
+            //let id = i + "-" + date.getMonth()
+
+            if (i == date.getUTCDate()) {
+                days += `<div class="today border border-grey m-0 p-4">${day}</div>`
+                continue
+            }
+
+            days += `<div class="border border-grey m-0 p-4">${day}</div>`
         }
 
-        days += `<div id=${id} class="border border-grey m-0 p-4">${day}</div>`
+
+        
     }
 
     monhtDays.innerHTML = days
 }
 
 let monhtDays = document.querySelector('.days')
+
 if (monhtDays != null) {
     renderCalendar()
 }
@@ -55,6 +111,11 @@ let prevButton = document.querySelector('.prev-month');
 if (prevButton != null) {
     prevButton.addEventListener('click', () => {
         date.setMonth(date.getMonth() - 1)
+
+        days_aux = localStorage.getItem("days_aux")
+
+        console.log()
+
         renderCalendar()
     })
 }
@@ -64,6 +125,9 @@ let nextButton = document.querySelector('.next-month');
 if (nextButton != null) {
     nextButton.addEventListener('click', () => {
         date.setMonth(date.getMonth() + 1)
+
+        days_aux = localStorage.getItem("days_aux")
+
         renderCalendar()
     })
 }

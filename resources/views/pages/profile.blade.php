@@ -27,17 +27,15 @@
             <div id="content-events">
                 <div id="perfil-invites" class="">
 
-                    <div class="border border-grey m-0 my-1 p-0 text-center">
+                    <div class="m-0 my-1 p-0 text-center">
                         @if(Auth::id() != $account->id)
                         <p class="mt-3 fs-4">These are not your invites</p>
                         @elseif(sizeof($account->user->invites) === 0)
                         <p class="mt-3 fs-4">There are no invites.</p>
                         @else
-                        <section id="cards">
                             @foreach ($account->user->invites as $invite)
                             @include('partials.invite', ['event' => $invite->event, 'invite_id' => $invite->id])
                             @endforeach
-                        </section>
                         @endif
                     </div>
                 </div>
@@ -68,6 +66,10 @@
                         </div>
                     </div>
                     <div class="days d-flex flex-wrap m-0 p-4">
+                        @foreach($account->user->tickets as $ticket)
+                            <?php echo $ticket->event->get_start_date_day() ?>
+                            <div id="{{$ticket->event->start_date}}" class="border border-grey m-0 p-4" style="color: blue;">{{$ticket->event->get_start_date_day()}}</div>
+                        @endforeach
                     </div>
                 </div>
             </div>

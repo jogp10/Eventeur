@@ -1,5 +1,6 @@
 <?php
 
+//namespace Carbon\Carbon;
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,4 +32,11 @@ class Event extends Model {
     public function reports() { return $this->hasMany(Report::class); }
 
     public function votes() { return $this->hasMany(Vote::class); }
+
+    public function get_start_date_day() {
+
+        $date_array = explode("-", $this->start_date);
+
+        return $date_array[2];
+    }
 }
