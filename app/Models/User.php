@@ -22,6 +22,8 @@ class User extends Model
 
     public function tickets() { return $this->hasMany(Ticket::class); }
 
+    public function requests() { return $this->hasMany(Request::class); }
+
     public function invites() { return $this->hasMany(Invite::class); }
 
     public function comments() { return $this->hasMany(Comment::class); }

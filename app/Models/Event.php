@@ -25,6 +25,8 @@ class Event extends Model {
 
     public function invites() { return $this->hasMany(Invite::class); }
 
+    public function requests() { return $this->hasMany(Request::class); }
+
     public function comments() { return $this->hasMany(Comment::class); }
 
     public function polls() { return $this->hasMany(Poll::class); }

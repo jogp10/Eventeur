@@ -19,6 +19,8 @@ drop table if exists votes CASCADE;
 drop table if exists reports CASCADE;
 drop table if exists bans CASCADE;
 
+drop table if exists requests CASCADE;
+
 DROP TYPE IF EXISTS privacy CASCADE;
 
 -- Types
@@ -134,6 +136,17 @@ CREATE TABLE invites (
     id          SERIAL PRIMARY KEY,
     user_id     INTEGER NOT NULL,
     event_id    INTEGER NOT NULL,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_event_id FOREIGN KEY(event_id) references events(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    UNIQUE(user_id, event_id)
+);
+
+CREATE TABLE requests (
+    id        SERIAL PRIMARY KEY,
+    user_id   INTEGER NOT NULL,
+    event_id  INTEGER NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -543,26 +556,26 @@ VALUES
 
 INSERT INTO events (user_id, name,description,start_date,end_date,location,capacity,privacy)
 VALUES
-  (45,'eu dolor egestas rhoncus. Proin nisl sem, consequat','In lorem. Donec elementum, lorem ut aliquam iaculis, lacus pede sagittis augue, eu tempor erat neque non quam.','2021-10-25', '2021-11-13','P.O. Box 737, 2366 Diam Av.',417,'Public'),
-  (98,'magnis dis parturient montes, nascetur ridiculus','tellus. Aenean egestas hendrerit neque. In ornare sagittis felis. Donec tempor, est ac mattis semper, dui lectus rutrum urna, nec luctus felis purus ac tellus. Suspendisse sed dolor. Fusce mi lorem, vehicula et, rutrum eu, ultrices sit amet,','2021-10-22','2021-11-20','Ap #415-6093 Eget Street',380,'Public'),
-  (16,'senectus et netus et','congue. In scelerisque scelerisque dui. Suspendisse ac metus vitae velit egestas lacinia. Sed congue, elit sed consequat auctor, nunc nulla vulputate dui, nec tempus mauris erat eget ipsum. Suspendisse sagittis. Nullam vitae diam. Proin dolor. Nulla semper tellus id','2021-10-18','2021-11-23','1448 Ac, Av.',204,'Public'),
+  (45,'eu dolor egestas rhoncus. Proin nisl sem, consequat','In lorem. Donec elementum, lorem ut aliquam iaculis, lacus pede sagittis augue, eu tempor erat neque non quam.','2023-10-25', '2023-11-13','P.O. Box 737, 2366 Diam Av.',417,'Public'),
+  (98,'magnis dis parturient montes, nascetur ridiculus','tellus. Aenean egestas hendrerit neque. In ornare sagittis felis. Donec tempor, est ac mattis semper, dui lectus rutrum urna, nec luctus felis purus ac tellus. Suspendisse sed dolor. Fusce mi lorem, vehicula et, rutrum eu, ultrices sit amet,','2023-10-22','2023-11-20','Ap #415-6093 Eget Street',380,'Public'),
+  (16,'senectus et netus et','congue. In scelerisque scelerisque dui. Suspendisse ac metus vitae velit egestas lacinia. Sed congue, elit sed consequat auctor, nunc nulla vulputate dui, nec tempus mauris erat eget ipsum. Suspendisse sagittis. Nullam vitae diam. Proin dolor. Nulla semper tellus id','2023-10-18','2023-11-23','1448 Ac, Av.',204,'Public'),
   (59,'elit sed consequat auctor, nunc','sodales elit erat vitae risus. Duis a mi fringilla mi lacinia mattis. Integer eu lacus. Quisque imperdiet,','2021-10-21','2021-11-08','883-8470 Magna Av.',58,'Public'),
-  (83,'amet, consectetuer adipiscing elit. Etiam laoreet,','Cras vehicula aliquet libero. Integer in magna. Phasellus dolor elit, pellentesque a, facilisis non, bibendum sed, est. Nunc','2021-10-25','2021-11-02','190-3930 Cum St.',204,'Private'),
-  (39,'non sapien molestie orci tincidunt adipiscing. Mauris','Cras interdum. Nunc sollicitudin commodo ipsum. Suspendisse non leo. Vivamus nibh dolor, nonummy ac, feugiat non, lobortis quis, pede. Suspendisse dui. Fusce diam nunc, ullamcorper eu, euismod ac, fermentum vel,','2021-05-19','2021-07-11','Ap #812-8492 Cum Road',355,'Public'),
-  (79,'Sed malesuada augue ut','lobortis risus. In mi pede, nonummy ut, molestie in, tempus eu, ligula. Aenean euismod mauris eu elit. Nulla facilisi. Sed neque. Sed eget lacus.','2021-10-28','2021-11-13','249-9537 Eget, Avenue',324,'Public'),
-  (19,'vehicula aliquet libero. Integer in magna.','consequat, lectus sit amet luctus vulputate, nisi sem semper erat, in consectetuer ipsum nunc id enim. Curabitur massa. Vestibulum accumsan neque et nunc. Quisque ornare','2021-10-21','2021-11-22','757-8707 Mi. Ave',361,'Public'),
-  (45,'arcu. Curabitur ut','euismod ac, fermentum vel, mauris. Integer sem elit, pharetra ut, pharetra sed, hendrerit a, arcu. Sed et libero. Proin mi. Aliquam gravida mauris ut mi. Duis risus odio, auctor vitae, aliquet','2021-10-26','2021-11-17','Ap #257-9182 Sapien. Ave',274,'Public'),
+  (83,'amet, consectetuer adipiscing elit. Etiam laoreet,','Cras vehicula aliquet libero. Integer in magna. Phasellus dolor elit, pellentesque a, facilisis non, bibendum sed, est. Nunc','2023-10-25','2023-11-02','190-3930 Cum St.',204,'Private'),
+  (39,'non sapien molestie orci tincidunt adipiscing. Mauris','Cras interdum. Nunc sollicitudin commodo ipsum. Suspendisse non leo. Vivamus nibh dolor, nonummy ac, feugiat non, lobortis quis, pede. Suspendisse dui. Fusce diam nunc, ullamcorper eu, euismod ac, fermentum vel,','2023-05-19','2023-07-11','Ap #812-8492 Cum Road',355,'Public'),
+  (79,'Sed malesuada augue ut','lobortis risus. In mi pede, nonummy ut, molestie in, tempus eu, ligula. Aenean euismod mauris eu elit. Nulla facilisi. Sed neque. Sed eget lacus.','2022-10-28','2022-11-13','249-9537 Eget, Avenue',324,'Public'),
+  (19,'vehicula aliquet libero. Integer in magna.','consequat, lectus sit amet luctus vulputate, nisi sem semper erat, in consectetuer ipsum nunc id enim. Curabitur massa. Vestibulum accumsan neque et nunc. Quisque ornare','2023-10-21','2023-11-22','757-8707 Mi. Ave',361,'Public'),
+  (45,'arcu. Curabitur ut','euismod ac, fermentum vel, mauris. Integer sem elit, pharetra ut, pharetra sed, hendrerit a, arcu. Sed et libero. Proin mi. Aliquam gravida mauris ut mi. Duis risus odio, auctor vitae, aliquet','2023-10-26','2023-11-17','Ap #257-9182 Sapien. Ave',274,'Public'),
   (15,'augue scelerisque mollis.','sit amet ornare lectus justo eu arcu. Morbi sit amet massa. Quisque porttitor eros nec tellus. Nunc lectus pede, ultrices a, auctor non, feugiat nec,','2021-10-23','2021-11-13','246-6797 Pharetra, Road',475,'Private'),
-  (71,'dolor. Quisque tincidunt pede ac','metus vitae velit egestas lacinia. Sed congue, elit sed consequat auctor, nunc nulla vulputate dui, nec tempus mauris erat eget ipsum. Suspendisse sagittis. Nullam vitae','2021-10-23','2021-11-24','5716 Augue St.',364,'Private'),
-  (83,'risus. Donec egestas. Aliquam nec enim.','mollis. Duis sit amet diam eu dolor egestas rhoncus. Proin nisl sem, consequat nec, mollis vitae, posuere at, velit. Cras','2021-10-26','2021-11-06','123-8901 Lacus. Av.',73,'Public'),
-  (5,'pede, nonummy ut, molestie','Donec vitae erat vel pede blandit congue. In scelerisque scelerisque dui. Suspendisse ac metus vitae velit egestas lacinia. Sed congue,','2021-10-23','2021-11-18','Ap #886-3769 Ligula Av.',493,'Private'),
-  (76,'magna. Suspendisse tristique','et ultrices posuere cubilia Curae Donec tincidunt. Donec vitae erat vel pede blandit congue. In scelerisque scelerisque dui. Suspendisse ac metus vitae velit egestas lacinia. Sed congue, elit sed consequat auctor, nunc','2021-10-24','2021-11-19','P.O. Box 132, 259 Lorem Street',474,'Public'),
-  (88,'viverra. Donec tempus, lorem','at, iaculis quis, pede. Praesent eu dui. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean eget magna. Suspendisse tristique neque venenatis lacus. Etiam bibendum fermentum metus.','2021-10-30','2021-11-04','575-1718 Orci Ave',89,'Public'),
-  (87,'velit justo nec','ante lectus convallis est, vitae sodales nisi magna sed dui. Fusce aliquam, enim nec tempus scelerisque, lorem','2021-10-28','2021-11-19','491-4933 Quis Avenue',59,'Public'),
-  (98,'sollicitudin a, malesuada id, erat. Etiam vestibulum','cursus vestibulum. Mauris magna. Duis dignissim tempor arcu. Vestibulum ut eros non enim commodo hendrerit. Donec porttitor tellus non magna. Nam ligula elit, pretium et, rutrum non, hendrerit id, ante. Nunc mauris sapien, cursus in,','2021-10-31','2021-11-15','Ap #103-5435 Aliquam Road',326,'Public'),
-  (3,'quis, tristique ac, eleifend vitae,','ipsum porta elit, a feugiat tellus lorem eu metus. In lorem. Donec elementum, lorem ut aliquam iaculis, lacus pede sagittis augue, eu','2021-10-30','2021-11-22','Ap #265-3578 Cum St.',299,'Public'),
-  (92,'pede. Cras vulputate velit','ut nisi a odio semper cursus. Integer mollis. Integer tincidunt aliquam arcu. Aliquam ultrices iaculis odio. Nam interdum enim non nisi. Aenean eget metus. In nec orci. Donec nibh. Quisque nonummy ipsum','2021-10-22','2021-11-03','P.O. Box 670, 4409 Neque. Street',86,'Private'),
-  (101,'condimentum. Donec at arcu. Vestibulum','faucibus orci luctus et ultrices posuere cubilia Curae Phasellus ornare. Fusce mollis. Duis sit amet diam eu dolor egestas rhoncus. Proin nisl sem, consequat nec, mollis vitae, posuere at, velit. Cras lorem lorem, luctus ut, pellentesque eget, dictum','2021-10-19','2021-11-02','806-7720 Litora Ave',205,'Public');
+  (71,'dolor. Quisque tincidunt pede ac','metus vitae velit egestas lacinia. Sed congue, elit sed consequat auctor, nunc nulla vulputate dui, nec tempus mauris erat eget ipsum. Suspendisse sagittis. Nullam vitae','2023-10-23','2023-11-24','5716 Augue St.',364,'Private'),
+  (83,'risus. Donec egestas. Aliquam nec enim.','mollis. Duis sit amet diam eu dolor egestas rhoncus. Proin nisl sem, consequat nec, mollis vitae, posuere at, velit. Cras','2022-10-26','2022-11-06','123-8901 Lacus. Av.',73,'Public'),
+  (5,'pede, nonummy ut, molestie','Donec vitae erat vel pede blandit congue. In scelerisque scelerisque dui. Suspendisse ac metus vitae velit egestas lacinia. Sed congue,','2023-10-23','2023-11-18','Ap #886-3769 Ligula Av.',493,'Private'),
+  (76,'magna. Suspendisse tristique','et ultrices posuere cubilia Curae Donec tincidunt. Donec vitae erat vel pede blandit congue. In scelerisque scelerisque dui. Suspendisse ac metus vitae velit egestas lacinia. Sed congue, elit sed consequat auctor, nunc','2023-10-24','2023-11-19','P.O. Box 132, 259 Lorem Street',474,'Public'),
+  (88,'viverra. Donec tempus, lorem','at, iaculis quis, pede. Praesent eu dui. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean eget magna. Suspendisse tristique neque venenatis lacus. Etiam bibendum fermentum metus.','2023-10-30','2023-11-04','575-1718 Orci Ave',89,'Public'),
+  (87,'velit justo nec','ante lectus convallis est, vitae sodales nisi magna sed dui. Fusce aliquam, enim nec tempus scelerisque, lorem','2022-10-28','2022-11-19','491-4933 Quis Avenue',59,'Public'),
+  (98,'sollicitudin a, malesuada id, erat. Etiam vestibulum','cursus vestibulum. Mauris magna. Duis dignissim tempor arcu. Vestibulum ut eros non enim commodo hendrerit. Donec porttitor tellus non magna. Nam ligula elit, pretium et, rutrum non, hendrerit id, ante. Nunc mauris sapien, cursus in,','2023-10-31','2023-11-15','Ap #103-5435 Aliquam Road',326,'Public'),
+  (3,'quis, tristique ac, eleifend vitae,','ipsum porta elit, a feugiat tellus lorem eu metus. In lorem. Donec elementum, lorem ut aliquam iaculis, lacus pede sagittis augue, eu','2023-10-30','2023-11-22','Ap #265-3578 Cum St.',299,'Public'),
+  (92,'pede. Cras vulputate velit','ut nisi a odio semper cursus. Integer mollis. Integer tincidunt aliquam arcu. Aliquam ultrices iaculis odio. Nam interdum enim non nisi. Aenean eget metus. In nec orci. Donec nibh. Quisque nonummy ipsum','2023-10-22','2023-11-03','P.O. Box 670, 4409 Neque. Street',86,'Private'),
+  (101,'condimentum. Donec at arcu. Vestibulum','faucibus orci luctus et ultrices posuere cubilia Curae Phasellus ornare. Fusce mollis. Duis sit amet diam eu dolor egestas rhoncus. Proin nisl sem, consequat nec, mollis vitae, posuere at, velit. Cras lorem lorem, luctus ut, pellentesque eget, dictum','2023-10-19','2023-11-02','806-7720 Litora Ave',205,'Public');
 
 
 INSERT INTO tags (name)
