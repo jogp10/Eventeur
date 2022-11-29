@@ -40,6 +40,8 @@ Route::post('api/give_ticket', 'EventController@ticket')->name('ticket');
 Route::delete('api/give_ticket/delete', 'EventController@deleteTicket')->name('deleteTicket');
 Route::get('create_event', 'EventController@create')->name('createEvent');
 Route::put('create_event', 'EventController@store')->name('storeEvent');
+Route::post('api/comment_form', 'EventController@commentForm')->name('commentForm');
+Route::post('api/comment', 'EventController@comment')->name('comment');
 
 //Static Pages
 Route::get('about', 'StaticPageController@about');

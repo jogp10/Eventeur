@@ -260,4 +260,12 @@ class EventController extends Controller
 
         return redirect()->back();
     }
+
+    public function commentForm(Request $request, $id) {
+        $event = Event::find($id);
+
+        
+
+        return view('pages.eventComment', ['event' => $event]);
+    }
 }

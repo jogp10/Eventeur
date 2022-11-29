@@ -173,7 +173,8 @@ function sendInviteHandler() {
   if (this.status != 200) window.location = '/';
 
   var modal = document.getElementsByClassName("modal")[0];
-  modal.getElementsByClassName.display = "none";
+
+  modal.style.display = "none";
 
   let invites = JSON.parse(this.responseText);
 }
@@ -182,7 +183,8 @@ function sendTicketHandler() {
   if (this.status != 200) window.location = '/';
 
   var modal = document.getElementsByClassName("modal")[1];
-  modal.getElementsByClassName.display = "none";
+
+  modal.style.display = "none";
 
   let tickets = JSON.parse(this.responseText);
 }
@@ -256,7 +258,6 @@ function createUserRow(user, url) {
   if (user['admin'] != null) {htmlView += '        <p>Bans:' + user['admin']['bans'].length + '</p>';};  
   htmlView += '      <form class="pb-1" action="' + url + '/admin/users/' + user['id'] + '/edit" method="GET">'
   htmlView += '         <button type="submit" class="btn btn-warning">Edit</button></form>'
-
   htmlView += '      <form class="pb-1" action="' + url + '/admin/users/' + user['id'] + '/delete" method="POST">'
   htmlView += '<input type="hidden" name="_method" value="DELETE">'
   htmlView += '<input type="hidden" name="_token" value="' + csrf + '">'

@@ -62,5 +62,3 @@ function checks(e) {
   var check = target.querySelector('td div svg');
   check.classList.toggle("hidden");
 };
-
-
