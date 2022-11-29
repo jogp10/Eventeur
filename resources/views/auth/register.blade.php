@@ -45,9 +45,10 @@
                     @endif
                </div>
                <div class="mb-3">
-                    <label>
-                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
-                    </label>  
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
+                        <label class="form-check-label">Remember Me</label>
+                    </div>
                </div>
                <button type="submit" class="btn btn-primary">Submit</button>
            </form>
