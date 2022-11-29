@@ -13,9 +13,6 @@
                         </svg>
                     </button>
                 </form>
-                <a class="ms-3 column btn rounded" href="{{route('createEvent')}}">
-                    <span>Create Event</span>
-                </button>
             </div>
             @if (Auth::user() != null)
             @if (Auth::user()->admin != null)
