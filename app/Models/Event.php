@@ -15,8 +15,7 @@ class Event extends Model {
         'Fitness',
         'Nature',
         'Sports',
-        'Geography',
-        'Orgy'
+        'Geography'
     ];
 
     protected $fillable = [
