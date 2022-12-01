@@ -135,23 +135,39 @@ if (nextButton != null) {
 
 let eventsButton = document.querySelector('#see-invites-button')
 let invitesButton = document.querySelector('#see-events-button')
+let ticketsButton = document.querySelector('#see-tickets-button')
 let profileInvites = document.getElementById('perfil-invites')
 let profileEvents = document.getElementById('perfil-events')
+let profileTickets = document.getElementById('perfil-tickets')
 
 
 eventsButton.addEventListener('click', () => {
-    profileInvites.className = ""
     profileEvents.className = "visually-hidden"
-    eventsButton.style.color = "black"
+    profileTickets.className = "visually-hidden"
+    profileInvites.className = ""
     invitesButton.style.color = "grey"
+    ticketsButton.style.color = "grey"
+    eventsButton.style.color = "black"
 })
 
 
 invitesButton.addEventListener('click', () => {
-    profileEvents.className = ""
     profileInvites.className = "visually-hidden"
+    profileTickets.className = "visually-hidden"
+    profileEvents.className = ""
     eventsButton.style.color = "grey"
+    ticketsButton.style.color = "grey"
     invitesButton.style.color = "black"
+})
+
+
+ticketsButton.addEventListener('click', () => {
+    profileEvents.className = "visually-hidden"
+    profileInvites.className = "visually-hidden"
+    profileTickets.className = ""
+    eventsButton.style.color = "grey"
+    invitesButton.style.color = "grey"
+    ticketsButton.style.color = "black"
 })
 
 
