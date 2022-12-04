@@ -106,7 +106,7 @@
   </div>
   <div id="comments" class="m-3 " style="margin-left: 7rem !important">
     @can('create', [App\Models\Comment::class, $event])
-    <div class="textarea-container comment-form m-2">
+    <div id="comment_form" class="textarea-container comment-form m-2 d-none">
       <form method="POST" action="{{ route( 'comment' ) }}" class="d-flex flex-column align-items-end">
         @csrf
         <input type="hidden" name="event_id" value="{{ $event->id }}">
@@ -115,7 +115,7 @@
       </form>
     </div>
     @endcan
-    @each('partials.comment', $event->comments, 'comment')
+    @each('partials.comment', $event->comments, 'comment', )
   </div>
 </div>
 <div class="modal fade" tabindex="-1" id="inviteModal" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -1,4 +1,4 @@
-<div class="p-2" >
+<div class="comment-section p-2">
   <div class="border rounded p-3 ps-4 d-flex flex-row justify-content-start" data-id="{{$comment->id}}">
     <div class="pe-2">
       <img src="/images/perfil.png" class="rounded-circle img-fluid m-0 p-0" height="80" width="120" alt="...">
@@ -9,9 +9,9 @@
       <p>{{ $comment->content }}</p>
       <div class="d-flex flex-row">
         <div class="d-flex flex-row">
-            @include('partials.form', ['action' => 'up', 'id' => $comment->id, 'type' => 'comment'])
-            <span class="" style="line-height:38px;">{{ $comment->votes->count() }}</span>
-            @include('partials.form', ['action' => 'down', 'id' => $comment->id, 'type' => 'comment'])
+          @include('partials.form', ['action' => 'up', 'id' => $comment->id, 'type' => 'comment'])
+          <span class="" style="line-height:38px;">{{ $comment->votes->count() }}</span>
+          @include('partials.form', ['action' => 'down', 'id' => $comment->id, 'type' => 'comment'])
         </div>
         @if (Auth::id() == $comment->user_id)
         <button type="button" class="col btn btn-link text-decoration-none" style="text-decoration: none;color: black;">
@@ -21,7 +21,7 @@
           <span>Edit</span>
         </button>
         @endif
-        <button type="button" class="col btn btn-link" style="text-decoration: none;color: black;">
+        <button id="{{$comment->id}}" type="button" class="event_comment col btn btn-link" style="text-decoration: none;color: black;">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left" viewBox="0 0 16 16">
             <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
           </svg>
@@ -44,6 +44,14 @@
     </div>
   </div>
   <div style="margin-left:10rem">
+    <div id="comment_{{ $comment->id }}_form" class="textarea-container comment-form mt-2 d-none">
+      <form method="POST" action="{{ route( 'comment' ) }}" class="d-flex flex-column align-items-end">
+        @csrf
+        <input type="hidden" name="comment_id" value="{{ $comment->id }}">
+        <textarea name="content" class="w-100 form-control" id="comment-content" cols="60" rows="5" placeholder="Escreva aqui o seu comentário..."></textarea>
+        <button type="submit" class="btn btn-primary btn-lg float-end">Enviar</button>
+      </form>
+    </div>
     @foreach ($comment->answers as $reply)
     <div class="answer border rounded mt-2 p-3 ps-4 d-flex flex-row justify-content-start" data-id="{{$reply['id']}}" style="">
       <div class="pe-2">
@@ -56,9 +64,9 @@
 
         <div class="d-flex flex-row">
           <div class="d-flex flex-row justify-content-between">
-              @include('partials.form', ['action' => 'up', 'id' => $reply->id, 'type' => 'answer'])
-              <span class="" style="line-height:38px;">{{ $reply->votes->count() }}</span>
-              @include('partials.form', ['action' => 'down', 'id' => $reply->id, 'type' => 'answer'])
+            @include('partials.form', ['action' => 'up', 'id' => $reply->id, 'type' => 'answer'])
+            <span class="" style="line-height:38px;">{{ $reply->votes->count() }}</span>
+            @include('partials.form', ['action' => 'down', 'id' => $reply->id, 'type' => 'answer'])
           </div>
           @if (Auth::id() == $reply->user_id)
           <button type="button" class="col btn btn-link" style="text-decoration: none;color: black;">
