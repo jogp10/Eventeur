@@ -107,7 +107,7 @@
   <div id="comments" class="m-3 " style="margin-left: 7rem !important">
     @can('create', [App\Models\Comment::class, $event])
     <div class="textarea-container comment-form m-2">
-      <form method="POST" action="{{ route( 'comment' ) }}" class="d-flex flex-column align-items-end" >
+      <form method="POST" action="{{ route( 'comment' ) }}" class="d-flex flex-column align-items-end">
         @csrf
         <input type="hidden" name="event_id" value="{{ $event->id }}">
         <textarea name="content" class="w-100 form-control" id="comment-content" cols="60" rows="5" placeholder="Escreva aqui o seu comentário..."></textarea>
@@ -142,7 +142,7 @@
         </div>
       </div>
       <div class="modal-footer p-0">
-        <button id="sendInvite" type="button" class="btn btn-primary align-self-end m-1" data-dismiss="modal">Send Invites</button>
+        <button id="sendInvite" type="button" class="btn btn-primary align-self-end m-1" data-bs-dismiss="modal">Send Invites</button>
       </div>
     </div>
   </div>
@@ -171,28 +171,28 @@
         </div>
       </div>
       <div class="modal-footer p-0">
-        <button id="sendTicket" type="button" class="btn btn-primary align-self-end m-1" data-dismiss="modal">Send Tickets</button>
+        <button id="sendTicket" type="button" class="btn btn-primary align-self-end m-1" data-bs-dismiss="modal">Send Tickets</button>
       </div>
     </div>
   </div>
 </div>
 
 <style>
-    .textarea-container {
-        position: relative;
-    }
+  .textarea-container {
+    position: relative;
+  }
 
-    .textarea-container textarea {
-        width: 100%;
-        height: 100%;
-        box-sizing: border-box;
-    }
+  .textarea-container textarea {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+  }
 
-    .textarea-container button {
-        position: absolute;
-        top: 100%;
-        right: 1%;
-        transform: translateY(-110%);
-    }
+  .textarea-container button {
+    position: absolute;
+    top: 100%;
+    right: 1%;
+    transform: translateY(-110%);
+  }
 </style>
 @endsection
