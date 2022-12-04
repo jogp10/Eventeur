@@ -11,6 +11,13 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model {
     use HasFactory;
 
+    protected $types = [
+        'Fitness',
+        'Nature',
+        'Sports',
+        'Geography'
+    ];
+
     protected $fillable = [
         'name', 'description', 'start_date', 'end_date', 'location', 'capacity', 'privacy', 'user_id', 'ticket', 'created_at', 'updated_at', 'tsvectors'
     ];
@@ -38,5 +45,10 @@ class Event extends Model {
         $date_array = explode("-", $this->start_date);
 
         return $date_array[2];
+    }
+
+    public function getTagTypes() {
+
+        return $this->types;
     }
 }

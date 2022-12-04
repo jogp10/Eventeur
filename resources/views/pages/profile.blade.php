@@ -20,6 +20,7 @@
             @endif
         </div>
         <div class="col-8 d-flex flex-column m-5 p-0 w-50">
+            @if(Auth::id() == $account->id)
             <div class="">
                 <a id="see-invites-button" type="button" class="btn btn-link fs-5 ms-0 ps-0" style="text-decoration: none; color: black;">Invites</a>
                 <a id="see-tickets-button" type="button" class="btn btn-link fs-5" style="text-decoration: none; color:grey;">Tickets</a>
@@ -27,7 +28,6 @@
             </div>
             <div id="content-events">
                 <div id="perfil-invites" class="">
-
                     <div class="m-0 my-1 p-0 text-center">
                         @if(Auth::id() != $account->id)
                         <p class="mt-3 fs-4">These are not your invites</p>
@@ -77,6 +77,10 @@
                     </div>
                 </div>
             </div>
+            @else
+            <h3>Events</h3>
+            @include('partials.ownedEvents', ['events' => $account->user->events])
+            @endif
         </div>
     </div>
 </div>

@@ -7,6 +7,7 @@ use App\Models\Invite;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\Vote;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -158,9 +159,8 @@ class EventController extends Controller
         $validated = $request->validate([
             'name' => ['max:100'],
             'description' => ['max:2000'],
+            'tags' => 'required'
         ]);
-
-        //print_r($request['privacy']);
 
         if($request['privacy'] == 'on') {
             $event->privacy = 'Private';
@@ -168,13 +168,21 @@ class EventController extends Controller
             $event->privacy = 'Public';
         }
 
-        //print_r($request->get('tags'));
+        foreach($request->get('tags') as $tagName) {
 
-        //foreach($request->get('tags') as $tag) {
-        //    $event->tags()->attach($tag);
-        //}
+            $tag = Tag::where('name', $tagName)->get();
+            $exists = Tag::get()->contains('name', $tagName);
 
-        
+            if(!$exists) {
+                $tag = Tag::create([
+                    'name' => $tagName
+                ]);
+                
+                $event->tags()->attach($tag);
+            }
+
+        }
+
         if ($request['name'] !== null) {
             $event->name = $request['name'];
         }

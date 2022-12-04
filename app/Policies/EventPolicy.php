@@ -85,6 +85,7 @@ class EventPolicy
     public function update(Account $account, Event $event)
     {
         //
+
         return $event->manager->id == $account->id;
     }
 

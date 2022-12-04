@@ -2,24 +2,27 @@
 
 @section('title', 'About Us')
 @section('content')
-<div class="container-md ">
-    <div class="row align-items-center">
+<h1 class="my-5 mt-4 px-5">Contact Us</h1>
+<div class="container-md">
+    <div class="row row-cols-1 row-cols-md-2 flex-column-reverse flex-md-row gx-5">
         <div class="col">
-            <h1>Contact Us</h1>
             <form method="POST" action=" {{ route('submitContact') }} ">
                 @csrf
-                <label for="name">Name</label><br>
-                <input type="text" id="name" name="name"><br>
-                <label for="email">Email</label><br>
-                <input type="text" id="email" name="email"><br>
-                <label for="subject">Subject</label><br>
-                <input type="text" id="subject" name="subject"><br><br>
-                <textarea id="content" name="content" rows="10" cols="45"></textarea><br><br>
-                <input type="submit" value="Send Request">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" id="name" name="name" class="form-control mb-3">
+
+                <label for="email" class="form-label">Email</label>
+                <input type="text" id="email" name="email" class="form-control mb-3">
+
+                <label for="subject" class="form-label">Subject</label><br>
+                <input type="text" id="subject" name="subject" class="form-control mb-3">
+
+                <textarea id="content" name="content" rows="10" cols="45" class="form-control"></textarea>
+                <button type="submit" class="form-control my-4">Send Request</button>
             </form>
         </div>
-        <div class="col">
-            <img src="images/logo_big.png" class="img-fluid" height="600" width="800" alt="...">
+        <div class="col align-self-center mt-5">
+            <img src="images/logo_big.png" class="img-fluid" height="500" width="600" alt="...">
         </div>
     </div>
 </div>

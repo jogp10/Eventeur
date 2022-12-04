@@ -2,12 +2,12 @@
 
 @section('title', 'About Us')
 @section('content')
-<div class="container-md ">
-    <div class="row align-items-center m-3">
-        <div class="col " style="text-align:center">
+<div class="container-md">
+    <div class="row">
+        <div class="col" style="text-align:center">
             <h1>About Eventeur</h1>
         </div>
-        <div class="col">
+        <div class="col align-self-center">
             <img src="images/logo_big.png" class="img-fluid" height="300" width="400" alt="...">
         </div>
     </div>

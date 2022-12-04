@@ -39,6 +39,7 @@ CREATE TABLE accounts (
     password    TEXT NOT NULL,
     description TEXT,
     age         INTEGER CHECK (age > 0),
+    remember_token TEXT,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     UNIQUE(email)
