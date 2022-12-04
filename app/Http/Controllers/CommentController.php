@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\Comment;
 use App\Models\Event;
+use App\Models\Answer;
 
 class CommentController extends Controller
 {
@@ -97,5 +98,22 @@ class CommentController extends Controller
     public function destroy(Comment $comment)
     {
         //
+    }
+
+    public function answer(Request $request) {
+        $comment = Comment::find($request->comment_id);
+        $event = Event::find($comment->event_id);
+
+        $this->authorize('create', [Comment::class, $event]);
+
+        $answer = Answer::create([
+            'content' => $request->content,
+            'user_id' => Auth::user()->id,
+            'comment_id' => $comment->id,
+        ]);
+
+        $answer->save();
+
+        return redirect()->back();
     }
 }

@@ -38,7 +38,7 @@ Route::get('create_event', 'EventController@create')->name('createEvent');
 Route::put('create_event', 'EventController@store')->name('storeEvent');
 
 //Comment
-Route::post('api/comment', 'CommentController@store')->name('comment');
+
 
 //Static Pages
 Route::get('about', 'StaticPageController@about');
@@ -66,4 +66,6 @@ Route::post('api/invite', 'InviteController@store')->name('invite');
 Route::delete('api/invite/delete', 'InviteController@destroy')->name('deleteInvite');
 Route::post('api/ticket', 'TicketController@store')->name('ticket');
 Route::delete('api/ticket/delete', 'TicketController@destroy')->name('deleteTicket');
+Route::post('api/comment', 'CommentController@store')->name('comment');
+Route::post('api/answer', 'CommentController@answer')->name('answer');
 

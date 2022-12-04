@@ -45,7 +45,7 @@
   </div>
   <div style="margin-left:10rem">
     <div id="comment_{{ $comment->id }}_form" class="textarea-container comment-form mt-2 d-none">
-      <form method="POST" action="{{ route( 'comment' ) }}" class="d-flex flex-column align-items-end">
+      <form method="POST" action="{{ route( 'answer' ) }}" class="d-flex flex-column align-items-end">
         @csrf
         <input type="hidden" name="comment_id" value="{{ $comment->id }}">
         <textarea name="content" class="w-100 form-control" id="comment-content" cols="60" rows="5" placeholder="Escreva aqui o seu comentário..."></textarea>
