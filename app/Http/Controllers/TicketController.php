@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ticket;
 use Illuminate\Http\Request;
 
-use App\Models\Vote;
-
-class VoteController extends Controller
+class TicketController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,24 +25,6 @@ class VoteController extends Controller
     public function create()
     {
         //
-        $vote = new Vote();
-
-        $this->authorize('create', $vote);
-
-        $action = $_POST['action'];
-        $id = $_POST['id'];
-        $user_id = $_POST['user_id'];
-        $type = $_POST['type'];
-
-        Vote::where('user_id', $user_id)->where($type . '_id', $id)->count() > 0 ? $vote = Vote::where('user_id', $user_id)->where($type . '_id', $id)->first()
-            : $vote = Vote::create(['user_id' => $user_id, $type . '_id' => $id]);
-
-
-        if ($action == 'down') {
-            $vote->delete();
-        }
-
-        return redirect()->back()->with('message', 'Your vote has been set successfully!');;
     }
 
     /**
@@ -55,15 +36,30 @@ class VoteController extends Controller
     public function store(Request $request)
     {
         //
+        $this->authorize('create', Ticket::class);
+
+        $users_id = $_POST['ids'];
+        $event = $_POST['event_id'];
+        $users_id = explode(',', $users_id);
+        foreach ($users_id as $user_id) {
+            $ticket = Ticket::create([
+                'user_id' => $user_id,
+                'event_id' => $event,
+                'num_of_tickets' => 2,
+            ]);
+            $ticket->save();
+        }
+
+        return response()->json(['success' => true]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Ticket  $ticket
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Ticket $ticket)
     {
         //
     }
@@ -71,10 +67,10 @@ class VoteController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Ticket  $ticket
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Ticket $ticket)
     {
         //
     }
@@ -83,10 +79,10 @@ class VoteController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Ticket  $ticket
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Ticket $ticket)
     {
         //
     }
@@ -94,11 +90,18 @@ class VoteController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Ticket  $ticket
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
         //
+        $ticket = Ticket::find($request['id']);
+
+        $this->authorize('delete', $ticket);
+        
+        $ticket->delete();
+
+        return redirect()->back();
     }
 }

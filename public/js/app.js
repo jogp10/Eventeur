@@ -93,7 +93,7 @@ function sendTicketsRequest(event) {
   }
 
   if (checkedArray.length > 0)
-    sendAjaxRequest('post', '/api/give_ticket/', { ids: checkedArray, event_id:event_id }, sendTicketHandler);
+    sendAjaxRequest('post', '/api/ticket/', { ids: checkedArray, event_id:event_id }, sendTicketHandler);
 }
 
 function searchUserInviteHandler() {
@@ -172,19 +172,11 @@ function searchUsersHandler() {
 function sendInviteHandler() {
   if (this.status != 200) window.location = '/';
 
-  var modal = document.getElementsByClassName("modal")[0];
-
-  modal.style.display = "none";
-
   let invites = JSON.parse(this.responseText);
 }
 
 function sendTicketHandler() {
   if (this.status != 200) window.location = '/';
-
-  var modal = document.getElementsByClassName("modal")[1];
-
-  modal.style.display = "none";
 
   let tickets = JSON.parse(this.responseText);
 }

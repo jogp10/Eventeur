@@ -40,14 +40,14 @@
       </div>
     </div>
     <div class="d-flex flex-row mt-auto justify-content-between align-items-end pb-3 ps-4 pe-4">
-      @if(Auth::user()->can('create', [App\Models\Comment::class, $event]))
+      @can('create', [App\Models\Comment::class, $event])
       <button type="button" id="comment-button" class="btn btn-link" style="text-decoration: none; color: black;">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left" viewBox="0 0 16 16">
           <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
         </svg>
         <span>Comment</span>
       </button>
-      @endif
+      @endcan
       <button type="button" class="btn btn-link" style="text-decoration: none; color: black;">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">
           <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
@@ -77,6 +77,12 @@
         </svg>
         <span>Give Ticket</span>
       </button>
+      <a href="{{ route( 'eventSettings', $event->id ) }}" type="button" class="btn btn-link" style="text-decoration: none; color: black;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25 " fill="currentColor" class="bi bi-gear " viewBox="0 0 16 16">
+          <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z" />
+          <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z" />
+        </svg>
+      </a>
       @else
       <button type="button" class="btn btn-link text-decoration-none">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-flag" viewBox="0 0 16 16">
@@ -84,14 +90,6 @@
         </svg>
         <span>Report</span>
       </button>
-      @endcan
-      @can('update', $event)
-      <a href="{{ route( 'eventSettings', $event->id ) }}" type="button" class="btn btn-link" style="text-decoration: none; color: black;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25 " fill="currentColor" class="bi bi-gear " viewBox="0 0 16 16">
-          <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z" />
-          <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z" />
-        </svg>
-      </a>
       @endcan
       @can('delete', $event)
       <form method="POST" action="{{ route( 'deleteEvent', ['id' => $event->id] ) }}">
@@ -106,7 +104,17 @@
       @endcan
     </div>
   </div>
-  <div id="comments" class="m-3" style="margin-left: 7rem !important">
+  <div id="comments" class="m-3 " style="margin-left: 7rem !important">
+    @can('create', [App\Models\Comment::class, $event])
+    <div class="textarea-container comment-form m-2">
+      <form method="POST" action="{{ route( 'comment' ) }}" class="d-flex flex-column align-items-end" >
+        @csrf
+        <input type="hidden" name="event_id" value="{{ $event->id }}">
+        <textarea name="content" class="w-100 form-control" id="comment-content" cols="60" rows="5" placeholder="Escreva aqui o seu comentário..."></textarea>
+        <button type="submit" class="btn btn-primary btn-lg float-end">Enviar</button>
+      </form>
+    </div>
+    @endcan
     @each('partials.comment', $event->comments, 'comment')
   </div>
 </div>
@@ -134,7 +142,7 @@
         </div>
       </div>
       <div class="modal-footer p-0">
-        <button id="sendInvite" type="button" class="btn btn-primary align-self-end m-1">Send Invites</button>
+        <button id="sendInvite" type="button" class="btn btn-primary align-self-end m-1" data-dismiss="modal">Send Invites</button>
       </div>
     </div>
   </div>
@@ -163,10 +171,28 @@
         </div>
       </div>
       <div class="modal-footer p-0">
-        <button id="sendTicket" type="button" class="btn btn-primary align-self-end m-1">Send Tickets</button>
+        <button id="sendTicket" type="button" class="btn btn-primary align-self-end m-1" data-dismiss="modal">Send Tickets</button>
       </div>
     </div>
   </div>
 </div>
 
+<style>
+    .textarea-container {
+        position: relative;
+    }
+
+    .textarea-container textarea {
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+    }
+
+    .textarea-container button {
+        position: absolute;
+        top: 100%;
+        right: 1%;
+        transform: translateY(-110%);
+    }
+</style>
 @endsection

@@ -34,14 +34,11 @@ Route::get('event/{id}/event_settings', 'EventController@edit')->name('eventSett
 Route::get('event/{id}/event_participants', 'EventController@showParticipantsEvent')->name('eventParticipants');
 Route::post('event/{id}/event_settings', 'EventController@update')->name('editEvent');
 Route::delete('event/{id}/delete_event', 'EventController@destroy')->name('deleteEvent');
-Route::post('api/invite', 'EventController@invite')->name('invite');
-Route::delete('api/invite/delete', 'EventController@deleteInvite')->name('deleteInvite');
-Route::post('api/give_ticket', 'EventController@ticket')->name('ticket');
-Route::delete('api/give_ticket/delete', 'EventController@deleteTicket')->name('deleteTicket');
 Route::get('create_event', 'EventController@create')->name('createEvent');
 Route::put('create_event', 'EventController@store')->name('storeEvent');
-Route::post('api/comment_form', 'EventController@commentForm')->name('commentForm');
-Route::post('api/comment', 'EventController@comment')->name('comment');
+
+//Comment
+Route::post('api/comment', 'CommentController@store')->name('comment');
 
 //Static Pages
 Route::get('about', 'StaticPageController@about');
@@ -63,3 +60,10 @@ Route::delete('admin/users/{id}/delete', 'ProfileController@destroy')->name('adm
 Route::get('search', 'SearchController@searchEvent');
 Route::get('api/searchuser', 'SearchController@showUser');
 Route::post('vote', 'VoteController@create')->name('vote');
+
+//API
+Route::post('api/invite', 'InviteController@store')->name('invite');
+Route::delete('api/invite/delete', 'InviteController@destroy')->name('deleteInvite');
+Route::post('api/ticket', 'TicketController@store')->name('ticket');
+Route::delete('api/ticket/delete', 'TicketController@destroy')->name('deleteTicket');
+
