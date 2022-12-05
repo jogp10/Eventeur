@@ -2,20 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\Account;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
-function console_log($output, $with_script_tags = true)
-{
-    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
-        ');';
-    if ($with_script_tags) {
-        $js_code = '<script>' . $js_code . '</script>';
-    }
-    echo $js_code;
-}
+use App\Models\Account;
+use App\Http\Controllers\Controller;
 
 class RegisterController extends Controller
 {

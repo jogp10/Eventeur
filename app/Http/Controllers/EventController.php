@@ -2,28 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Answer;
-use App\Models\Invite;
-use App\Models\Ticket;
-use App\Models\User;
-use App\Models\Vote;
-use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 use App\Models\Event;
-use App\Models\Account;
-
-function console_log($output, $with_script_tags = true)
-{
-    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
-        ');';
-    if ($with_script_tags) {
-        $js_code = '<script>' . $js_code . '</script>';
-    }
-    echo $js_code;
-}
+use App\Models\Invite;
+use App\Models\Ticket;
+use App\Models\Comment;
+use App\Models\Tag;
 
 class EventController extends Controller
 {
@@ -88,7 +74,6 @@ class EventController extends Controller
         }
 
         if($request->price) $event->price = $request->price;
-        console_log($event);
         $event->save();
 
         return redirect()->route('event.show', ['id' => $event->id]);
@@ -212,60 +197,11 @@ class EventController extends Controller
 
     public function invite(Request $request)
     {
-        $this->authorize('create', Invite::class);
-
-        $users_id = $_POST['ids'];
-        $event = $_POST['event_id'];
-        $users_id = explode(',', $users_id);
-        foreach ($users_id as $user_id) {
-            $invite = Invite::create([
-                'user_id' => $user_id,
-                'event_id' => $event,
-            ]);
-            $invite->save();
-        }
-
-        return response()->json(['success' => true]);
+        
     }
 
     public function deleteInvite(Request $request)
     {
-        $invite = Invite::find($request['id']);
-
-        $this->authorize('delete', $invite);
         
-        $invite->delete();
-
-        return redirect()->back();
-    }
-
-    public function ticket(Request $request)
-    {
-        $this->authorize('create', Ticket::class);
-
-        $users_id = $_POST['ids'];
-        $event = $_POST['event_id'];
-        $users_id = explode(',', $users_id);
-        foreach ($users_id as $user_id) {
-            $ticket = Ticket::create([
-                'user_id' => $user_id,
-                'event_id' => $event,
-                'num_of_tickets' => 2,
-            ]);
-            $ticket->save();
-        }
-
-        return response()->json(['success' => true]);
-    }
-
-    public function deleteTicket(Request $request)
-    {
-        $ticket = Ticket::find($request['id']);
-
-        $this->authorize('delete', $ticket);
-        
-        $ticket->delete();
-
-        return redirect()->back();
     }
 }

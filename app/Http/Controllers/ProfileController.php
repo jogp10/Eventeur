@@ -16,17 +16,6 @@ use App\Rules\CurrentPassword;
 use Validator;
 
 
-function console_log($output, $with_script_tags = true)
-{
-    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
-        ');';
-    if ($with_script_tags) {
-        $js_code = '<script>' . $js_code . '</script>';
-    }
-    echo $js_code;
-}
-
-
 class ProfileController extends Controller
 {
     /**
@@ -163,8 +152,6 @@ class ProfileController extends Controller
         $invite = Invite::find($invite_id);
         $event = $invite->event;
 
-        console_log($invite);
-        console_log(Auth::user());
         $this->authorize('delete', $invite);
         
         $ticket = Ticket::create([

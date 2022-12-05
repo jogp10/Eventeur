@@ -83,10 +83,10 @@
                         </div>
                     </div>
                     <div class="days d-flex flex-wrap m-0 p-4">
-                        @foreach($account->user->tickets as $ticket)
+                        {{--@foreach($account->user->tickets as $ticket)
                             <?php echo $ticket->event->get_start_date_day() ?>
                             <div id="{{$ticket->event->start_date}}" class="border border-grey m-0 p-4" style="color: blue;">{{$ticket->event->get_start_date_day()}}</div>
-                        @endforeach
+                        @endforeach--}}
                     </div>
                 </div>
             </div>
