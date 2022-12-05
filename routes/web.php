@@ -24,7 +24,8 @@ Route::post('register', 'Auth\RegisterController@register')->name('register');
 Route::get('profile/{id}', 'ProfileController@show')->name('profile');
 Route::get('profile/{id}/edit', 'ProfileController@showEditPage');
 Route::put('profile/{id}/edit', 'ProfileController@update')->name('editProfile');
-Route::get('profile/{id}/security', 'ProfileController@showSettingsPage');
+Route::put('profile/{id}/editPassword', 'ProfileController@updatePassword')->name('editProfilePassword');
+Route::put('profile/{id}/editEmail', 'ProfileController@updateEmail')->name('editProfileEmail');
 Route::get('profile/{id}/{invite_id}/accept_invitation', 'ProfileController@acceptInvitation')->name('AcceptInvitation');
 Route::get('profile/{id}/{invite_id}/ignore_invitation', 'ProfileController@ignoreInvitation')->name('IgnoreInvitation');
 

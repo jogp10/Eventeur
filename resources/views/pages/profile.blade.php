@@ -1,7 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="liveAlertPlaceholder" role="alert"></div>
 <div class="container">
+
+    @if (Auth::user() && $account->id === Auth::user()->id)
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mt-3 mb-0">
+        <li class="breadcrumb-item active"><a href="#" style="text-decoration: none; color: black;">Profile</a></li>
+        <li class="breadcrumb-item" aria-current="page" ><a href="{{ url('/profile/' . $account->id . '/edit') }}" style="text-decoration: none; color: grey;">Settings</a></li>
+      </ol>
+    </nav>
+    @endif
+    
+    <h3 class="my-3">Profile</h3>
+
     <div class="row">
         <div class="col-4 border border-dark text-center m-5 p-0 text-center" style="min-height: 600px;">
             <div class="position-relative">

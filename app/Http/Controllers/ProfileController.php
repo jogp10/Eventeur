@@ -4,11 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 use App\Models\Account;
 use App\Models\Invite;
 use App\Models\User;
 use App\Models\Ticket;
+use App\Rules\CurrentPassword;
+
+
+use Validator;
+
 
 function console_log($output, $with_script_tags = true)
 {
@@ -101,6 +107,50 @@ class ProfileController extends Controller
             $account->description = $request['description'];
         }
 
+        $account->save();
+
+        if (Auth::user()->admin && Auth::id() != $id) return redirect()->route('admin.users');
+        return $this->show($account->id);
+    }
+
+    public function updatePassword(Request $request, $id) {
+
+        $account = Account::find($id);
+        
+        $this->authorize('update', $account);
+        
+        $passwordHash = $account->password;
+
+        $validate = $request->validate([
+            'oldPassword' => ['required', 'string', new CurrentPassword()],
+            'newPassword' => 'required|string|min:6',
+            'password_confirmation' => 'required|string|same:newPassword'
+        ]);
+
+        //if(!Hash::check($request->input('oldPassword'), $passwordHash)) {
+        //    if (Auth::user()->admin && Auth::id() != $id) return redirect()->route('admin.users');
+        //    return $this->showEditPage($account->id);
+        //}
+
+        $account->password = bcrypt($request['newPassword']);
+        $account->save();
+
+        if (Auth::user()->admin && Auth::id() != $id) return redirect()->route('admin.users');
+        return $this->show($account->id);
+    }
+
+    public function updateEmail(Request $request, $id) {
+
+        $account = Account::find($id);
+        
+        $this->authorize('update', $account);
+
+        $validate = $request->validate([
+            'newEmail' => 'required|string',
+            'confirmedEmail' => 'required|same:newEmail',
+        ]);
+
+        $account->email = $request['newEmail'];
         $account->save();
 
         if (Auth::user()->admin && Auth::id() != $id) return redirect()->route('admin.users');

@@ -1,9 +1,7 @@
 let date = new Date();
-var days_aux = document.querySelector('.days').childNodes;
-localStorage.setItem("days_aux", days_aux)
 
-console.log(">>>", days_aux)
 
+/*
 function check_element_in_array(array, elem) {
 
     for(let i=0; i<array.length; i++) {
@@ -26,6 +24,7 @@ function get_element_in_array(array, elem) {
 
     return null;
 }
+*/
 
 function renderCalendar() {
     
@@ -55,46 +54,17 @@ function renderCalendar() {
 
     for (let i = 1; i <= lastDay; i++) {
 
-        let day_aux = get_element_in_array(days_aux, i)
-        let splited_date = null
-
-        
-
-        if(day_aux != null) {
-            splited_date = day_aux.getAttribute("id")
-            if(splited_date != null) {
-                splited_date.split("-");
-            }
+    
+        let day = i
+        if (i < 10) {
+            day = '0' + i
         }
-
-        //console.log(">", day_aux)
-
-        //console.log(date)
-        //console.log(">", date.getFullYear())
-        //console.log(">", date.getMonth())
-
-        if(splited_date != null && splited_date[0] == date.getFullYear() && splited_date[1] == date.getMonth()) {
-            days += day_aux.outerHTML
+        //let id = i + "-" + date.getMonth()
+        if (i == date.getUTCDate()) {
+            days += `<div class="today border border-grey m-0 p-4">${day}</div>`
+            continue
         }
-        else {
-
-            let day = i
-
-            if (i < 10) {
-                day = '0' + i
-            }
-
-            //let id = i + "-" + date.getMonth()
-
-            if (i == date.getUTCDate()) {
-                days += `<div class="today border border-grey m-0 p-4">${day}</div>`
-                continue
-            }
-
-            days += `<div class="border border-grey m-0 p-4">${day}</div>`
-        }
-
-
+        days += `<div class="border border-grey m-0 p-4">${day}</div>`
         
     }
 
@@ -132,7 +102,6 @@ if (nextButton != null) {
     })
 }
 
-
 let eventsButton = document.querySelector('#see-invites-button')
 let invitesButton = document.querySelector('#see-events-button')
 let ticketsButton = document.querySelector('#see-tickets-button')
@@ -169,6 +138,9 @@ ticketsButton.addEventListener('click', () => {
     invitesButton.style.color = "grey"
     ticketsButton.style.color = "black"
 })
+
+
+
 
 
 function truncateText(selector, maxLength) {
