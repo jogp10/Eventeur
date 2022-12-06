@@ -11,6 +11,9 @@
 |
 */
 // Home
+
+use Illuminate\Routing\Route;
+
 Route::get('/', 'EventController@index')->name('home');
 
 // Authentication
@@ -68,5 +71,5 @@ Route::delete('api/invite/delete', 'InviteController@destroy')->name('deleteInvi
 Route::post('api/ticket', 'TicketController@store')->name('ticket');
 Route::delete('api/ticket/delete', 'TicketController@destroy')->name('deleteTicket');
 Route::post('api/comment', 'CommentController@store')->name('comment');
+Route::delete('api/comment/delete', 'CommentController@destroy')->name('deleteComment');
 Route::post('api/answer', 'CommentController@answer')->name('answer');
-
