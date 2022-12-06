@@ -7,6 +7,7 @@
     @if (Auth::user() && $account->id === Auth::user()->id)
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb mt-3 mb-2">
+        <span></span>
         <li class="breadcrumb-item active"><a href="{{ url('/profile', Auth::id()) }}" style="text-decoration: none; color: grey;">Profile</a></li>
         <li class="breadcrumb-item" aria-current="page" ><a href="#" style="text-decoration: none; color: black;">Settings</a></li>
       </ol>
