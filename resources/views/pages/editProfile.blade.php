@@ -6,26 +6,23 @@
 
     @if (Auth::user() && $account->id === Auth::user()->id)
     <nav aria-label="breadcrumb">
-      <ol class="breadcrumb mt-3 mb-2">
-        <span></span>
-        <li class="breadcrumb-item active"><a href="{{ url('/profile', Auth::id()) }}" style="text-decoration: none; color: grey;">Profile</a></li>
-        <li class="breadcrumb-item" aria-current="page" ><a href="#" style="text-decoration: none; color: black;">Settings</a></li>
-      </ol>
+        <ol class="breadcrumb mt-3 mb-2">
+            <span></span>
+            <li class="breadcrumb-item active"><a href="{{ url('/profile', Auth::id()) }}" style="text-decoration: none; color: grey;">Profile</a></li>
+            <li class="breadcrumb-item" aria-current="page"><a href="#" style="text-decoration: none; color: black;">Settings</a></li>
+        </ol>
     </nav>
     @endif
-
-    <h3 class="my-3">Settings</h3>
-
     <div class="row">
         <div class="col">
             <nav class="border-bottom border-3" style="--bs-breadcrumb-divider: '';" aria-label="breadcrumb">
                 <ol class="breadcrumb ps-5 mb-2">
                     <li class="breadcrumb-item me-2" aria-current="page"><a class="link-dark text-decoration-none" href="{{ url('/editProfile') }}">
                             <p class="m-0 fs-5">Settings</p>
-                        </button></li>
-                    <li class="breadcrumb-item active"><button id="security-button" type="button" class="btn btn-link text-decoration-none" style="color: grey">
+                        </a></li>
+                    <li class="breadcrumb-item active"><a id="security-button" type="button" class="link-dark text-decoration-none" style="color: grey">
                             <p class="m-0 fs-5">Security</p>
-                        </button></li>
+                        </a></li>
                 </ol>
             </nav>
         </div>
@@ -50,7 +47,7 @@
         </div>
     </div>
     <h5 class="ps-5 mt-5">Profile Settings</h5>
-    <form class="ps-5" method="POST" action="{{ route('editProfile', ['id' => $account->id]) }}">
+    <form class="ps-5 mb-3" method="POST" action="{{ route('editProfile', ['id' => $account->id]) }}">
         @method('PUT')
         @csrf
         <div class="row row-cols-2 border border-3 gx-0 py-4 px-3">
@@ -76,37 +73,9 @@
                 </div>
             </div>
         </div>
-        <h5 class="ps-5 mt-5">Profile Settings</h5>
-        <form class="ps-5" method="POST" action="{{ route('editProfile', ['id' => $account->id]) }}">
-            @method('PUT')
-            @csrf
-            <div class="row row-cols-2 border border-3 gx-0 py-4 px-3">
-                <div class="col-12 col-lg-2">
-                    <label for="name" class="form-label"><span class="align-middle">Name</span></label>
-                </div>
-                <div class="col-12 col-lg-10">
-                    <input type="name" name="name" id="inputName" class="form-control" aria-describedby="nameHelpBlock" value="{{$account->name}}">
-                    <div id="nameHelpBlock" class="form-text pe-2">Change your username</div>
-                </div>
-            </div>
-            <div class="row row-cols-3 border border-3 gx-0 py-4 px-3">
-                <div class="col-12 col-lg-2">
-                    <label for="inputUsername5" class="form-label"><span class="align-middle">Description</span></label>
-                </div>
-                <div class="col-12 col-lg-10">
-                    <div class="form-floating">
-                        <textarea class="form-control" name="description" id="floatingTextarea2" style="height: 300px">{{$account->description}}</textarea>
-                        <div id="nameHelpBlock" class="form-text pe-2">Must not exceed 200 characters</div>
-                        <div class="clearfix">
-                            <button type="submit" class="btn btn-primary btn-lg float-end">Save Settings</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </section>
-    <section id="settings" class="visually-hidden">
-        <div class="container-sm mt-5">
+        </section>
+        <section id="settings" class="visually-hidden">
+            <div class="container-sm mt-5">
                 <form class="ps-5" method="POST" action="{{ route('editProfilePassword', ['id' => $account->id]) }}">
                     @method('PUT')
                     @csrf
@@ -189,7 +158,7 @@
                     </div>
                 </form>
             </div>
-        </div>
-    </section>
+</div>
+</section>
 </div>
 @endsection
