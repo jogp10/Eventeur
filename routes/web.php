@@ -73,3 +73,4 @@ Route::delete('api/ticket/delete', 'TicketController@destroy')->name('deleteTick
 Route::post('api/comment', 'CommentController@store')->name('comment');
 Route::delete('api/comment/delete', 'CommentController@destroy')->name('deleteComment');
 Route::post('api/answer', 'CommentController@answer')->name('answer');
+Route::delete('api/answer/delete', 'CommentController@answerDestroy')->name('deleteAnswer');

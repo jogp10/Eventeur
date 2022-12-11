@@ -118,6 +118,25 @@ class CommentController extends Controller
         return redirect()->back()->with('message', 'Comment deleted successfuly.');
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Comment  $comment
+     * @return \Illuminate\Http\Response
+     */
+    public function answerDestroy(Request $request)
+    {
+        $id = $request->answer_id;
+        console_log($id);
+        $answer = Answer::find($id);
+
+        $this->authorize('delete', $answer);
+
+        $answer->delete();
+
+        return redirect()->back()->with('message', 'Answer deleted successfuly.');
+    }
+
     public function answer(Request $request)
     {
         $comment = Comment::find($request->comment_id);
