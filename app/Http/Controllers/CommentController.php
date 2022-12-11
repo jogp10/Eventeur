@@ -9,6 +9,16 @@ use App\Models\Comment;
 use App\Models\Event;
 use App\Models\Answer;
 
+function console_log($output, $with_script_tags = true)
+{
+    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
+        ');';
+    if ($with_script_tags) {
+        $js_code = '<script>' . $js_code . '</script>';
+    }
+    echo $js_code;
+}
+
 class CommentController extends Controller
 {
     /**
@@ -95,8 +105,10 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request)
     {
+        $id = $request->comment_id;
+        console_log($id);
         $comment = Comment::find($id);
 
         $this->authorize('delete', $comment);
@@ -106,7 +118,8 @@ class CommentController extends Controller
         return redirect()->back()->with('message', 'Comment deleted successfuly.');
     }
 
-    public function answer(Request $request) {
+    public function answer(Request $request)
+    {
         $comment = Comment::find($request->comment_id);
         $event = Event::find($comment->event_id);
 
