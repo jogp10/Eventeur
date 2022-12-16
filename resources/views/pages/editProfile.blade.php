@@ -10,16 +10,13 @@
 
     @if (Auth::user() && $account->id === Auth::user()->id)
     <nav aria-label="breadcrumb">
-      <ol class="breadcrumb mt-3 mb-2">
-        <span></span>
-        <li class="breadcrumb-item active"><a href="{{ url('/profile', Auth::id()) }}" style="text-decoration: none; color: grey;">Profile</a></li>
-        <li class="breadcrumb-item" aria-current="page" ><a href="#" style="text-decoration: none; color: black;">Settings</a></li>
-      </ol>
+        <ol class="breadcrumb mt-3 mb-2">
+            <span></span>
+            <li class="breadcrumb-item active"><a href="{{ url('/profile', Auth::id()) }}" style="text-decoration: none; color: grey;">Profile</a></li>
+            <li class="breadcrumb-item" aria-current="page"><a href="#" style="text-decoration: none; color: black;">Settings</a></li>
+        </ol>
     </nav>
     @endif
-
-    <h3 class="my-3">Settings</h3>
-
     <div class="row">
         <div class="col">
             <nav class="border-bottom border-3" style="--bs-breadcrumb-divider: '';" aria-label="breadcrumb">
@@ -191,7 +188,7 @@
               </div>
             </div>
         </div>
-    </div>
+    </section>
 </div>
 
 
