@@ -28,6 +28,7 @@ Route::put('profile/{id}/editPassword', 'ProfileController@updatePassword')->nam
 Route::put('profile/{id}/editEmail', 'ProfileController@updateEmail')->name('editProfileEmail');
 Route::get('profile/{id}/{invite_id}/accept_invitation', 'ProfileController@acceptInvitation')->name('AcceptInvitation');
 Route::get('profile/{id}/{invite_id}/ignore_invitation', 'ProfileController@ignoreInvitation')->name('IgnoreInvitation');
+Route::get('profile/{id}/delete', 'ProfileController@destroy')->name('Delete');
 
 //Event
 Route::get('event/{id}', 'EventController@show')->name('event.show');
