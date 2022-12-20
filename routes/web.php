@@ -31,6 +31,10 @@ Route::put('profile/{id}/editPassword', 'ProfileController@updatePassword')->nam
 Route::put('profile/{id}/editEmail', 'ProfileController@updateEmail')->name('editProfileEmail');
 Route::get('profile/{id}/{invite_id}/accept_invitation', 'ProfileController@acceptInvitation')->name('AcceptInvitation');
 Route::get('profile/{id}/{invite_id}/ignore_invitation', 'ProfileController@ignoreInvitation')->name('IgnoreInvitation');
+Route::get('profile/{id}/delete', 'ProfileController@destroy')->name('Delete');
+
+//Route::get('profile/{id}/myEvents', 'ProfileController@myEvents')->name('myEvents')
+//Route::get('profile/{id}/', 'ProfileController@myEvents')->name('myEvents')
 
 //Event
 Route::get('event/{id}', 'EventController@show')->name('event.show');
@@ -38,8 +42,13 @@ Route::get('event/{id}/event_settings', 'EventController@edit')->name('eventSett
 Route::get('event/{id}/event_participants', 'EventController@showParticipantsEvent')->name('eventParticipants');
 Route::post('event/{id}/event_settings', 'EventController@update')->name('editEvent');
 Route::delete('event/{id}/delete_event', 'EventController@destroy')->name('deleteEvent');
+Route::get('event/{id}/create_poll', 'EventController@createPoll')->name('createPoll');
 Route::get('create_event', 'EventController@create')->name('createEvent');
 Route::put('create_event', 'EventController@store')->name('storeEvent');
+Route::post('event/{id}/answer_poll','EventController@votePoll')->name('votePoll');
+
+
+
 
 //Comment
 

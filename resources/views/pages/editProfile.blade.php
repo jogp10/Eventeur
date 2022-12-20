@@ -1,8 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="liveAlertPlaceholder" role="alert"></div>
-<div class="container-sm">
+@if( Session::has('message'))
+    <div class="alert alert-success" role="alert">
+      {{ Session::get('message')}}
+    </div>
+@endif
+<div class="container-sm position-relative">
 
     @if (Auth::user() && $account->id === Auth::user()->id)
     <nav aria-label="breadcrumb">
@@ -16,13 +20,12 @@
     <div class="row">
         <div class="col">
             <nav class="border-bottom border-3" style="--bs-breadcrumb-divider: '';" aria-label="breadcrumb">
-                <ol class="breadcrumb ps-5 mb-2">
-                    <li class="breadcrumb-item me-2" aria-current="page"><a class="link-dark text-decoration-none" href="{{ url('/editProfile') }}">
-                            <p class="m-0 fs-5">Settings</p>
-                        </a></li>
-                    <li class="breadcrumb-item active"><a id="security-button" type="button" class="link-dark text-decoration-none" style="color: grey">
-                            <p class="m-0 fs-5">Security</p>
-                        </a></li>
+                <ol class="breadcrumb ps-5">
+                    <li class="breadcrumb-item me-2" aria-current="page"><button id="settings-button" type="button" class="btn btn-link text-decoration-none" style="color: black">
+                    <span class="m-0 p-0 fs-5">Settings</span></button></li>
+                    <li class="breadcrumb-item active"><button id="security-button" type="button" class="btn btn-link text-decoration-none" style="color: grey">
+                            <span class="m-0 p-0 fs-5">Security</span>
+                        </button></li>
                 </ol>
             </nav>
         </div>
@@ -47,118 +50,10 @@
         </div>
     </div>
     <h5 class="ps-5 mt-5">Profile Settings</h5>
-    <form class="ps-5 mb-3" method="POST" action="{{ route('editProfile', ['id' => $account->id]) }}">
-        @method('PUT')
-        @csrf
-        <div class="row row-cols-2 border border-3 gx-0 py-4 px-3">
-            <div class="col-12 col-lg-2">
-                <label for="name" class="form-label"><span class="align-middle">Name</span></label>
-            </div>
-            <div class="col-12 col-lg-10">
-                <input type="name" name="name" id="inputName" class="form-control" aria-describedby="nameHelpBlock" value="{{$account->name}}">
-                <div id="nameHelpBlock" class="form-text pe-2">Change your password</div>
-            </div>
-        </div>
-        <div class="row row-cols-3 border border-3 gx-0 py-4 px-3">
-            <div class="col-12 col-lg-2">
-                <label for="inputUsername5" class="form-label"><span class="align-middle">Description</span></label>
-            </div>
-            <div class="col-12 col-lg-10">
-                <div class="form-floating">
-                    <textarea class="form-control" name="description" id="floatingTextarea2" style="height: 300px">{{$account->description}}</textarea>
-                    <div id="nameHelpBlock" class="form-text pe-2">Must not exceed 200 characters</div>
-                    <div class="clearfix">
-                        <button type="submit" class="btn btn-primary btn-lg float-end">Save Settings</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        </section>
-        <section id="settings" class="visually-hidden">
-            <div class="container-sm mt-5">
-                <form class="ps-5" method="POST" action="{{ route('editProfilePassword', ['id' => $account->id]) }}">
-                    @method('PUT')
-                    @csrf
-                    <div class="row row-cols-2 border border-3 gx-0 py-4 px-3">
-                        <div class="col-12 col-lg-2">
-                            <label for="password" class="form-label"><span class="align-middle">Old Password</span></label>
-                        </div>
-                        <div class="col-12 col-lg-10 pb-3">
-                            <input type="password" name="oldPassword" id="inputName" class="form-control" aria-describedby="nameHelpBlock">
-                            @if ($errors->has('oldPassword'))
-                            <span class="error">
-                                {{ $errors->first('oldPassword') }}
-                            </span>
-                            @endif
-                        </div>
-                        <div class="col-12 col-lg-2">
-                            <label for="password" class="form-label"><span class="align-middle">New Password</span></label>
-                        </div>
-                        <div class="col-12 col-lg-10 pb-3">
-                            <input type="password" name="newPassword" id="inputName" class="form-control" aria-describedby="nameHelpBlock">
-                            @if ($errors->has('newPassword'))
-                            <span class="error">
-                                {{ $errors->first('newPassword') }}
-                            </span>
-                            @endif
-                        </div>
-                        <div class="col-12 col-lg-2">
-                            <label for="password" class="form-label"><span class="align-middle">Confirm Password</span></label>
-                        </div>
-                        <div class="col-12 col-lg-10">
-                            <input type="password" name="password_confirmation" id="inputName" class="form-control" aria-describedby="nameHelpBlock">
-                            @if ($errors->has('password_confirmation'))
-                            <span class="error">
-                                {{ $errors->first('password_confirmation') }}
-                            </span>
-                            @endif
-                        </div>
-                        <div class="col-12 mt-2 ">
-                            <div class="form-floating">
-                                <div class="clearfix">
-                                    <button type="submit" class="btn btn-primary liveAlertBtn btn-lg float-end">Save Settings</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <form class="ps-5" method="POST" action="{{ route('editProfileEmail', ['id' => $account->id]) }}">
-                    @method('PUT')
-                    @csrf
-                    <div class="row row-cols-2 border border-3 gx-0 py-4 px-3">
-                        <div class="col-12 col-lg-3">
-                            <label for="email" class="form-label"><span class="align-middle">New Email Address</span></label>
-                        </div>
-                        <div class="col-12 col-lg-9 pb-3">
-                            <input type="email" name="newEmail" id="inputName" class="form-control" aria-describedby="nameHelpBlock">
-                            @if ($errors->has('newEmail'))
-                            <span class="error">
-                                {{ $errors->first('newEmail') }}
-                            </span>
-                            @endif
-                        </div>
-                        <div class="col-12 col-lg-3">
-                            <label for="email" class="form-label"><span class="align-middle">Confirm Email Address</span></label>
-                        </div>
-                        <div class="col-12 col-lg-9">
-                            <input type="email" name="confirmedEmail" id="inputName" class="form-control" aria-describedby="nameHelpBlock">
-                            @if ($errors->has('confirmedEmail'))
-                            <span class="error">
-                                {{ $errors->first('confirmedEmail') }}
-                            </span>
-                            @endif
-                        </div>
-                        <div class="col-12 mt-2">
-                            <div class="form-floating">
-                                <div class="clearfix">
-                                    <button type="submit" class="btn btn-primary btn-lg liveAlertBtn float-end">Save Settings</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
+    @include('partials.profileSettings')
+     
+    @include('partials.securitySection')
 </div>
-</section>
-</div>
+
+
 @endsection

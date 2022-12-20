@@ -1,7 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="liveAlertPlaceholder" role="alert"></div>
+@if( Session::has('message'))
+    <div class="alert alert-success" role="alert">
+      {{ Session::get('message')}}
+    </div>
+@endif
 <div class="container">
 
     @if (Auth::user() && $account->id === Auth::user()->id)
@@ -84,7 +88,6 @@
                     </div>
                     <div class="days d-flex flex-wrap m-0 p-4">
                         {{--@foreach($account->user->tickets as $ticket)
-                            <?php echo $ticket->event->get_start_date_day() ?>
                             <div id="{{$ticket->event->start_date}}" class="border border-grey m-0 p-4" style="color: blue;">{{$ticket->event->get_start_date_day()}}</div>
                         @endforeach--}}
                     </div>

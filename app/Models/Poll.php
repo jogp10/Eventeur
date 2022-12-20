@@ -13,7 +13,17 @@ class Poll extends Model
         'event_id', 'question', 'created_at', 'updated_at'
     ];
 
+    public $usersThatVoted = array();
+
     public function event() { return $this->belongsTo(Event::class); }
 
     public function pollOptions() { return $this->hasMany(PollOption::class); }
+
+    public function addUserToVotedList($user) {
+        $this->usersThatVoted[] = $user;
+    }
+
+    public function checkIfUserVoted($user) {
+        return in_array($user, $this->usersThatVoted);
+    }
 }
