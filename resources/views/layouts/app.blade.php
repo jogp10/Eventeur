@@ -49,7 +49,11 @@
     </div>
     @endif
     <section id="content">
+      @if(Auth::check() && Auth::user()->isBanned())
+      @include("partials.banned")
+      @else
       @yield('content')
+      @endif
     </section>
   </main>
   @include("partials.footer")

@@ -20,4 +20,16 @@ class Account extends Authenticatable
 
     public function user() { return $this->hasOne(User::class); }
     public function admin() { return $this->hasOne(Admin::class); }
+
+    public function isBanned()
+    {
+        $bans = Ban::where('user_id', $this->id)->get();
+        if($bans->count() == 0) return false;
+        foreach ($bans as $ban) {
+            if ($ban->expired_at == null) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
