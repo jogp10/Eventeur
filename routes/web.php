@@ -33,14 +33,22 @@ Route::get('profile/{id}/{invite_id}/accept_invitation', 'ProfileController@acce
 Route::get('profile/{id}/{invite_id}/ignore_invitation', 'ProfileController@ignoreInvitation')->name('IgnoreInvitation');
 Route::get('profile/{id}/delete', 'ProfileController@destroy')->name('Delete');
 
+//Route::get('profile/{id}/myEvents', 'ProfileController@myEvents')->name('myEvents')
+//Route::get('profile/{id}/', 'ProfileController@myEvents')->name('myEvents')
+
 //Event
 Route::get('event/{id}', 'EventController@show')->name('event.show');
 Route::get('event/{id}/event_settings', 'EventController@edit')->name('eventSettings');
 Route::get('event/{id}/event_participants', 'EventController@showParticipantsEvent')->name('eventParticipants');
 Route::post('event/{id}/event_settings', 'EventController@update')->name('editEvent');
 Route::delete('event/{id}/delete_event', 'EventController@destroy')->name('deleteEvent');
+Route::get('event/{id}/create_poll', 'EventController@createPoll')->name('createPoll');
 Route::get('create_event', 'EventController@create')->name('createEvent');
 Route::put('create_event', 'EventController@store')->name('storeEvent');
+Route::post('event/{id}/answer_poll','EventController@votePoll')->name('votePoll');
+
+
+
 
 //Comment
 
@@ -64,6 +72,7 @@ Route::delete('admin/users/{id}/delete', 'ProfileController@destroy')->name('adm
 //Actions
 Route::get('search', 'SearchController@searchEvent');
 Route::get('api/searchuser', 'SearchController@showUser');
+Route::get('api/searchattendee', 'SearchController@showAttendee');
 Route::post('vote', 'VoteController@create')->name('vote');
 
 //API

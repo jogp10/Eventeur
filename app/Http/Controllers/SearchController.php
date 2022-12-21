@@ -42,22 +42,46 @@ class SearchController extends Controller
 
     public function showUser(Request $request)
     {
-        if ($_GET['search']!= '') {
+        if ($_GET['search'] != '') {
             $users = Account::whereRaw('LOWER(name) LIKE ? ', ['%' . strtolower($_GET['search']) . '%'])
-                            ->where('id', '<>', 1)
-                            ->get();
+                ->where('id', '<>', 1)
+                ->get();
         } else {
             $users = Account::All();
             $users->shift();
         }
-        foreach($users as $user) {
+        foreach ($users as $user) {
             $user->user;
             $user->admin;
-            if($user->admin)$user->admin->bans;
+            if ($user->admin) $user->admin->bans;
             $user->user->reports;
             $user->user->events;
             $user->updated_at;
         }
         return $users;
+    }
+
+    public function showAttendee(Request $request)
+    {
+        if ($_GET['search'] != '') {
+            $users = Account::whereRaw('LOWER(name) LIKE ? ', ['%' . strtolower($_GET['search']) . '%'])
+                ->where('id', '<>', 1)
+                ->get();
+        } else {
+            $users = Account::All();
+            $users->shift();
+        }
+        $attendees = array();
+        foreach ($users as $user) {
+            $user->user;
+            $user->admin;
+            if ($user->admin) $user->admin->bans;
+            $user->user->reports;
+            $user->user->events;
+            $user->updated_at;
+            if ($user->user->tickets->where('event_id', $_GET['event_id'])->count() > 0)
+                $attendees[] = $user;
+        }
+        return $attendees;
     }
 }

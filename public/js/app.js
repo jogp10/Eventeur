@@ -1,19 +1,26 @@
 function addEventListeners() {
   let searchCard = document.querySelector('#searchuser_invite');
   if (searchCard != null) {
-    searchCard.addEventListener('load', sendSearchUserInviteRequest);
+    window.addEventListener('load', sendSearchUserInviteRequest);
     searchCard.addEventListener('input', sendSearchUserInviteRequest);
   }
 
   let searchCard2 = document.querySelector('#searchuser_ticket');
   if (searchCard2 != null) {
-    searchCard2.addEventListener('load', sendSearchUserTicketRequest);
+    window.addEventListener('load', sendSearchUserTicketRequest);
     searchCard2.addEventListener('input', sendSearchUserTicketRequest);
   }
 
   let searchCard3 = document.querySelector('#searchusers');
   if (searchCard3 != null) {
+    window.addEventListener('load', sendSearchUsersRequest);
     searchCard3.addEventListener('input', sendSearchUsersRequest);
+  }
+
+  let searchCard4 = document.querySelector('#searchattendee');
+  if (searchCard4 != null) {
+    window.addEventListener('load', sendSearchAttendeesRequest);
+    searchCard4.addEventListener('input', sendSearchAttendeesRequest);
   }
 
   let submitInvites = document.getElementById("sendInvite");
@@ -45,27 +52,36 @@ function sendAjaxRequest(method, url, data, handler) {
 }
 
 function sendSearchUserInviteRequest() {
-  let search = this.value;
+  let search;
+  if (this.value) search = this.value;
+  else search = "";
 
-  sendAjaxRequest('get', '/api/searchuser?search=' + search, {search:search}, searchUserInviteHandler);
+  sendAjaxRequest('get', '/api/searchuser?search=' + search, { search: search }, searchUserInviteHandler);
 }
 
 function sendSearchUserTicketRequest() {
-  let search = this.value;
+  let search;
+  if (this.value) search = this.value;
+  else search = "";
 
-  sendAjaxRequest('get', '/api/searchuser?search=' + search, {search:search}, searchUserTicketHandler);
+  sendAjaxRequest('get', '/api/searchuser?search=' + search, { search: search }, searchUserTicketHandler);
 }
 
 function sendSearchUsersRequest() {
-  let search = this.value;
+  let search;
+  if (this.value) search = this.value;
+  else search = "";
 
-  sendAjaxRequest('get', '/api/searchuser?search=' + search, {search:search}, searchUsersHandler);
+  sendAjaxRequest('get', '/api/searchuser?search=' + search, { search: search }, searchUsersHandler);
 }
 
-function sendSearchUsersRequest() {
-  let search = this.value;
+function sendSearchAttendeesRequest() {
+  let search;
+  if (this.value) search = this.value;
+  else search = "";
+  const event_id = document.querySelector(".event").id;
 
-  sendAjaxRequest('get', '/api/searchuser?search=' + search, {search:search}, searchUsersHandler);
+  sendAjaxRequest('get', '/api/searchattendee?search=' + search + '&event_id=' + event_id, { search: search, }, searchAttendeesHandler);
 }
 
 function sendInvitesRequest(event) {
@@ -79,7 +95,7 @@ function sendInvitesRequest(event) {
   }
 
   if (checkedArray.length > 0)
-    sendAjaxRequest('post', '/api/invite/', { ids: checkedArray, event_id:event_id }, sendInviteHandler);
+    sendAjaxRequest('post', '/api/invite/', { ids: checkedArray, event_id: event_id }, sendInviteHandler);
 }
 
 function sendTicketsRequest(event) {
@@ -93,10 +109,34 @@ function sendTicketsRequest(event) {
   }
 
   if (checkedArray.length > 0)
-    sendAjaxRequest('post', '/api/ticket/', { ids: checkedArray, event_id:event_id }, sendTicketHandler);
+    sendAjaxRequest('post', '/api/ticket/', { ids: checkedArray, event_id: event_id }, sendTicketHandler);
 }
 
 function searchUserInviteHandler() {
+  if (this.status != 200) window.location = '/';
+
+  let users = JSON.parse(this.responseText);
+  let new_rows = [];
+
+  for (let i = 0; i < users.length; i++) {
+    new_rows += createRow(users[i]);
+  }
+
+  let table = document.querySelector('#inviteModal tbody');
+
+  if (users.length == 0) {
+    table.innerHTML = '<tr><td colspan="8">No users found</td></tr>';
+  } else {
+    table.innerHTML = new_rows;
+  }
+
+  var tr = document.getElementsByTagName("tr");
+  for (var i = 0; i < tr.length; i++) {
+    tr[i].addEventListener('click', checks, false);
+  }
+}
+
+function searchAttendeesHandler() {
   if (this.status != 200) window.location = '/';
 
   let users = JSON.parse(this.responseText);
@@ -107,17 +147,12 @@ function searchUserInviteHandler() {
     new_rows += createRow(users[i]);
   }
 
-  let table = document.querySelector('#inviteModal tbody');
+  let table = document.querySelector('#attendeeModal tbody');
 
   if (users.length == 0) {
-    table.innerHTML = '<tr><td colspan="3">No users found</td></tr>';
+    table.innerHTML = '<tr><td colspan="8">No users found</td></tr>';
   } else {
     table.innerHTML = new_rows;
-  }
-
-  var tr = document.getElementsByTagName("tr");
-  for (var i = 0; i < tr.length; i++) {
-    tr[i].addEventListener('click', checks, false);
   }
 }
 
@@ -231,7 +266,7 @@ function createRow(user) {
 function createUserRow(user, url) {
   const csrf = document.querySelector('meta[name="csrf-token"]').content;
   user['updated_at'] = user['updated_at'].substring(0, 10) + ' ' + user['updated_at'].substring(11, 19);
-  
+
   let htmlView = '';
   htmlView += '<div class="card mb-3" style="max-width: 540px;">';
   htmlView += '  <div class="row g-0">';
@@ -247,7 +282,7 @@ function createUserRow(user, url) {
   htmlView += '      </div>';
   htmlView += '      <div class="col-md-4 d-flex flex-column justify-content-center">';
   htmlView += '        <p>Reports:' + user['user']['reports'].length + '</p>';
-  if (user['admin'] != null) {htmlView += '        <p>Bans:' + user['admin']['bans'].length + '</p>';};  
+  if (user['admin'] != null) { htmlView += '        <p>Bans:' + user['admin']['bans'].length + '</p>'; };
   htmlView += '      <form class="pb-1" action="' + url + '/admin/users/' + user['id'] + '/edit" method="GET">'
   htmlView += '         <button type="submit" class="btn btn-warning">Edit</button></form>'
   htmlView += '      <form class="pb-1" action="' + url + '/admin/users/' + user['id'] + '/delete" method="POST">'
