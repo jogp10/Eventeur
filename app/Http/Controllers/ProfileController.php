@@ -191,6 +191,6 @@ class ProfileController extends Controller
         $user->delete();
 
         if (Auth::user()->admin && Auth::user()->id != $id) return redirect()->route('admin.users');
-        return redirect()->route('home');
+        return redirect()->route('home')->with('message','Your account was deleted successfully!');
     }
 }
