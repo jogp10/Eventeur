@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Account;
 use App\Models\Event;
+use App\Models\Ban;
 
 class SearchController extends Controller
 {
@@ -57,6 +58,13 @@ class SearchController extends Controller
             $user->user->reports;
             $user->user->events;
             $user->updated_at;
+            $bans = Ban::where('user_id', $user->id)->get();
+            foreach ($bans as $ban) {
+                if ($ban->expired_at == null) {
+                    $user->banned = true;
+                    break;
+                }
+            }
         }
         return $users;
     }

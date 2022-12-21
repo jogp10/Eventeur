@@ -135,6 +135,9 @@ class EventController extends Controller
     public function createPoll(Request $request, $id) {
 
         $event = Event::find($id);
+
+        $this->authorize('update', $event);
+
         $request = $request->toArray();
         $pollOptions = array();
     

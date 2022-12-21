@@ -186,7 +186,6 @@ function searchUsersHandler() {
 
   let users = JSON.parse(this.responseText);
   let new_rows = [];
-  console.log(users);
 
   let url = window.location.href;
   url = url.substring(0, url.indexOf('/'));
@@ -281,10 +280,21 @@ function createUserRow(user, url) {
   htmlView += '        <p class="card-text"><small class="text-muted">Last updated ' + user['updated_at'] + '</small></p>';
   htmlView += '      </div>';
   htmlView += '      <div class="col-md-4 d-flex flex-column justify-content-center">';
-  htmlView += '        <p>Reports:' + user['user']['reports'].length + '</p>';
-  if (user['admin'] != null) { htmlView += '        <p>Bans:' + user['admin']['bans'].length + '</p>'; };
+  htmlView += '        <p>Reports: ' + user['user']['reports'].length + '</p>';
+  if (user['admin'] != null) { htmlView += '        <p>Bans: ' + user['admin']['bans'].length + '</p>'; };
   htmlView += '      <form class="pb-1" action="' + url + '/admin/users/' + user['id'] + '/edit" method="GET">'
   htmlView += '         <button type="submit" class="btn btn-warning">Edit</button></form>'
+  if (user['banned'] != null) {
+    htmlView += '      <form class="pb-1" action="' + url + '/admin/users/' + user['id'] + '/unban" method="POST">'
+    htmlView += '<input type="hidden" name="_token" value="' + csrf + '">'
+    htmlView += '<input type="hidden" name="user_id" value="' + user['id'] + '">'
+    htmlView += '         <button type="submit" class="btn btn-danger">Unban</button></form>'
+  } else {
+    htmlView += '      <form class="pb-1" action="' + url + '/admin/users/' + user['id'] + '/ban" method="POST">'
+    htmlView += '<input type="hidden" name="_token" value="' + csrf + '">'
+    htmlView += '<input type="hidden" name="user_id" value="' + user['id'] + '">'
+    htmlView += '         <button type="submit" class="btn btn-danger">Ban</button></form>'
+  }
   htmlView += '      <form class="pb-1" action="' + url + '/admin/users/' + user['id'] + '/delete" method="POST">'
   htmlView += '<input type="hidden" name="_method" value="DELETE">'
   htmlView += '<input type="hidden" name="_token" value="' + csrf + '">'

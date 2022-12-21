@@ -245,9 +245,10 @@ CREATE TABLE bans (
     id              SERIAL PRIMARY KEY,
     admin_id        INTEGER NOT NULL,
     user_id         INTEGER DEFAULT 1,
-    ban_type        INTEGER NOT NULL,
+    reason          TEXT NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    expired_at  TIMESTAMP,
     CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 

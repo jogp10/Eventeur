@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 
 use App\Models\Account;
@@ -12,8 +11,7 @@ use App\Models\Invite;
 use App\Models\User;
 use App\Models\Ticket;
 use App\Rules\CurrentPassword;
-
-
+use App\Models\Ban;
 use Validator;
 
 
@@ -31,6 +29,18 @@ class ProfileController extends Controller
 
         $users = Account::all();
         $users->shift();
+
+        // Check if users are banned
+
+        foreach ($users as $user) {
+            $bans = Ban::where('user_id', $user->id)->get();
+            foreach ($bans as $ban) {
+                if ($ban->expired_at == null) {
+                    $user->banned = true;
+                    break;
+                }
+            }
+        }
 
         if (Auth::user()->admin) return view('pages.admin.users', ['users' => $users]);
         return redirect()->route('home');
@@ -103,12 +113,13 @@ class ProfileController extends Controller
         return $this->show($account->id);
     }
 
-    public function updatePassword(Request $request, $id) {
+    public function updatePassword(Request $request, $id)
+    {
 
         $account = Account::find($id);
-        
+
         $this->authorize('update', $account);
-        
+
         $passwordHash = $account->password;
 
         $validate = $request->validate([
@@ -124,10 +135,11 @@ class ProfileController extends Controller
         return $this->show($account->id);
     }
 
-    public function updateEmail(Request $request, $id) {
+    public function updateEmail(Request $request, $id)
+    {
 
         $account = Account::find($id);
-        
+
         $this->authorize('update', $account);
 
         $validator = Validator::make($request->all(), [
@@ -137,24 +149,25 @@ class ProfileController extends Controller
 
         if ($validator->fails()) {
             if (Auth::user()->admin && Auth::id() != $id) return redirect()->route('admin.users');
-            return Redirect::to(`/profile/$account->id/edit`)->with('error','Error');
+            return Redirect::to(`/profile/$account->id/edit`)->with('error', 'Error');
         }
 
         $account->email = $request['newEmail'];
         $account->save();
 
         if (Auth::user()->admin && Auth::id() != $id) return redirect()->route('admin.users');
-        return Redirect::to(`/profile/$account->id`)->with('message','Successful');
+        return Redirect::to(`/profile/$account->id`)->with('message', 'Successful');
     }
 
-    public function acceptInvitation($id, $invite_id) {
+    public function acceptInvitation($id, $invite_id)
+    {
 
         $user = User::find($id);
         $invite = Invite::find($invite_id);
         $event = $invite->event;
 
         $this->authorize('delete', $invite);
-        
+
         $ticket = Ticket::create([
             'event_id' => $event->id,
             'user_id' => $user->id,
@@ -165,7 +178,8 @@ class ProfileController extends Controller
         return redirect()->route('profile', $id);
     }
 
-    public function ignoreInvitation($id, $invite_id) {
+    public function ignoreInvitation($id, $invite_id)
+    {
 
         $invite = Invite::find($invite_id);
 

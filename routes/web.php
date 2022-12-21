@@ -68,6 +68,8 @@ Route::get('admin/users/{id}', 'ProfileController@show')->name('admin.user');
 Route::get('admin/users/{id}/edit', 'ProfileController@showEditPage')->name('admin.editUser');
 Route::put('admin/users/{id}/edit', 'ProfileController@update')->name('admin.updateUser');
 Route::delete('admin/users/{id}/delete', 'ProfileController@destroy')->name('admin.deleteUser');
+Route::post('admin/users/{id}/ban', 'BanController@store')->name('admin.banUser');
+Route::post('admin/users/{id}/unban', 'BanController@update')->name('admin.unbanUser');
 
 //Actions
 Route::get('search', 'SearchController@searchEvent');

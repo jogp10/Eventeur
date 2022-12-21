@@ -17,6 +17,17 @@
                 <form class="pb-1" action="{{ url('/admin/users/' . $user->id . '/edit') }}" method="GET">
                     <button type="submit" class="btn btn-warning">Edit</button>
                 </form>
+                @if ($user->banned)
+                <form class="pb-1" action="{{ url('/admin/users/' . $user->id . '/unban') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-danger">Unban</button>
+                </form>
+                @else
+                <form class="pb-1" action="{{ url('/admin/users/' . $user->id . '/ban') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-danger">Ban</button>
+                </form>
+                @endif
                 <form class="pb-1" action="{{ url('/admin/users/' . $user->id . '/delete') }}" method="POST">
                     @csrf
                     @method('DELETE')
