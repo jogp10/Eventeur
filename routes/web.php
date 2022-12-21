@@ -63,6 +63,7 @@ Route::delete('admin/users/{id}/delete', 'ProfileController@destroy')->name('adm
 //Actions
 Route::get('search', 'SearchController@searchEvent');
 Route::get('api/searchuser', 'SearchController@showUser');
+Route::get('api/searchattendee', 'SearchController@showAttendee');
 Route::post('vote', 'VoteController@create')->name('vote');
 
 //API
