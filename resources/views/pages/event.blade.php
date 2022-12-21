@@ -26,6 +26,9 @@
         </button>
         <h4 class="text-muted pb-3">{{ strtok($event->description, '.') }}</h4>
         <p class="text-break" style="max-width: 700px"> {{ substr($event->description, strpos($event->description, '.')+2) }}</p>
+        @if(Auth::check() && Auth::id() === $event->manager->id)
+        <button id="add-poll" type="button" class="btn btn-primary w-25">Create Poll</button>
+        @endif
       </div>
       <div class="p-3 justify-content-center d-flex flex-column">
         <img src="/images/community-events.jpeg" class="rounded img-fluid m-0 p-0" height="300" width="400" alt="...">
@@ -115,7 +118,7 @@
       @endcan
     </div>
   </div>
-  <div id="comments" class="m-3 " style="margin-left: 7rem !important">
+  <div id="comments" class="m-3 position-relative" style="margin-left: 7rem !important">
     @can('create', [App\Models\Comment::class, $event])
     <div id="comment_form" class="textarea-container comment-form m-2 d-none">
       <form method="POST" action="{{ route( 'comment' ) }}" class="d-flex flex-column align-items-end">
@@ -127,7 +130,23 @@
     </div>
     @endcan
     @each('partials.comment', $event->comments, 'comment', )
+
+    <div id="poll-form" class="container justify-content-center" style="text-align: center;">
+      <form id="form-poll-event" class="w-25" method="GET" action="{{ route('createPoll', ['id' => $event->id]) }}" style="display: inline-block;">
+      @csrf
+      </form>
+      <button class="invisible" id="add-option" type="button">+ Option</button>
+    </div>
+
+    <div class="container">
+      <div class="row-cols-2">
+        @each('partials.poll', $event->polls, 'poll')
+      </div>
+    </div>
+
   </div>
+
+
 </div>
 <div class="modal fade" tabindex="-1" id="inviteModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -171,21 +190,9 @@
           </button>
         </form>
       </div>
-      <div class="modal-body p-1 d-flex flex-column flex-1" style="overflow: auto; max-height:400px">
-        <div class="d-flex flex-column" style="min-height:min-content">
-          <div class="userCard d-flex flex-row p-0 pb-1">
-            <table class="w-100">
-              <tbody>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer p-0">
-        <button id="sendTicket" type="button" class="btn btn-primary align-self-end m-1" data-bs-dismiss="modal">Send Tickets</button>
-      </div>
     </div>
   </div>
+
 </div>
 <div class="modal fade" tabindex="-1" id="attendeeModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -214,6 +221,8 @@
   </div>
 </div>
 
+
+
 <style>
   .textarea-container {
     position: relative;
@@ -231,5 +240,16 @@
     right: 1%;
     transform: translateY(-110%);
   }
+
+  /*
+  .poll-submit-button {
+    background-color: green;
+    border-radius: 50%;
+  }
+  */
+
 </style>
+
+
+
 @endsection

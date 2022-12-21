@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 
 use App\Models\Account;
 use App\Models\Invite;
@@ -116,11 +117,6 @@ class ProfileController extends Controller
             'password_confirmation' => 'required|string|same:newPassword'
         ]);
 
-        //if(!Hash::check($request->input('oldPassword'), $passwordHash)) {
-        //    if (Auth::user()->admin && Auth::id() != $id) return redirect()->route('admin.users');
-        //    return $this->showEditPage($account->id);
-        //}
-
         $account->password = bcrypt($request['newPassword']);
         $account->save();
 
@@ -134,16 +130,21 @@ class ProfileController extends Controller
         
         $this->authorize('update', $account);
 
-        $validate = $request->validate([
+        $validator = Validator::make($request->all(), [
             'newEmail' => 'required|string',
             'confirmedEmail' => 'required|same:newEmail',
         ]);
+
+        if ($validator->fails()) {
+            if (Auth::user()->admin && Auth::id() != $id) return redirect()->route('admin.users');
+            return Redirect::to(`/profile/$account->id/edit`)->with('error','Error');
+        }
 
         $account->email = $request['newEmail'];
         $account->save();
 
         if (Auth::user()->admin && Auth::id() != $id) return redirect()->route('admin.users');
-        return $this->show($account->id);
+        return Redirect::to(`/profile/$account->id`)->with('message','Successful');
     }
 
     public function acceptInvitation($id, $invite_id) {
