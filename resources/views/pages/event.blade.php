@@ -133,7 +133,7 @@
 
     <div id="poll-form" class="container justify-content-center" style="text-align: center;">
       <form id="form-poll-event" class="w-25" method="GET" action="{{ route('createPoll', ['id' => $event->id]) }}" style="display: inline-block;">
-      @csrf
+        @csrf
       </form>
       <button class="invisible" id="add-option" type="button">+ Option</button>
     </div>
@@ -190,8 +190,22 @@
           </button>
         </form>
       </div>
+      <div class="modal-body p-1 d-flex flex-column flex-1" style="overflow: auto; max-height:400px">
+        <div class="d-flex flex-column" style="min-height:min-content">
+          <div class="userCard d-flex flex-row p-0 pb-1">
+            <table class="w-100">
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer p-0">
+        <button id="sendTicket" type="button" class="btn btn-primary align-self-end m-1" data-bs-dismiss="modal">Send Invites</button>
+      </div>
     </div>
   </div>
+</div>
 
 </div>
 <div class="modal fade" tabindex="-1" id="attendeeModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -247,7 +261,6 @@
     border-radius: 50%;
   }
   */
-
 </style>
 
 

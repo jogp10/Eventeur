@@ -21,35 +21,37 @@ let formElle = `<div class="row mb-3">
                 </div>`
 
 
-addPollButton.addEventListener('click', () => {
-    if(cont % 2 == 0) {
-        changeFormElement()
-    }else {
-        let addOptionButton = document.getElementById('add-option')
-        addOptionButton.classList.add('invisible')
-        pollFormElle.innerHTML = ""
-    }
-    cont++
-})
+if (addPollButton !== null) {
+    addPollButton.addEventListener('click', () => {
+        if (cont % 2 == 0) {
+            changeFormElement()
+        } else {
+            let addOptionButton = document.getElementById('add-option')
+            addOptionButton.classList.add('invisible')
+            pollFormElle.innerHTML = ""
+        }
+        cont++
+    })
+}
 
 function createPoll(url) {
-    document.location.href=url
+    document.location.href = url
 }
 
 function changeFormElement() {
 
     pollFormElle.innerHTML = `${formElle}<button id="poll-submit-button" type=submit class="float-end">submit</button>`
-    
+
 
     let addOptionButton = document.getElementById('add-option')
     addOptionButton.classList.remove('invisible')
     addOptionButton.addEventListener('click', addOption)
-    
+
 }
 
 function addOption() {
 
-    if(numOptions <= 6) {
+    if (numOptions <= 6) {
         formElle += `<div class="row mb-3">
                     <label for="option ${numOptions}" class="col-3 col-form-label">Option ${numOptions}</label>
                     <div class="col-9">
@@ -57,9 +59,9 @@ function addOption() {
                     </div>
                 </div>`
     }
-    
+
     numOptions++
-    
+
     changeFormElement()
 }
 

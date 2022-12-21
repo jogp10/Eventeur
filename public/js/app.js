@@ -55,7 +55,6 @@ function sendSearchUserInviteRequest() {
   let search;
   if (this.value) search = this.value;
   else search = "";
-  console.log(search);
 
   sendAjaxRequest('get', '/api/searchuser?search=' + search, { search: search }, searchUserInviteHandler);
 }
@@ -64,7 +63,6 @@ function sendSearchUserTicketRequest() {
   let search;
   if (this.value) search = this.value;
   else search = "";
-  console.log(search);
 
   sendAjaxRequest('get', '/api/searchuser?search=' + search, { search: search }, searchUserTicketHandler);
 }

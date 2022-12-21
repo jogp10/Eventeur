@@ -3,8 +3,6 @@ let profilePageSecuritysButton = document.getElementById('security-button')
 let editProfileSection = document.getElementById("settings")
 let editSecuritySection = document.getElementById("security")
 
-console.log(profilePageSettingsButton)
-
 if(profilePageSettingsButton !== null) {
 
   profilePageSettingsButton.addEventListener('click', () => {
