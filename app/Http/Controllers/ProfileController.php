@@ -142,7 +142,7 @@ class ProfileController extends Controller
         $account->save();
 
         if (Auth::user()->admin && Auth::id() != $id) return redirect()->route('admin.users');
-        return redirect()->route('profile', ['id' => $id])->with('message','You changed your email successfuly!');
+        return redirect()->route('profile', ['id' => $id])->with('message','You changed your password successfuly!');
     }
 
     public function updateEmail(Request $request, $id)
