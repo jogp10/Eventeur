@@ -9,6 +9,11 @@
                 <div class="col-12 col-lg-10">
                     <input type="name" name="name" id="inputName" class="form-control" aria-describedby="nameHelpBlock" value="{{$account->name}}">
                     <div id="nameHelpBlock" class="form-text pe-2">Change your password</div>
+                    @if ($errors->has('name'))
+                    <span class="error text-danger">
+                        {{ $errors->first('name') }}
+                    </span>
+                    @endif
                 </div>
             </div>
             <div class="row row-cols-3 border border-3 gx-0 py-4 px-3">
@@ -19,6 +24,11 @@
                     <div class="form-floating">
                         <textarea class="form-control" name="description" id="floatingTextarea2" style="height: 300px">{{$account->description}}</textarea>
                         <div id="nameHelpBlock" class="form-text pe-2">Must not exceed 200 characters</div>
+                        @if ($errors->has('description'))
+                            <span class="error text-danger">
+                            {{ $errors->first('description') }}
+                            </span>
+                        @endif
                         <div class="clearfix">
                             <button type="submit" class="btn btn-primary btn-lg float-end">Save Settings</button>
                         </div>

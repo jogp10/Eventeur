@@ -24,6 +24,8 @@ class ProfileController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
     public function index()
     {
         Auth::user();
@@ -69,6 +71,13 @@ class ProfileController extends Controller
 
         if (Auth::user()->admin && Auth::user()->id != $id) return view('pages.admin.editUser', ['account' => $account_user]);
         return view('pages.securityProfile', ['account' => $account_user]);
+    }
+
+    public function showOwnEvents($id) {
+
+        $events = Events::where('user_id', "=", $id)->get();
+
+        return view('pages.events', ['events' => $events]);
     }
 
     /**
@@ -117,11 +126,12 @@ class ProfileController extends Controller
             'password_confirmation' => 'required|string|same:newPassword'
         ]);
 
+
         $account->password = bcrypt($request['newPassword']);
         $account->save();
 
         if (Auth::user()->admin && Auth::id() != $id) return redirect()->route('admin.users');
-        return $this->show($account->id);
+        return redirect()->route('profile', ['id' => $id])->with('message','You changed your email successfuly!');
     }
 
     public function updateEmail(Request $request, $id) {
@@ -130,21 +140,21 @@ class ProfileController extends Controller
         
         $this->authorize('update', $account);
 
-        $validator = Validator::make($request->all(), [
+        $validate = $request->validate([
             'newEmail' => 'required|string',
             'confirmedEmail' => 'required|same:newEmail',
         ]);
 
         if ($validator->fails()) {
             if (Auth::user()->admin && Auth::id() != $id) return redirect()->route('admin.users');
-            return Redirect::to(`/profile/$account->id/edit`)->with('error','Error');
+            return $this->showEditPage($account->id);
         }
 
         $account->email = $request['newEmail'];
         $account->save();
 
         if (Auth::user()->admin && Auth::id() != $id) return redirect()->route('admin.users');
-        return Redirect::to(`/profile/$account->id`)->with('message','Successful');
+        return redirect()->route('profile', ['id' => $id])->with('message','You changed your email successfuly!');
     }
 
     public function acceptInvitation($id, $invite_id) {

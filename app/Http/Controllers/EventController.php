@@ -59,8 +59,6 @@ class EventController extends Controller
 
         $this->authorize('create', $event);
 
-        
-
         $event->name = $request->name;
         $event->description = $request->description;
         $event->location = $request->location;
@@ -188,7 +186,6 @@ class EventController extends Controller
         ]);
 
         $pollOption->increment('votes');
-        $poll->addUserToVotedList($user->name);
 
         return redirect()->route('event.show', ['id' => $poll->event_id]);
     }

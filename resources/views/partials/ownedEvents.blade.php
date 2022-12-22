@@ -5,6 +5,12 @@
         <section id="cards">
             @each('partials.invite', $events, 'event')
         </section>
+        <div class="container mt-0 pt-0">
+            <div class="row border border-grey border-rouded bg-green">
+                <a href="{{ route('MyEvents', Auth::id()) }}" type="button">
+                <p class="fs-5">...</p></a>
+            </div> 
+        </div>
     @else
     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
@@ -15,19 +21,26 @@
                     @include('partials.invite', ['event' => $event])
                     </section>
                 </div>
+                <div class="container mt-0 pt-0">
+                    <div class="row border border-grey border-rouded bg-green">
+                    <a href="{{ route('MyEvents', Auth::id()) }}" type="button">
+                        <p class="fs-5">...</p></a>
+                    </div> 
+                </div>
             @else
                 <div class="carousel-item">
                     <section id="cards">
                     @include('partials.invite', ['event' => $event])
                     </section>
                 </div>
+                <div class="container mt-0 pt-0">
+                    <div class="row border border-grey border-rouded bg-green">
+                    <a href="{{ route('MyEvents', Auth::id()) }}" type="button">
+                        <p class="fs-5">...</p></a>
+                    </div> 
+                </div>
             @endif
             @endforeach
-        </div>
-        <div class="container mt-0 pt-0">
-            <div class="row border border-grey border-rouded bg-green">
-                <p class="fs-5">...</p>
-            </div>  
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
