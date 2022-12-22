@@ -9,7 +9,7 @@
                 <div class="col-12 col-lg-10 pb-3">
                     <input type="password" name="oldPassword" id="inputName" class="form-control" aria-describedby="nameHelpBlock">
                     @if ($errors->has('oldPassword'))
-                    <span class="error">
+                    <span class="error text-danger">
                         {{ $errors->first('oldPassword') }}
                     </span>
                     @endif
@@ -20,7 +20,7 @@
                 <div class="col-12 col-lg-10 pb-3">
                     <input type="password" name="newPassword" id="inputName" class="form-control" aria-describedby="nameHelpBlock">
                     @if ($errors->has('newPassword'))
-                    <span class="error">
+                    <span class="error text-danger">
                         {{ $errors->first('newPassword') }}
                     </span>
                     @endif
@@ -31,7 +31,7 @@
                 <div class="col-12 col-lg-10">
                     <input type="password" name="password_confirmation" id="inputName" class="form-control" aria-describedby="nameHelpBlock">
                     @if ($errors->has('password_confirmation'))
-                    <span class="error">
+                    <span class="error text-danger">
                         {{ $errors->first('password_confirmation') }}
                     </span>
                     @endif
@@ -53,10 +53,10 @@
                     <label for="email" class="form-label"><span class="align-middle">New Email Address</span></label>
                 </div>
                 <div class="col-12 col-lg-9 pb-3">
-                    <input type="email" name="newEmail" id="inputName" class="form-control" aria-describedby="nameHelpBlock">
-                    @if ($errors->has('newEmail'))
-                    <span class="error">
-                        {{ $errors->first('newEmail') }}
+                    <input type="email" name="email" id="inputName" class="form-control" aria-describedby="nameHelpBlock">
+                    @if ($errors->has('email'))
+                    <span class="error text-danger">
+                        {{ $errors->first('email') }}
                     </span>
                     @endif
                 </div>
@@ -66,7 +66,7 @@
                 <div class="col-12 col-lg-9">
                     <input type="email" name="confirmedEmail" id="inputName" class="form-control" aria-describedby="nameHelpBlock">
                     @if ($errors->has('confirmedEmail'))
-                    <span class="error">
+                    <span class="error text-danger">
                         {{ $errors->first('confirmedEmail') }}
                     </span>
                     @endif

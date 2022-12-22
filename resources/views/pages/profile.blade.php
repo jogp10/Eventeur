@@ -1,11 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-@if( Session::has('message'))
-    <div class="alert alert-success" role="alert">
-      {{ Session::get('message')}}
-    </div>
-@endif
 <div class="container">
 
     @if (Auth::user() && $account->id === Auth::user()->id)
