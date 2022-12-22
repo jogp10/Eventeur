@@ -21,7 +21,12 @@ Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('register', 'Auth\RegisterController@showRegistrationForm');
+
 Route::post('register', 'Auth\RegisterController@register')->name('register');
+Route::get('/forgot-password', 'Auth\PasswordController@viewForgotForm')->middleware('guest')->name('password.request');
+Route::post('/forgot-password', 'Auth\PasswordController@sendResetLinkEmail')->middleware('guest')->name('password.email');
+Route::get('/reset-password/{token}&{email}', 'Auth\PasswordController@viewResetForm')->middleware('guest')->name('password.reset');
+Route::post('/reset-password', 'Auth\PasswordController@resetPassword')->middleware('guest')->name('password.update');
 
 //User
 Route::get('profile/{id}', 'ProfileController@show')->name('profile');
@@ -45,13 +50,7 @@ Route::delete('event/{id}/delete_event', 'EventController@destroy')->name('delet
 Route::get('event/{id}/create_poll', 'EventController@createPoll')->name('createPoll');
 Route::get('create_event', 'EventController@create')->name('createEvent');
 Route::put('create_event', 'EventController@store')->name('storeEvent');
-Route::post('event/{id}/answer_poll','EventController@votePoll')->name('votePoll');
-
-
-
-
-//Comment
-
+Route::post('event/{id}/answer_poll', 'EventController@votePoll')->name('votePoll');
 
 //Static Pages
 Route::get('about', 'StaticPageController@about');
