@@ -24,11 +24,6 @@
             @endif
             @endforeach
         </div>
-        <div class="container mt-0 pt-0">
-            <div class="row border border-grey border-rouded bg-green">
-                <p class="fs-5">...</p>
-            </div>  
-        </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="">Previous</span>

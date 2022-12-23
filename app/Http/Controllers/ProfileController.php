@@ -22,6 +22,8 @@ class ProfileController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
     public function index()
     {
         Auth::user();
@@ -81,6 +83,13 @@ class ProfileController extends Controller
         return view('pages.securityProfile', ['account' => $account_user]);
     }
 
+    public function showOwnEvents($id) {
+
+        $events = Events::where('user_id', "=", $id)->get();
+
+        return view('pages.events', ['events' => $events]);
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -128,11 +137,12 @@ class ProfileController extends Controller
             'password_confirmation' => 'required|string|same:newPassword'
         ]);
 
+
         $account->password = bcrypt($request['newPassword']);
         $account->save();
 
         if (Auth::user()->admin && Auth::id() != $id) return redirect()->route('admin.users');
-        return $this->show($account->id);
+        return redirect()->route('profile', ['id' => $id])->with('message','You changed your password successfuly!');
     }
 
     public function updateEmail(Request $request, $id)
@@ -142,21 +152,16 @@ class ProfileController extends Controller
 
         $this->authorize('update', $account);
 
-        $validator = Validator::make($request->all(), [
-            'newEmail' => 'required|string',
-            'confirmedEmail' => 'required|same:newEmail',
+        $validate = $request->validate([
+            'email' => 'string|unique:accounts|required',
+            'confirmedEmail' => 'required|same:email',
         ]);
 
-        if ($validator->fails()) {
-            if (Auth::user()->admin && Auth::id() != $id) return redirect()->route('admin.users');
-            return Redirect::to(`/profile/$account->id/edit`)->with('error', 'Error');
-        }
-
-        $account->email = $request['newEmail'];
+        $account->email = $request['email'];
         $account->save();
 
         if (Auth::user()->admin && Auth::id() != $id) return redirect()->route('admin.users');
-        return Redirect::to(`/profile/$account->id`)->with('message', 'Successful');
+        return redirect()->route('profile', ['id' => $id])->with('message','You changed your email successfuly!');
     }
 
     public function acceptInvitation($id, $invite_id)
@@ -205,6 +210,6 @@ class ProfileController extends Controller
         $user->delete();
 
         if (Auth::user()->admin && Auth::user()->id != $id) return redirect()->route('admin.users');
-        return redirect()->route('home');
+        return redirect()->route('home')->with('message','Your account was deleted successfully!');
     }
 }

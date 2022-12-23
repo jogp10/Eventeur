@@ -1,11 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-@if( Session::has('message'))
-    <div class="alert alert-success" role="alert">
-      {{ Session::get('message')}}
-    </div>
-@endif
 <div class="container-sm position-relative">
 
     @if (Auth::user() && $account->id === Auth::user()->id)
@@ -51,7 +46,6 @@
     </div>
     <h5 class="ps-5 mt-5">Profile Settings</h5>
     @include('partials.profileSettings')
-     
     @include('partials.securitySection')
 </div>
 

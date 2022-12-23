@@ -33,4 +33,28 @@ class User extends Model
     public function reports() { return $this->hasMany(Report::class); }
 
     public function bans() { return $this->hasMany(Ban::class); }    
+    
+    public function checkIfVotedPoll($id) {
+        
+        foreach($this->votes as $vote) {
+            $pollOption = PollOption::where('id', '=', $vote->poll_option_id)->first();
+            if($pollOption->poll_id === $id){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function checkVotedOption($id) {
+
+        foreach($this->votes as $vote) {
+            $pollOption = PollOption::where('id', '=', $vote->poll_option_id)->first();
+            if($pollOption->id === $id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
