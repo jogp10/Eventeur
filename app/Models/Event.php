@@ -15,7 +15,9 @@ class Event extends Model {
         'Fitness',
         'Nature',
         'Sports',
-        'Geography'
+        'Geography',
+        'Math',
+        'Programming'
     ];
 
     protected $fillable = [
@@ -50,5 +52,16 @@ class Event extends Model {
     public function getTagTypes() {
 
         return $this->types;
+    }
+
+    public function checkIfEventHasTag($tagName) {
+
+        foreach($this->tags as $tag) {
+            if($tag->name === $tagName) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
