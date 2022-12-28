@@ -35,7 +35,10 @@
                         <label class="form-check-label">Remember Me</label>
                     </div>
                </div>
-               <button type="submit" class="btn btn-primary">Submit</button>
+                <div class="mb-3">
+                     <button type="submit" class="btn btn-primary">Log In</button>
+                     <a href="{{ url('/auth/google') }}"><img src="/images/google/2x/btn_google_signin_dark_normal_web@2x.png" style="max-width:205px; max-height:100px"></a>
+                </div>
            </form>
        </div>
        <div class="col d-flex justify-content-center align-self-center text-center">
