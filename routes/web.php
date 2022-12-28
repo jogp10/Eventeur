@@ -86,3 +86,7 @@ Route::post('api/comment', 'CommentController@store')->name('comment');
 Route::delete('api/comment/delete', 'CommentController@destroy')->name('deleteComment');
 Route::post('api/answer', 'CommentController@answer')->name('answer');
 Route::delete('api/answer/delete', 'CommentController@answerDestroy')->name('deleteAnswer');
+
+// OAuth
+Route::get('auth/redirect', 'OAuthController@redirectToProvider')->name('oauth');
+Route::get('auth/callback', 'OAuthController@handleProviderCallback');
