@@ -55,7 +55,7 @@
                 </div>
                 <div>
                     <button type="submit" class="btn btn-primary">Sign Up</button>
-                    <a href="{{ url('/auth/google') }}"><img src="/images/google/2x/btn_google_signin_dark_normal_web@2x.png" style="max-width:205px; max-height:100px"></a>
+                    <a href="{{ route('oauth') }}"><img src="/images/google/1x/btn_google_signin_dark_normal_web.png" style="max-width:205px; max-height:100px"></a>
                 </div>
             </form>
         </div>

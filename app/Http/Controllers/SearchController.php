@@ -16,7 +16,6 @@ class SearchController extends Controller
     {
         $search_text = $_GET['query'];            
         $search_type = $_GET['type'];
-        $events;
 
         if($search_type == 'name') {
             if (mb_substr($search_text, 0, 1) != "\"") {
