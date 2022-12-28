@@ -45,6 +45,9 @@
                     @endif
                </div>
                <div class="mb-3">
+                     <a href="{{ route('password.request') }}">Forgot your password?</a>
+                </div>
+               <div class="mb-3">
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
                         <label class="form-check-label">Remember Me</label>
@@ -55,7 +58,7 @@
        </div>
        <div class="col d-flex justify-content-center align-self-center text-center">
            <div class="p-5 m-5">
-               <img src="images/logo_big.png" class="img-fluid mb-3" width="400" height="300" alt="...">
+               <img src="/images/logo_big.png" class="img-fluid mb-3" width="400" height="300" alt="...">
                <h3>Welcome to Eventeur!</h3>
                <p class="fs-4 text-black-50"><small>The newest platform where you can find all the events you're looking for.</small></p>
                <p>Have an account already?<a class="ms-2" href="{{ url('/login') }}">log In</a></p>
