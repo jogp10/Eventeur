@@ -375,6 +375,21 @@ END IF;
 END $$
 LANGUAGE plpgsql;
 
+-- Index 12
+do $$
+begin
+IF NOT EXISTS( SELECT NULL
+            FROM INFORMATION_SCHEMA.COLUMNS
+           WHERE table_name = 'tags'
+             AND table_schema = 'lbaw2224'
+             AND column_name = 'search')  THEN
+
+  ALTER TABLE tags ADD search TSVECTOR;
+
+END IF;
+END $$
+LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION event_search_update() RETURNS TRIGGER AS $$
 BEGIN
  IF TG_OP = 'INSERT' THEN
@@ -398,10 +413,36 @@ END $$
 LANGUAGE plpgsql;
 
 
+CREATE OR REPLACE FUNCTION tag_search_update() RETURNS TRIGGER AS $$
+BEGIN
+ IF TG_OP = 'INSERT' THEN
+        NEW.search = (
+         setweight(to_tsvector('english', NEW.name), 'A')
+        );
+ END IF;
+ IF TG_OP = 'UPDATE' THEN
+         IF (NEW.name <> OLD.name) THEN
+           NEW.search = (
+             setweight(to_tsvector('english', NEW.name), 'A')
+           );
+         END IF;
+ END IF;
+ RETURN NEW;
+END $$
+LANGUAGE plpgsql;
+
+
 CREATE TRIGGER event_search_update
 BEFORE INSERT OR UPDATE ON events
 FOR EACH ROW
 EXECUTE PROCEDURE event_search_update();
+
+
+CREATE TRIGGER event_tag_search_update
+BEFORE INSERT OR UPDATE ON tags
+FOR EACH ROW
+EXECUTE PROCEDURE tag_search_update();
+
 
 --CREATE INDEX search_event ON events USING GIN (searchs);
 

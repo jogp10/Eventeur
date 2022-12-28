@@ -29,24 +29,23 @@
                     <input type="text" name="name" class="form-control" id="exampleFormControlInput1" value="{{$event->name}}">
                 </div>
 
-                
-                {{-- @foreach($event->tags as $tag)
-                <div class="form-check">
-                    <input class="form-check-input" name="tags[]" type="checkbox" value="{{$tag->name}}" id="flexCheckDefault" checked>
-                    <label class="form-check-label" for="flexCheckDefault">{{$tag->name}}</label>
-                </div>
-                @endforeach --}}
-                
                 @foreach($event->getTagTypes() as $type)
-                <div class="form-check">
-                    <input class="form-check-input" name="tags[]" type="checkbox" value="{{ $type }}" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">{{ $type }}</label>
-                </div>
+                    @if($event->checkIfEventHasTag($type))
+                    <div class="form-check">
+                        <input class="form-check-input" name="tags[]" type="checkbox" value="{{ $type }}" id="flexCheckDefault" checked>
+                        <label class="form-check-label" for="flexCheckDefault">{{ $type }}</label>
+                    </div>
+                    @else
+                    <div class="form-check">
+                        <input class="form-check-input" name="tags[]" type="checkbox" value="{{ $type }}" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">{{ $type }}</label>
+                    </div>
+                    @endif
                 @endforeach
-                
+        
                 <div class="mt-4 form-check form-switch">
-                    <label class="form-check-label" for="flexSwitchCheckDefault">Privacy</label>
-                    <input class="form-check-input" name="privacy" type="checkbox" role="switch" id="flexSwitchCheckDefault" @if($event->privacy=='Private')checked @endif>
+                    <label class="form-check-label" for="flexSwitchCheckDefault">{{ $event->privacy }}</label>
+                    <input class="form-check-input" name="privacy" type="checkbox" role="switch" id="flexSwitchCheckDefault" @if($event->privacy=='Private') checked @endif>
                 </div>
 
                 <div class="mb-4 mt-4">
