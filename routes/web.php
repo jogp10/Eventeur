@@ -23,14 +23,14 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('register', 'Auth\RegisterController@showRegistrationForm');
 
 Route::post('register', 'Auth\RegisterController@register')->name('register');
-Route::get('/forgot-password', 'Auth\PasswordController@viewForgotForm')->middleware('guest')->name('password.request');
-Route::post('/forgot-password', 'Auth\PasswordController@sendResetLinkEmail')->middleware('guest')->name('password.email');
-Route::get('/reset-password/{token}&{email}', 'Auth\PasswordController@viewResetForm')->middleware('guest')->name('password.reset');
-Route::post('/reset-password', 'Auth\PasswordController@resetPassword')->middleware('guest')->name('password.update');
+Route::get('/forgot-password', 'PasswordController@viewForgotForm')->middleware('guest')->name('password.request');
+Route::post('/forgot-password', 'PasswordController@sendResetLinkEmail')->middleware('guest')->name('password.email');
+Route::get('/reset-password/{token}', 'PasswordController@viewResetForm')->middleware('guest')->name('password.reset');
+Route::post('/reset-password', 'PasswordController@resetPassword')->middleware('guest')->name('password.update');
 
 //User
 Route::get('profile/{id}', 'ProfileController@show')->name('profile');
-Route::get('profile/{id}/edit', 'ProfileController@showEditPage')->name('editProfile');
+Route::get('profile/{id}/edit', 'ProfileController@showEditPage');
 Route::get('profile/{id}/my_events', 'ProfileController@showOwnEvents')->name('MyEvents');
 Route::put('profile/{id}/edit', 'ProfileController@update')->name('editProfile');
 Route::put('profile/{id}/editPassword', 'ProfileController@updatePassword')->name('editProfilePassword');

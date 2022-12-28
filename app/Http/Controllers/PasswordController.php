@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 class PasswordController extends Controller
 {
     //
+    
     public function viewForgotForm(Request $request)
     {
         # code...
@@ -27,14 +28,14 @@ class PasswordController extends Controller
         );
 
         return $status === Password::RESET_LINK_SENT
-                    ? back()->with(['status' => __($status)])
+                    ? view('auth.send-code-reset-password')->with(['status' => __($status)])
                     : back()->withErrors(['email' => __($status)]);
     }
 
-    public function viewResetForm($token, $email)
+    public function viewResetForm($token)
     {
         # code...
-        return view('auth.reset-password', ['token' => $token, 'email' => $email]);
+        return view('auth.reset-password', ['token' => $token]);
     }
 
     public function resetPassword(Request $request) {

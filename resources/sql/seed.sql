@@ -18,6 +18,7 @@ drop table if exists poll_options CASCADE;
 drop table if exists votes CASCADE;
 drop table if exists reports CASCADE;
 drop table if exists bans CASCADE;
+drop table if exists password_resets CASCADE;
 
 DROP TYPE IF EXISTS privacy CASCADE;
 
@@ -249,6 +250,16 @@ CREATE TABLE bans (
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     expired_at  TIMESTAMP,
+    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE password_resets (
+    id              SERIAL PRIMARY KEY,
+    user_id         INTEGER DEFAULT 1,
+    token           TEXT NOT NULL,
+    email           TEXT NOT NULL,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
