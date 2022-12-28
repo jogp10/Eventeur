@@ -9,6 +9,8 @@
 
     <a href="{{ url('/admin/users') }}">Users</a>
 
+    <a href="{{ url('/admin/events') }}">Events</a>
+
 
 
 </div>
