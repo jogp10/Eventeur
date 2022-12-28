@@ -25,7 +25,7 @@ Route::get('register', 'Auth\RegisterController@showRegistrationForm');
 Route::post('register', 'Auth\RegisterController@register')->name('register');
 Route::get('/forgot-password', 'PasswordController@viewForgotForm')->middleware('guest')->name('password.request');
 Route::post('/forgot-password', 'PasswordController@sendResetLinkEmail')->middleware('guest')->name('password.email');
-Route::get('/reset-password/{token}', 'PasswordController@viewResetForm')->middleware('guest')->name('password.reset');
+Route::get('/reset-password/{token}/{email}', 'PasswordController@viewResetForm')->middleware('guest')->name('password.reset');
 Route::post('/reset-password', 'PasswordController@resetPassword')->middleware('guest')->name('password.update');
 
 //User

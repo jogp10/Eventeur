@@ -12,13 +12,12 @@
 
                 <div class="mb-3">
                     <label for="email" class="form-label">Email Address</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ $email }}" readonly>
                     @if ($errors->has('email'))
                     <span class="error">
                         {{ $errors->first('email') }}
                     </span>
                     @endif
-                    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label text-white">Password</label>
