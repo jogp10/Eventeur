@@ -10,6 +10,7 @@ use App\Models\Event;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Validator;
 
 class PollController extends Controller{
     
@@ -19,11 +20,18 @@ class PollController extends Controller{
 
         $this->authorize('update', $event);
 
-        $request = $request->toArray();
+        $validate = $request->validate([
+            'question' => 'required' 
+        ]);
+
         $pollOptions = array();
+        $request = $request->toArray();
     
         foreach($request as $name => $value) {
-            echo $name;
+            if($value === null) {
+                return redirect()->route('event.show', ['id' => $event->id])->with('error', 'You need to fill the options with a answer.');
+            }
+            
             if(strpos($name, "option") !== false) {
                 $pollOptions[$name] = $value;
             }

@@ -64,4 +64,15 @@ class Event extends Model {
 
         return false;
     }
+
+    public function checkIfUserParticipateEvent($id) {
+        
+        foreach($this->tickets as $ticket) {
+            if($ticket->user->id === $id) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
 }
