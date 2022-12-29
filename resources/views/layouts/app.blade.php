@@ -32,7 +32,6 @@
   <script src={{ asset('js/comment.js') }} defer></script>
   <script src={{ asset('js/event.js') }} defer></script>
 </head>
-<title></title>
 <link rel="icon" href="{!! asset('/images/logo.png') !!}" />
 
 <body>

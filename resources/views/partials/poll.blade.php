@@ -24,8 +24,8 @@
       </div>
       @endforeach 
       @if(Auth::id() !== $poll->event->manager->id && !Auth::user()->user->checkIfVotedPoll($poll->id))
-      <div class="text-end mb-2">
-        <button type="submit" class="btn btn-primary">Submit</button>
+      <div id='${$poll->event->id}' class="text-end mb-2">
+        <button id="submit-poll-vote" type="submit" class="btn btn-primary">Submit</button>
       </div>
       @endif
     </form>

@@ -112,6 +112,7 @@ function sendTicketsRequest(event) {
     sendAjaxRequest('post', '/api/ticket/', { ids: checkedArray, event_id: event_id }, sendTicketHandler);
 }
 
+
 function searchUserInviteHandler() {
   if (this.status != 200) window.location = '/';
 
@@ -238,6 +239,9 @@ function createCard(card) {
 
   return new_card;
 }
+
+
+
 
 function createRow(user) {
   let htmlView = '';

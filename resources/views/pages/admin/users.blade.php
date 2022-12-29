@@ -20,7 +20,7 @@
 
     <section id="cards" class="container">
         <div class="row row-cols-2 justify-content-center">
-        @each('partials.user', $users, 'user')
+        @each('partials.user', $users->slice(0, 2), 'user')
         </div>
     </section>
 </div>

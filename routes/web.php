@@ -34,9 +34,6 @@ Route::get('profile/{id}/{invite_id}/accept_invitation', 'ProfileController@acce
 Route::get('profile/{id}/{invite_id}/ignore_invitation', 'ProfileController@ignoreInvitation')->name('IgnoreInvitation');
 Route::get('profile/{id}/delete', 'ProfileController@destroy')->name('Delete');
 
-//Route::get('profile/{id}/myEvents', 'ProfileController@myEvents')->name('myEvents')
-//Route::get('profile/{id}/', 'ProfileController@myEvents')->name('myEvents')
-
 //Event
 Route::get('event/{id}', 'EventController@show')->name('event.show');
 Route::get('event/{id}/event_settings', 'EventController@edit')->name('eventSettings');
@@ -47,8 +44,6 @@ Route::get('create_event', 'EventController@create')->name('createEvent');
 Route::put('create_event', 'EventController@store')->name('storeEvent');
 Route::get('event/{id}/create_poll', 'PollController@createPoll')->name('createPoll');
 Route::post('event/{id}/answer_poll','PollController@votePoll')->name('votePoll');
-
-
 
 
 //Comment
