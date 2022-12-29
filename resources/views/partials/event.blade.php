@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="col-3 p-0 m-0">
-                <img src="images/community-events.jpeg" class="img-fluid m-0 p-0 rounded" height="300" width="400" alt="...">
+                <img src="images/events/community-events.jpeg" class="img-fluid m-0 p-0 rounded" height="300" width="400" alt="...">
             </div>
         </div>
     </div>
