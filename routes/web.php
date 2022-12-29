@@ -34,6 +34,9 @@ Route::get('event/{id}/event_settings', 'EventController@edit')->name('eventSett
 Route::get('event/{id}/event_participants', 'EventController@showParticipantsEvent')->name('eventParticipants');
 Route::post('event/{id}/event_settings', 'EventController@update')->name('editEvent');
 Route::delete('event/{id}/delete_event', 'EventController@destroy')->name('deleteEvent');
+Route::post('api/request_join', 'EventController@request_join');
+Route::delete('api/delete_join', 'EventController@delete_join');
+Route::post('api/accept_join', 'EventController@accept_join');
 Route::post('api/invite', 'EventController@invite')->name('invite');
 Route::delete('api/invite/delete', 'EventController@deleteInvite')->name('deleteInvite');
 Route::post('api/give_ticket', 'EventController@ticket')->name('ticket');

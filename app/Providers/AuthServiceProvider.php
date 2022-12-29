@@ -23,6 +23,7 @@ class AuthServiceProvider extends ServiceProvider
     Account::class => AccountPolicy::class,
     Ban::class => BanPolicy::class,
     Report::class => ReportPolicy::class,
+    Request::class => RequestPolicy::class,
   ];
 
   /**

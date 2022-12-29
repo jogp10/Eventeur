@@ -25,6 +25,11 @@ function addEventListeners() {
   if (submitTickets != null) {
     submitTickets.addEventListener('click', sendTicketsRequest);
   }
+
+  let submitRequest = document.getElementById("requestInvite");
+  if (submitRequest != null) {
+    submitRequest.addEventListener('click', sendRequestRequest);
+  }
 }
 
 function encodeForAjax(data) {
@@ -80,6 +85,15 @@ function sendInvitesRequest(event) {
 
   if (checkedArray.length > 0)
     sendAjaxRequest('post', '/api/invite/', { ids: checkedArray, event_id:event_id }, sendInviteHandler);
+}
+
+function sendRequestRequest(event) {
+  // if (this.status != 200) window.location = '/';
+  // user_id = document.querySelector(".user").id;
+  event_id = document.querySelector(".event").id;
+
+  sendAjaxRequest('post', '/api/request_join/', {event_id:event_id }, sendRequestHandler);
+  
 }
 
 function sendTicketsRequest(event) {
@@ -176,6 +190,11 @@ function sendInviteHandler() {
   modal.getElementsByClassName.display = "none";
 
   let invites = JSON.parse(this.responseText);
+}
+
+function sendRequestHandler(){
+  // if (this.status != 200) window.location = '/';
+
 }
 
 function sendTicketHandler() {

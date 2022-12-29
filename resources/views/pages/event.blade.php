@@ -55,6 +55,7 @@
         </svg>
         <span>{{ $event->start_date }}</span>
       </button>
+
       @cannot('update', $event)
       <button type="button" class="btn btn-primary text-decoration-none">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
@@ -63,6 +64,11 @@
         <span>Buy Tickets</span>
       </button>
       @endcannot
+
+      @if(Auth::check() && Auth::id() != $event->manager->id)
+      <button id="requestInvite" type="button" class="btn btn-primary align-self-end m-1">Request to join</button>
+      @endif
+      
       @if(Auth::check())
       <button type="button" id="invite" class="btn btn-primary text-decoration-none" data-bs-toggle="modal" data-bs-target="#inviteModal" style="background-color:#d1410c; border-color:#d1410c;">
         <i class="fa-regular fa-share-from-square"></i>
