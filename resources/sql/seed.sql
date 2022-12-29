@@ -20,6 +20,7 @@ drop table if exists reports CASCADE;
 drop table if exists bans CASCADE;
 
 drop table if exists requests CASCADE;
+drop table if exists password_resets CASCADE;
 
 DROP TYPE IF EXISTS privacy CASCADE;
 
@@ -38,9 +39,13 @@ CREATE TABLE accounts (
     id          SERIAL PRIMARY KEY,
     email       TEXT NOT NULL,
     name        TEXT NOT NULL,
-    password    TEXT NOT NULL,
+    password    TEXT,
     description TEXT,
     age         INTEGER CHECK (age > 0),
+    remember_token TEXT,
+    provider    TEXT,
+    provider_id TEXT,
+    provider_refresh_token TEXT,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     UNIQUE(email)
@@ -83,7 +88,7 @@ CREATE TABLE events (
 CREATE TABLE cover_images (
     id SERIAL PRIMARY KEY,
     event_id   INTEGER NOT NULL,
-    path        TEXT NOT NULL,
+    name        TEXT NOT NULL DEFAULT 'community-events.jpeg',
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_event_id FOREIGN KEY(event_id) references events(id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -92,12 +97,12 @@ CREATE TABLE cover_images (
 
 CREATE TABLE profile_images (
     id SERIAL PRIMARY KEY,
-    account_id  INTEGER DEFAULT 1,
-    path        TEXT NOT NULL,
+    user_id  INTEGER DEFAULT 1,
+    name        TEXT NOT NULL DEFAULT 'perfil.png',
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_account_id FOREIGN KEY(account_id) REFERENCES accounts(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    UNIQUE(account_id)
+    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    UNIQUE(user_id)
 );
 
 CREATE TABLE tags (
@@ -257,7 +262,18 @@ CREATE TABLE bans (
     id              SERIAL PRIMARY KEY,
     admin_id        INTEGER NOT NULL,
     user_id         INTEGER DEFAULT 1,
-    ban_type        INTEGER NOT NULL,
+    reason          TEXT NOT NULL,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    expired_at  TIMESTAMP,
+    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE password_resets (
+    id              SERIAL PRIMARY KEY,
+    user_id         INTEGER DEFAULT 1,
+    token           TEXT NOT NULL,
+    email           TEXT NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -281,6 +297,16 @@ CREATE OR REPLACE FUNCTION create_account() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     INSERT INTO users(account_id) VALUES (NEW.id);
+    INSERT INTO profile_images(user_id) VALUES (NEW.id);
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION create_event() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    INSERT INTO cover_images(event_id) VALUES (NEW.id);
     RETURN NEW;
 END
 $BODY$
@@ -314,6 +340,7 @@ Drop TRIGGER IF EXISTS invites_event_notification ON invites;
 Drop TRIGGER IF EXISTS check_attendee ON tickets;
 Drop TRIGGER IF EXISTS create_account ON accounts;
 Drop TRIGGER IF EXISTS delete_user ON users;
+Drop TRIGGER IF EXISTS create_event ON events;
 
 -- Trigger 1
 CREATE TRIGGER invites_event_notification_trigger 
@@ -338,6 +365,12 @@ CREATE TRIGGER delete_user
     BEFORE DELETE ON users
     FOR EACH ROW
     EXECUTE PROCEDURE delete_user();
+
+-- Trigger 5
+CREATE TRIGGER create_event
+    AFTER INSERT ON events
+    FOR EACH ROW
+    EXECUTE PROCEDURE create_event();
 
 
 --Indexes
@@ -372,6 +405,21 @@ END IF;
 END $$
 LANGUAGE plpgsql;
 
+-- Index 12
+do $$
+begin
+IF NOT EXISTS( SELECT NULL
+            FROM INFORMATION_SCHEMA.COLUMNS
+           WHERE table_name = 'tags'
+             AND table_schema = 'lbaw2224'
+             AND column_name = 'search')  THEN
+
+  ALTER TABLE tags ADD search TSVECTOR;
+
+END IF;
+END $$
+LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION event_search_update() RETURNS TRIGGER AS $$
 BEGIN
  IF TG_OP = 'INSERT' THEN
@@ -395,10 +443,36 @@ END $$
 LANGUAGE plpgsql;
 
 
+CREATE OR REPLACE FUNCTION tag_search_update() RETURNS TRIGGER AS $$
+BEGIN
+ IF TG_OP = 'INSERT' THEN
+        NEW.search = (
+         setweight(to_tsvector('english', NEW.name), 'A')
+        );
+ END IF;
+ IF TG_OP = 'UPDATE' THEN
+         IF (NEW.name <> OLD.name) THEN
+           NEW.search = (
+             setweight(to_tsvector('english', NEW.name), 'A')
+           );
+         END IF;
+ END IF;
+ RETURN NEW;
+END $$
+LANGUAGE plpgsql;
+
+
 CREATE TRIGGER event_search_update
 BEFORE INSERT OR UPDATE ON events
 FOR EACH ROW
 EXECUTE PROCEDURE event_search_update();
+
+
+CREATE TRIGGER event_tag_search_update
+BEFORE INSERT OR UPDATE ON tags
+FOR EACH ROW
+EXECUTE PROCEDURE tag_search_update();
+
 
 --CREATE INDEX search_event ON events USING GIN (searchs);
 
@@ -620,7 +694,7 @@ VALUES
   (3,11),
   (14,4),
   (20,11),
-  (11,7),
+  (11,7),   
   (9,8),
   (12,12),
   (20,16);

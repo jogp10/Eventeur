@@ -1,4 +1,4 @@
-<div class="m-0 my-1 p-0 text-center" style="min">
+<div class="m-0 my-1 p-0 text-center">
     @if(sizeof($events) === 0)
         <p class="mt-3 fs-4">I don't have any events created.</p>
     @elseif(sizeof($events) == 1)
@@ -26,11 +26,11 @@
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
+            <span class="">Previous</span>
         </button>
         <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
+            <span class="">Next</span>
         </button>
     </div>
     @endif

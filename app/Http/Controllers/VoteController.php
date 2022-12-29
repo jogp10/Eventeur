@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Vote;
 use Illuminate\Http\Request;
+
+use App\Models\Vote;
 
 class VoteController extends Controller
 {
@@ -42,7 +43,7 @@ class VoteController extends Controller
             $vote->delete();
         }
 
-        return redirect()->back()->with('message', 'Your vote has been set successfully!');;
+        return redirect()->back()->with('message', 'Your vote has been set successfully!');
     }
 
     /**

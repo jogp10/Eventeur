@@ -29,39 +29,30 @@
                     <input type="text" name="name" class="form-control" id="exampleFormControlInput1" value="{{$event->name}}">
                 </div>
 
-                @foreach($event->tags as $tag)
-                <div class="form-check">
-                    <input class="form-check-input" name="tags[]" type="checkbox" value="" id="flexCheckDefault" checked>
-                    <label class="form-check-label" for="flexCheckDefault">{{$tag->name}}</label>
-                </div>
+                @foreach($event->getTagTypes() as $type)
+                    @if($event->checkIfEventHasTag($type))
+                    <div class="form-check">
+                        <input class="form-check-input" name="tags[]" type="checkbox" value="{{ $type }}" id="flexCheckDefault" checked>
+                        <label class="form-check-label" for="flexCheckDefault">{{ $type }}</label>
+                    </div>
+                    @else
+                    <div class="form-check">
+                        <input class="form-check-input" name="tags[]" type="checkbox" value="{{ $type }}" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">{{ $type }}</label>
+                    </div>
+                    @endif
                 @endforeach
-
-                <div class="form-check">
-                    <input class="form-check-input" name="tags[]" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">Fitness</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" name="tags[]" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckChecked">Nature</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" name="tags[]" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckChecked">Sports</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" name="tags[]" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckChecked">Geography</label>
-                </div>
-
+        
                 <div class="mt-4 form-check form-switch">
-                    <label class="form-check-label" for="flexSwitchCheckDefault">Privacy</label>
-                    <input class="form-check-input" name="privacy" type="checkbox" role="switch" id="flexSwitchCheckDefault" @if($event->privacy=='Private')checked @endif>
+                    <label class="form-check-label" for="flexSwitchCheckDefault">{{ $event->privacy }}</label>
+                    <input class="form-check-input" name="privacy" type="checkbox" role="switch" id="flexSwitchCheckDefault" @if($event->privacy=='Private') checked @endif>
                 </div>
 
                 <div class="mb-4 mt-4">
                     <label for="exampleFormControlTextarea1" name="description" class="form-label">Description</label>
                     <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="13">{{$event->description}}</textarea>
                 </div>
+                
                 <div class="clearfix mb-3">
                     <button type="submit" class="btn btn-primary btn-lg float-end">Save Settings</button>
                 </div>

@@ -1,7 +1,7 @@
-<div class="card mb-3" style="max-width: 540px;">
+<div class="col card mb-3 me-5" style="max-width: 540px;">
     <div class="row g-0">
         <div class="col-md-4">
-            <img src="/images/perfil.png" class="rounded-circle img-fluid rounded-start" alt="...">
+            <img src="/images/profiles/{{$user->user->profileImage->name}}" class="rounded-circle img-fluid rounded-start" alt="...">
         </div>
         <div class="col-md-8 d-flex flex-row">
             <div class="card-body col-md-8">
@@ -17,6 +17,17 @@
                 <form class="pb-1" action="{{ url('/admin/users/' . $user->id . '/edit') }}" method="GET">
                     <button type="submit" class="btn btn-warning">Edit</button>
                 </form>
+                @if ($user->banned)
+                <form class="pb-1" action="{{ url('/admin/users/' . $user->id . '/unban') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-danger">Unban</button>
+                </form>
+                @else
+                <form class="pb-1" action="{{ url('/admin/users/' . $user->id . '/ban') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-danger">Ban</button>
+                </form>
+                @endif
                 <form class="pb-1" action="{{ url('/admin/users/' . $user->id . '/delete') }}" method="POST">
                     @csrf
                     @method('DELETE')

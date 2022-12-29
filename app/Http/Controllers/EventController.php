@@ -2,27 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Answer;
-use App\Models\Invite;
-use App\Models\Ticket;
-use App\Models\User;
-use App\Models\Vote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 use App\Models\Event;
+use App\Models\Tag;
 use App\Models\Account;
-
-function console_log($output, $with_script_tags = true)
-{
-    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
-        ');';
-    if ($with_script_tags) {
-        $js_code = '<script>' . $js_code . '</script>';
-    }
-    echo $js_code;
-}
+use App\Models\CoverImage;
 
 class EventController extends Controller
 {
@@ -40,6 +26,32 @@ class EventController extends Controller
             ->get();
 
         return view('pages.home', ['events' => $events]);
+    }
+
+    public function manageEvents()
+    {
+        Auth::user();
+        $this->authorize('viewAny', Account::class);
+
+        $events = Event::all();
+        $events->shift();
+
+        // Check if users are banned
+
+        /*
+        foreach ($users as $user) {
+            $bans = Ban::where('user_id', $user->id)->get();
+            foreach ($bans as $ban) {
+                if ($ban->expired_at == null) {
+                    $user->banned = true;
+                    break;
+                }
+            }
+        }
+        */
+
+        if (Auth::user()->admin) return view('pages.admin.events', ['events' => $events]);
+        return redirect()->route('home');
     }
 
     /**
@@ -68,8 +80,6 @@ class EventController extends Controller
 
         $this->authorize('create', $event);
 
-        
-
         $event->name = $request->name;
         $event->description = $request->description;
         $event->location = $request->location;
@@ -79,16 +89,18 @@ class EventController extends Controller
         $event->privacy = $request->privacy;
         $event->user_id = Auth::user()->id;
 
-        if($request->hasFile('image')) {
+        if ($request->hasFile('image')) {
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
             $filename = time() . '.' . $extension;
-            $file->move('uploads/events/', $filename);
-            $event->image = $filename;
+            $file->move('/images/events/', $filename);
+            $coverImage = CoverImage::create([
+                'name' => $filename,
+                'event_id' => $event->id
+            ]);
         }
 
-        if($request->price) $event->price = $request->price;
-        console_log($event);
+        if ($request->price) $event->price = $request->price;
         $event->save();
 
         return redirect()->route('event.show', ['id' => $event->id]);
@@ -109,18 +121,19 @@ class EventController extends Controller
         return view('pages.event', ['event' => $event]);
     }
 
-    public function showParticipantsEvent($id) {
-        
+    public function showParticipantsEvent($id)
+    {
+
         $event = Event::find($id);
 
         $this->authorize('update', $event);
 
-        foreach($event->invites as $invite) {
+        foreach ($event->invites as $invite) {
             $invite->user;
             $invite->user->account;
         }
 
-        foreach($event->tickets as $ticket) {
+        foreach ($event->tickets as $ticket) {
             $ticket->user;
             $ticket->user->account;
         }
@@ -134,13 +147,15 @@ class EventController extends Controller
      * @param  \App\Models\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id) {
+    public function edit(Request $request, $id)
+    {
         $event = Event::find($id);
 
         $this->authorize('update', $event);
 
         return view('pages.eventSettings', ['event' => $event]);
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -151,7 +166,7 @@ class EventController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
         $event = Event::find($id);
 
         $this->authorize('update', $event);
@@ -159,33 +174,90 @@ class EventController extends Controller
         $validated = $request->validate([
             'name' => ['max:100'],
             'description' => ['max:2000'],
+            'tags' => 'required'
         ]);
 
-        //print_r($request['privacy']);
-
-        if($request['privacy'] == 'on') {
+        if ($request['privacy'] === 'on') {
             $event->privacy = 'Private';
-        }else {
+        } else {
             $event->privacy = 'Public';
         }
 
-        //print_r($request->get('tags'));
+        $eventTagNames = array();
 
-        //foreach($request->get('tags') as $tag) {
-        //    $event->tags()->attach($tag);
-        //}
+        foreach ($event->tags as $tag) {
+            array_push($eventTagNames, $tag->name);
+        }
 
-        
+        foreach ($request->get('tags') as $tagName) {
+
+            if (!in_array($tagName, $eventTagNames)) {
+                $tag = Tag::where('name', $tagName)->get();
+                $exists = Tag::get()->contains('name', $tagName);
+
+                if (!$exists) {
+                    $tag = Tag::create([
+                        'name' => $tagName
+                    ]);
+                }
+
+                $event->tags()->attach($tag);
+            }
+        }
+
+        foreach ($eventTagNames as $nameTag) {
+            if (!in_array($nameTag, $request->get('tags'))) {
+                $tag = Tag::where('name', $nameTag)->get();
+                $event->tags()->detach($tag);
+            }
+        }
+
         if ($request['name'] !== null) {
             $event->name = $request['name'];
         }
         if ($request['description'] !== null) {
             $event->description = $request['description'];
         }
+        if ($request['location'] !== null) {
+            $event->location = $request['location'];
+        }
+        if ($request['start_date'] !== null) {
+            $event->start_date = $request['start_date'];
+        }
+        if ($request['end_date'] !== null) {
+            $event->end_date = $request['end_date'];
+        }
+        if ($request['capacity'] !== null) {
+            $event->capacity = $request['capacity'];
+        }
+        if ($request['price'] !== null) {
+            $event->price = $request['price'];
+        }
+        if ($request['image'] !== null) {
+            $validate = $request->validate([
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ]);
 
-        $event->save(); 
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('images/events'), $imageName);
+
+            if ($event->coverImage) {
+                $event->coverImage->delete();
+            }
+
+            $eventImage = CoverImage::create([
+                'event_id' => $event->id,
+                'name' => $imageName
+            ]);
+
+            $eventImage->save();
+        }
+
+        $event->save();
         return redirect()->route('event.show', ['id' => $event]);
     }
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -193,7 +265,8 @@ class EventController extends Controller
      * @param  \App\Models\Account  $account
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id) {
+    public function destroy(Request $request, $id)
+    {
         $event = Event::find($id);
 
         $this->authorize('delete', $event);
@@ -205,60 +278,9 @@ class EventController extends Controller
 
     public function invite(Request $request)
     {
-        $this->authorize('create', Invite::class);
-
-        $users_id = $_POST['ids'];
-        $event = $_POST['event_id'];
-        $users_id = explode(',', $users_id);
-        foreach ($users_id as $user_id) {
-            $invite = Invite::create([
-                'user_id' => $user_id,
-                'event_id' => $event,
-            ]);
-            $invite->save();
-        }
-
-        return response()->json(['success' => true]);
     }
 
     public function deleteInvite(Request $request)
     {
-        $invite = Invite::find($request['id']);
-
-        $this->authorize('delete', $invite);
-        
-        $invite->delete();
-
-        return redirect()->back();
-    }
-
-    public function ticket(Request $request)
-    {
-        $this->authorize('create', Ticket::class);
-
-        $users_id = $_POST['ids'];
-        $event = $_POST['event_id'];
-        $users_id = explode(',', $users_id);
-        foreach ($users_id as $user_id) {
-            $ticket = Ticket::create([
-                'user_id' => $user_id,
-                'event_id' => $event,
-                'num_of_tickets' => 2,
-            ]);
-            $ticket->save();
-        }
-
-        return response()->json(['success' => true]);
-    }
-
-    public function deleteTicket(Request $request)
-    {
-        $ticket = Ticket::find($request['id']);
-
-        $this->authorize('delete', $ticket);
-        
-        $ticket->delete();
-
-        return redirect()->back();
     }
 }

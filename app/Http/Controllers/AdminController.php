@@ -4,19 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Account;
 use App\Models\Admin;
+use App\Models\User;
+use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-
-function console_log($output, $with_script_tags = true)
-{
-    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
-        ');';
-    if ($with_script_tags) {
-        $js_code = '<script>' . $js_code . '</script>';
-    }
-    echo $js_code;
-}
+use App\Models\Ban;
 
 class AdminController extends Controller
 {
