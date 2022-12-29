@@ -12,6 +12,8 @@ use App\Models\User;
 use App\Models\Ticket;
 use App\Rules\CurrentPassword;
 use App\Models\Ban;
+use App\Models\Event;
+use App\Models\ProfileImage;
 use Validator;
 
 
@@ -85,7 +87,7 @@ class ProfileController extends Controller
 
     public function showOwnEvents($id) {
 
-        $events = Events::where('user_id', "=", $id)->get();
+        $events = Event::where('user_id', "=", $id)->get();
 
         return view('pages.events', ['events' => $events]);
     }
@@ -162,6 +164,34 @@ class ProfileController extends Controller
 
         if (Auth::user()->admin && Auth::id() != $id) return redirect()->route('admin.users');
         return redirect()->route('profile', ['id' => $id])->with('message','You changed your email successfuly!');
+    }
+
+    public function updateImage(Request $request, $id) {
+            
+            $account = Account::find($id);
+    
+            $this->authorize('update', $account);
+    
+            $validate = $request->validate([
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ]);
+    
+            $imageName = time().'.'.$request->image->extension();
+            $request->image->move(public_path('images/profiles'), $imageName);
+
+            if ($account->user->profileImage) {
+                $account->user->profileImage->delete();
+            }
+    
+            $profileImage = ProfileImage::create([
+                'user_id' => $account->user->id,
+                'name' => $imageName
+            ]);
+
+            $profileImage->save();
+    
+            if (Auth::user()->admin && Auth::id() != $id) return redirect()->route('admin.users');
+            return redirect()->route('profile', ['id' => $id])->with('message','You changed your image successfuly!');
     }
 
     public function acceptInvitation($id, $invite_id)

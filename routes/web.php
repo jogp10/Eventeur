@@ -21,13 +21,19 @@ Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('register', 'Auth\RegisterController@showRegistrationForm');
+
 Route::post('register', 'Auth\RegisterController@register')->name('register');
+Route::get('/forgot-password', 'PasswordController@viewForgotForm')->middleware('guest')->name('password.request');
+Route::post('/forgot-password', 'PasswordController@sendResetLinkEmail')->middleware('guest')->name('password.email');
+Route::get('/reset-password/{token}/{email}', 'PasswordController@viewResetForm')->middleware('guest')->name('password.reset');
+Route::post('/reset-password', 'PasswordController@resetPassword')->middleware('guest')->name('password.update');
 
 //User
 Route::get('profile/{id}', 'ProfileController@show')->name('profile');
-Route::get('profile/{id}/edit', 'ProfileController@showEditPage')->name('editProfile');
+Route::get('profile/{id}/edit', 'ProfileController@showEditPage');
 Route::get('profile/{id}/my_events', 'ProfileController@showOwnEvents')->name('MyEvents');
 Route::put('profile/{id}/edit', 'ProfileController@update')->name('editProfile');
+Route::put('profile/{id}/editImage', 'ProfileController@updateImage')->name('editProfileImage');
 Route::put('profile/{id}/editPassword', 'ProfileController@updatePassword')->name('editProfilePassword');
 Route::put('profile/{id}/editEmail', 'ProfileController@updateEmail')->name('editProfileEmail');
 Route::get('profile/{id}/{invite_id}/accept_invitation', 'ProfileController@acceptInvitation')->name('AcceptInvitation');
@@ -84,3 +90,7 @@ Route::post('api/comment', 'CommentController@store')->name('comment');
 Route::delete('api/comment/delete', 'CommentController@destroy')->name('deleteComment');
 Route::post('api/answer', 'CommentController@answer')->name('answer');
 Route::delete('api/answer/delete', 'CommentController@answerDestroy')->name('deleteAnswer');
+
+// OAuth
+Route::get('auth/redirect', 'OAuthController@redirectToProvider')->name('oauth');
+Route::get('auth/callback', 'OAuthController@handleProviderCallback');

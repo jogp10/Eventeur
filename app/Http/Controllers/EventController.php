@@ -6,15 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Event;
-use App\Models\Invite;
-use App\Models\Ticket;
-use App\Models\Comment;
 use App\Models\Tag;
-use App\Models\Poll;
-use App\Models\PollOption;
-use App\Models\Vote;
 use App\Models\Account;
-use Illuminate\Support\Facades\DB;
+use App\Models\CoverImage;
 
 class EventController extends Controller
 {
@@ -94,15 +88,18 @@ class EventController extends Controller
         $event->privacy = $request->privacy;
         $event->user_id = Auth::user()->id;
 
-        if($request->hasFile('image')) {
+        if ($request->hasFile('image')) {
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
             $filename = time() . '.' . $extension;
-            $file->move('uploads/events/', $filename);
-            $event->image = $filename;
+            $file->move('/images/events/', $filename);
+            $coverImage = CoverImage::create([
+                'name' => $filename,
+                'event_id' => $event->id
+            ]);
         }
 
-        if($request->price) $event->price = $request->price;
+        if ($request->price) $event->price = $request->price;
         $event->save();
 
         return redirect()->route('event.show', ['id' => $event->id]);
@@ -123,18 +120,19 @@ class EventController extends Controller
         return view('pages.event', ['event' => $event]);
     }
 
-    public function showParticipantsEvent($id) {
-        
+    public function showParticipantsEvent($id)
+    {
+
         $event = Event::find($id);
 
         $this->authorize('update', $event);
 
-        foreach($event->invites as $invite) {
+        foreach ($event->invites as $invite) {
             $invite->user;
             $invite->user->account;
         }
 
-        foreach($event->tickets as $ticket) {
+        foreach ($event->tickets as $ticket) {
             $ticket->user;
             $ticket->user->account;
         }
@@ -148,7 +146,8 @@ class EventController extends Controller
      * @param  \App\Models\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id) {
+    public function edit(Request $request, $id)
+    {
         $event = Event::find($id);
 
         $this->authorize('update', $event);
@@ -156,7 +155,7 @@ class EventController extends Controller
         return view('pages.eventSettings', ['event' => $event]);
     }
 
-    
+
     /**
      * Update the specified resource in storage.
      *
@@ -164,8 +163,9 @@ class EventController extends Controller
      * @param  \App\Models\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
-        
+    public function update(Request $request, $id)
+    {
+
         $event = Event::find($id);
 
         $this->authorize('update', $event);
@@ -176,25 +176,25 @@ class EventController extends Controller
             'tags' => 'required'
         ]);
 
-        if($request['privacy'] === 'on') {
+        if ($request['privacy'] === 'on') {
             $event->privacy = 'Private';
-        }else {
+        } else {
             $event->privacy = 'Public';
         }
 
-        $eventTagNames = Array(); 
+        $eventTagNames = array();
 
-        foreach($event->tags as $tag) {
+        foreach ($event->tags as $tag) {
             array_push($eventTagNames, $tag->name);
         }
 
-        foreach($request->get('tags') as $tagName) {
+        foreach ($request->get('tags') as $tagName) {
 
-            if(!in_array($tagName, $eventTagNames)) {
+            if (!in_array($tagName, $eventTagNames)) {
                 $tag = Tag::where('name', $tagName)->get();
                 $exists = Tag::get()->contains('name', $tagName);
 
-                if(!$exists) {
+                if (!$exists) {
                     $tag = Tag::create([
                         'name' => $tagName
                     ]);
@@ -204,8 +204,8 @@ class EventController extends Controller
             }
         }
 
-        foreach($eventTagNames as $nameTag) {
-            if(!in_array($nameTag, $request->get('tags'))) {
+        foreach ($eventTagNames as $nameTag) {
+            if (!in_array($nameTag, $request->get('tags'))) {
                 $tag = Tag::where('name', $nameTag)->get();
                 $event->tags()->detach($tag);
             }
@@ -217,12 +217,46 @@ class EventController extends Controller
         if ($request['description'] !== null) {
             $event->description = $request['description'];
         }
+        if ($request['location'] !== null) {
+            $event->location = $request['location'];
+        }
+        if ($request['start_date'] !== null) {
+            $event->start_date = $request['start_date'];
+        }
+        if ($request['end_date'] !== null) {
+            $event->end_date = $request['end_date'];
+        }
+        if ($request['capacity'] !== null) {
+            $event->capacity = $request['capacity'];
+        }
+        if ($request['price'] !== null) {
+            $event->price = $request['price'];
+        }
+        if ($request['image'] !== null) {
+            $validate = $request->validate([
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ]);
 
-        $event->save(); 
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('images/events'), $imageName);
+
+            if ($event->coverImage) {
+                $event->coverImage->delete();
+            }
+
+            $eventImage = CoverImage::create([
+                'event_id' => $event->id,
+                'name' => $imageName
+            ]);
+
+            $eventImage->save();
+        }
+
+        $event->save();
         return redirect()->route('event.show', ['id' => $event]);
     }
 
-    
+
 
     /**
      * Remove the specified resource from storage.
@@ -230,7 +264,8 @@ class EventController extends Controller
      * @param  \App\Models\Account  $account
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id) {
+    public function destroy(Request $request, $id)
+    {
         $event = Event::find($id);
 
         $this->authorize('delete', $event);
@@ -242,11 +277,9 @@ class EventController extends Controller
 
     public function invite(Request $request)
     {
-        
     }
 
     public function deleteInvite(Request $request)
     {
-        
     }
 }

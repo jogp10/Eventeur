@@ -18,6 +18,7 @@ drop table if exists poll_options CASCADE;
 drop table if exists votes CASCADE;
 drop table if exists reports CASCADE;
 drop table if exists bans CASCADE;
+drop table if exists password_resets CASCADE;
 
 DROP TYPE IF EXISTS privacy CASCADE;
 
@@ -36,10 +37,13 @@ CREATE TABLE accounts (
     id          SERIAL PRIMARY KEY,
     email       TEXT NOT NULL,
     name        TEXT NOT NULL,
-    password    TEXT NOT NULL,
+    password    TEXT,
     description TEXT,
     age         INTEGER CHECK (age > 0),
     remember_token TEXT,
+    provider    TEXT,
+    provider_id TEXT,
+    provider_refresh_token TEXT,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     UNIQUE(email)
@@ -82,7 +86,7 @@ CREATE TABLE events (
 CREATE TABLE cover_images (
     id SERIAL PRIMARY KEY,
     event_id   INTEGER NOT NULL,
-    path        TEXT NOT NULL,
+    name        TEXT NOT NULL DEFAULT 'community-events.jpeg',
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_event_id FOREIGN KEY(event_id) references events(id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -91,12 +95,12 @@ CREATE TABLE cover_images (
 
 CREATE TABLE profile_images (
     id SERIAL PRIMARY KEY,
-    account_id  INTEGER DEFAULT 1,
-    path        TEXT NOT NULL,
+    user_id  INTEGER DEFAULT 1,
+    name        TEXT NOT NULL DEFAULT 'perfil.png',
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_account_id FOREIGN KEY(account_id) REFERENCES accounts(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    UNIQUE(account_id)
+    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    UNIQUE(user_id)
 );
 
 CREATE TABLE tags (
@@ -252,6 +256,16 @@ CREATE TABLE bans (
     CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE TABLE password_resets (
+    id              SERIAL PRIMARY KEY,
+    user_id         INTEGER DEFAULT 1,
+    token           TEXT NOT NULL,
+    email           TEXT NOT NULL,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 --Functions
 
 CREATE OR REPLACE FUNCTION
@@ -270,6 +284,16 @@ CREATE OR REPLACE FUNCTION create_account() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     INSERT INTO users(account_id) VALUES (NEW.id);
+    INSERT INTO profile_images(user_id) VALUES (NEW.id);
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION create_event() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    INSERT INTO cover_images(event_id) VALUES (NEW.id);
     RETURN NEW;
 END
 $BODY$
@@ -303,6 +327,7 @@ Drop TRIGGER IF EXISTS invites_event_notification ON invites;
 Drop TRIGGER IF EXISTS check_attendee ON tickets;
 Drop TRIGGER IF EXISTS create_account ON accounts;
 Drop TRIGGER IF EXISTS delete_user ON users;
+Drop TRIGGER IF EXISTS create_event ON events;
 
 -- Trigger 1
 CREATE TRIGGER invites_event_notification_trigger 
@@ -327,6 +352,12 @@ CREATE TRIGGER delete_user
     BEFORE DELETE ON users
     FOR EACH ROW
     EXECUTE PROCEDURE delete_user();
+
+-- Trigger 5
+CREATE TRIGGER create_event
+    AFTER INSERT ON events
+    FOR EACH ROW
+    EXECUTE PROCEDURE create_event();
 
 
 --Indexes

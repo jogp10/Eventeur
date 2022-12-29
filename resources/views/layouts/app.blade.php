@@ -47,6 +47,9 @@
       {{ Session::get('error')}}
     </div>
     @endif
+    @if($errors->any())
+    <h4>{{$errors->first()}}</h4>
+    @endif
     <section id="content">
       @if(Auth::check() && Auth::user()->isBanned())
       @include("partials.banned")

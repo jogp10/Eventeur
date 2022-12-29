@@ -247,7 +247,7 @@ function createRow(user) {
   let htmlView = '';
   htmlView += '<tr class="d-flex flex-row btn pb-1" id="' + user['id'] + '">';
   htmlView += ' <td>';
-  htmlView += '   <img src="/images/perfil.png" class="rounded-circle img-fluid m-0 p-0" style="height:3rem; width:3.5rem" alt="...">';
+  htmlView += '   <img src="/images/profiles/perfil.png" class="rounded-circle img-fluid m-0 p-0" style="height:3rem; width:3.5rem" alt="...">';
   htmlView += ' </td>';
   htmlView += ' <td class="align-middle ps-2">';
   htmlView += '  <div class="d-flex flex-column">';
@@ -274,7 +274,7 @@ function createUserRow(user, url) {
   htmlView += '<div class="card mb-3" style="max-width: 540px;">';
   htmlView += '  <div class="row g-0">';
   htmlView += '    <div class="col-md-4">';
-  htmlView += '      <img src="/images/perfil.png" class="rounded-circle img-fluid rounded-start" alt="...">';
+  htmlView += '      <img src="/images/profiles/perfil.png" class="rounded-circle img-fluid rounded-start" alt="...">';
   htmlView += '    </div>';
   htmlView += '    <div class="col-md-8 d-flex flex-row">';
   htmlView += '      <div class="card-body col-md-8">';
