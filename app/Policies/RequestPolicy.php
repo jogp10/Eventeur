@@ -53,10 +53,8 @@ class RequestPolicy
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function create(Account $account, Event $event)
-    {
-        return True;
-        
-        // FIx this
+    {        
+        // Fix this
         if($event->tickets->where('user_id', $account->id)->count() > 0) {
             return False;
         }
@@ -74,7 +72,12 @@ class RequestPolicy
      */
     public function update(Account $account, Request $request)
     {
-        return False;
+        if ($request->user->id == $account->id) {
+            return True;
+        }
+        else {
+            return False;
+        }
     }
 
     /**
