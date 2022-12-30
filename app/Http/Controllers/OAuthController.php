@@ -20,6 +20,12 @@ class OAuthController extends Controller
     {
         $user = Socialite::driver('google')->user();
 
+        if (Account::where('email', $user->email)->exists()) {
+            $authUser = Account::where('email', $user->email)->first();
+            Auth::login($authUser);
+            return redirect()->route('profile', ['id' => $authUser->id]);
+        }
+
         $authUser = Account::updateOrCreate(
             [
                 'provider_id' => $user->id,

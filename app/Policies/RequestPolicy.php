@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Account;
 use App\Models\Request;
+use App\Models\Event;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class RequestPolicy

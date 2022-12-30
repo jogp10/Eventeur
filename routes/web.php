@@ -46,13 +46,6 @@ Route::get('event/{id}/event_settings', 'EventController@edit')->name('eventSett
 Route::get('event/{id}/event_participants', 'EventController@showParticipantsEvent')->name('eventParticipants');
 Route::post('event/{id}/event_settings', 'EventController@update')->name('editEvent');
 Route::delete('event/{id}/delete_event', 'EventController@destroy')->name('deleteEvent');
-Route::post('api/request_join', 'EventController@request_join');
-Route::delete('api/delete_join', 'EventController@delete_join');
-Route::post('api/accept_join', 'EventController@accept_join');
-Route::post('api/invite', 'EventController@invite')->name('invite');
-Route::delete('api/invite/delete', 'EventController@deleteInvite')->name('deleteInvite');
-Route::post('api/give_ticket', 'EventController@ticket')->name('ticket');
-Route::delete('api/give_ticket/delete', 'EventController@deleteTicket')->name('deleteTicket');
 Route::get('create_event', 'EventController@create')->name('createEvent');
 Route::put('create_event', 'EventController@store')->name('storeEvent');
 Route::get('event/{id}/create_poll', 'PollController@createPoll')->name('createPoll');
@@ -97,6 +90,9 @@ Route::post('api/comment', 'CommentController@store')->name('comment');
 Route::delete('api/comment/delete', 'CommentController@destroy')->name('deleteComment');
 Route::post('api/answer', 'CommentController@answer')->name('answer');
 Route::delete('api/answer/delete', 'CommentController@answerDestroy')->name('deleteAnswer');
+Route::post('api/request_join', 'RequestController@store');
+Route::delete('api/delete_join', 'RequestController@destroy');
+Route::post('api/accept_join', 'RequestController@update');
 
 // OAuth
 Route::get('auth/redirect', 'OAuthController@redirectToProvider')->name('oauth');

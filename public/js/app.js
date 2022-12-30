@@ -109,7 +109,6 @@ function sendRequestRequest(event) {
   event_id = document.querySelector(".event").id;
 
   sendAjaxRequest('post', '/api/request_join/', {event_id:event_id }, sendRequestHandler);
-  
 }
 
 function sendTicketsRequest(event) {
