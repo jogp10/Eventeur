@@ -60,9 +60,9 @@
       </button>
       @endcannot
 
-      @if(Auth::check() && Auth::id() != $event->manager->id)
-      <button id="requestInvite" type="button" class="btn btn-primary align-self-end m-1">Request to join</button>
-      @endif
+      @can('viewAny', App\Models\Request::class)
+      <button id="requestInvite" type="button" class="btn btn-primary">Request to join</button>
+      @endcan
       
       @if(Auth::check())
       <button type="button" id="invite" class="btn btn-primary text-decoration-none" data-bs-toggle="modal" data-bs-target="#inviteModal" style="background-color:#d1410c; border-color:#d1410c;">
