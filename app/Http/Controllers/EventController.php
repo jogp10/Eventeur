@@ -283,4 +283,58 @@ class EventController extends Controller
     public function deleteInvite(Request $request)
     {
     }
+
+    public function request_join(Request $request)
+    {
+        $event = $_POST['event_id'];
+
+        $this->authorize('create', [Request::class, Event::find($event)]);
+
+        
+        $user_id = Auth::user()->id;
+
+        $request = Request::create([
+            'user_id' => $user_id,
+            'event_id' => $event,
+        ]);
+        $request->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function accept_join(Request $request)
+    {
+        $this->authorize('create', Ticket::class);
+
+        $request_id = $_POST['request_id'];
+        $request = Request::find($request[$request_id]);
+
+        $event = $request->event_id;
+        $user_id = $request->user_id;
+
+        $ticket = Ticket::create([
+            'user_id' => $user_id,
+            'event_id' => $event,
+            'num_of_tickets' => 1,
+        ]);
+        $ticket->save();
+
+        $request = Request::where('user_id', $user_id)->where('event_id', $event)->first();
+        $request->delete();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function delete_join(Request $request)
+    {
+        $request_id = $_POST['request_id'];
+        $request = Request::find($request[$request_id]);
+
+        $this->authorize('delete', $request);
+        
+        $request->delete();
+
+        return redirect()->back();
+    }
+
 }

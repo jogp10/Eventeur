@@ -25,6 +25,7 @@ class AuthServiceProvider extends ServiceProvider
     Report::class => ReportPolicy::class,
     Poll::class => PollPolicy::class,
     Ban::class => BanPolicy::class,
+    Request::class => RequestPolicy::class,
   ];
 
   /**
