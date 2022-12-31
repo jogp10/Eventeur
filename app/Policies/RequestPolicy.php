@@ -71,8 +71,6 @@ class RequestPolicy
             return False;
         } else if ($event->manager->id == $account->id) {
             return False;
-        } else if ($event->tickets->count() == $event->max_tickets) {
-            return False;
         } else {
             return True;
         }

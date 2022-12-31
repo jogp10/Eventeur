@@ -116,7 +116,7 @@ class RequestController extends Controller
         $request = Req::where('user_id', $user_id)->where('event_id', $event)->first();
         $request->delete();
 
-        return response()->json(['success' => true]);
+        return redirect()->back();
     }
 
     /**
