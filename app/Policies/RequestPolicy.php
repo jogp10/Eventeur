@@ -67,8 +67,13 @@ class RequestPolicy
         // Fix this
         if($event->tickets->where('user_id', $account->id)->count() > 0) {
             return False;
-        }
-        else {
+        } else if (Request::where('event_id', $event->id)->exists() && Request::where('event_id', $event->id)->where('user_id', $account->id)->count() > 0) {
+            return False;
+        } else if ($event->manager->id == $account->id) {
+            return False;
+        } else if ($event->tickets->count() == $event->max_tickets) {
+            return False;
+        } else {
             return True;
         }
     }

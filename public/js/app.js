@@ -224,9 +224,10 @@ function sendInviteHandler() {
 }
 
 function sendRequestHandler(){
-  // if (this.status != 200) window.location = '/';
+  if (this.status != 200) window.location = '/';
   console.log(this.responseText);
 
+  location.reload();
 }
 
 function sendTicketHandler() {
