@@ -128,7 +128,7 @@ class RequestController extends Controller
     public function destroy(Request $r, $request_id)
     {
         //
-        $request = Request::find($request_id);
+        $request = Req::find($request_id);
 
         $this->authorize('delete', $request);
         
