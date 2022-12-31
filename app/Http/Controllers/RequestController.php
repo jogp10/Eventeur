@@ -9,6 +9,15 @@ use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+function console_log($output, $with_script_tags = true)
+{
+    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
+        ');';
+    if ($with_script_tags) {
+        $js_code = '<script>' . $js_code . '</script>';
+    }
+    echo $js_code;
+}
 
 class RequestController extends Controller
 {
@@ -41,15 +50,17 @@ class RequestController extends Controller
     public function store(Request $request)
     {
         //
-        $event = $_POST['event_id'];
+        $event_id = $_POST['event_id'];
+        $event = Event::find($event_id);
 
-        $this->authorize('create', [Request::class, Event::find($event)]);
+
+        $this->authorize('create', [Req::class, $event]);
         
         $user_id = Auth::user()->id;
 
         $request = Req::create([
             'user_id' => $user_id,
-            'event_id' => $event,
+            'event_id' => $event_id
         ]);
         $request->save();
 

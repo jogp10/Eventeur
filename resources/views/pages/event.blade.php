@@ -60,7 +60,7 @@
       </button>
       @endcannot
 
-      @can('viewAny', App\Models\Request::class)
+      @can('create', [App\Models\Request::class, $event])
       <button id="requestInvite" type="button" class="btn btn-primary">Request to join</button>
       @endcan
       
