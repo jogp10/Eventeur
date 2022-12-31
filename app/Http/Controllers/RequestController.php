@@ -96,13 +96,12 @@ class RequestController extends Controller
      * @param  \App\Models\Req  $request
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Req $req)
+    public function update(Request $r, $request_id)
     {
         //
         $this->authorize('create', Ticket::class);
 
-        $request_id = $_POST['request_id'];
-        $request = Request::find($request[$request_id]);
+        $request = Req::find($request_id);
 
         $event = $request->event_id;
         $user_id = $request->user_id;
@@ -114,7 +113,7 @@ class RequestController extends Controller
         ]);
         $ticket->save();
 
-        $request = Request::where('user_id', $user_id)->where('event_id', $event)->first();
+        $request = Req::where('user_id', $user_id)->where('event_id', $event)->first();
         $request->delete();
 
         return response()->json(['success' => true]);
@@ -126,11 +125,10 @@ class RequestController extends Controller
      * @param  \App\Models\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy(Request $r, $request_id)
     {
         //
-        $request_id = $_POST['request_id'];
-        $request = Request::find($request[$request_id]);
+        $request = Request::find($request_id);
 
         $this->authorize('delete', $request);
         

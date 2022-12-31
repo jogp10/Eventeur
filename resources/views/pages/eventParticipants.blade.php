@@ -74,11 +74,11 @@
                         <td>{{$request->event->name}}</td>
                         <td>{{$request->updated_at}}</td>
                         <td>
-                            <form class="pb-1" action="{{ route('api/delete_join', ['request_id' => $request->id]) }}" method="POST">
+                            <form class="pb-1" action="{{ url('api/accept_join', ['request_id' => $request->id]) }}" method="POST">
                                 @csrf
-                                <button type="submit" class="btn btn-danger">Accept Request</button>
+                                <button type="submit" class="btn btn-success">Accept Request</button>
                             </form>
-                            <form class="pb-1" action="{{ route('api/accept_join', ['request_id' => $request->id]) }}" method="POST">
+                            <form class="pb-1" action="{{ url('api/delete_join', ['request_id' => $request->id]) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger">Remove Request</button>
