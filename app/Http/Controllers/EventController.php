@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\Event;
 use App\Models\Tag;
@@ -19,11 +20,16 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = Event::inRandomOrder()
+        // order by number of votes
+        $events = Event::leftjoin('votes', 'events.id', '=', 'votes.event_id')
+            ->select('events.*', DB::raw('COUNT(votes.event_id) as total_votes'))
+            ->groupBy('events.id')
+            ->orderBy('total_votes', 'DESC')
             ->limit(8)
             ->where('privacy', 'Public')
             ->where('end_date', '>', date('Y-m-d H:i:s'))
             ->get();
+
 
         return view('pages.home', ['events' => $events]);
     }
@@ -275,5 +281,4 @@ class EventController extends Controller
 
         return redirect()->route('home');
     }
-
 }

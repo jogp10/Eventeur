@@ -8,7 +8,7 @@
             </div>
             <div class="col-8">
                 <h3><a style="text-decoration: none; color: black;" href="{{ url('/event') . '/' . $event->id }}">{{$event->name}}</a></h3>
-                <p class="mb-5">{{$event->description}}</p>
+                <p class="mb-5">{{strstr($event->description, '.', true)}}</p>
                 <div class="d-flex flex-row justify-content-between align-items-end">
                     <button type="button" class="btn" style="text-decoration: none;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left" viewBox="0 0 16 16">
