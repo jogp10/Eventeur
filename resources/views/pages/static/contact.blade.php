@@ -2,8 +2,8 @@
 
 @section('title', 'About Us')
 @section('content')
-<h1 class="my-5 mt-4 px-5">Contact Us</h1>
-<div class="container-md">
+<div class="container-md pt-4 d-flex flex-column">
+    <h1 class="my-5 px-5 text-center">Contact Us</h1>
     <div class="row row-cols-1 row-cols-md-2 flex-column-reverse flex-md-row gx-5">
         <div class="col">
             <form method="POST" action=" {{ route('submitContact') }} ">
@@ -17,7 +17,7 @@
                 <label for="subject" class="form-label">Subject</label><br>
                 <input type="text" id="subject" name="subject" class="form-control mb-3">
 
-                <textarea id="content" name="content" rows="10" cols="45" class="form-control"></textarea>
+                <textarea id="content_form" name="content_form" rows="10" cols="45" class="form-control"></textarea>
                 <button type="submit" class="form-control my-4">Send Request</button>
             </form>
         </div>

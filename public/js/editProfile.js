@@ -6,15 +6,15 @@ let editSecuritySection = document.getElementById("security")
 if(profilePageSettingsButton !== null) {
 
   profilePageSettingsButton.addEventListener('click', () => {
-    editSecuritySection.className = "visually-hidden"
-    editProfileSection.className = ""
+    editSecuritySection.classList.add("visually-hidden");
+    editProfileSection.classList.remove("visually-hidden");
     profilePageSecuritysButton.style.color = "grey"
     profilePageSettingsButton.style.color = "black"
   })
 
   profilePageSecuritysButton.addEventListener('click', () => {
-      editSecuritySection.className = ""
-      editProfileSection.className = "visually-hidden"
+      editSecuritySection.classList.remove("visually-hidden");
+      editProfileSection.classList.add("visually-hidden");
       profilePageSecuritysButton.style.color = "black"
       profilePageSettingsButton.style.color = "grey"
   })

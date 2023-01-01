@@ -15,12 +15,12 @@
     <div class="row mt-5 ps-5">
         <div class="col">
             <h5>Profile Image</h5>
-            <div class="d-flex flex-column flex-sm-row border border-3">
+            <div class="profileDiv d-flex flex-column flex-sm-row border border-3">
                 <div class="align-self-center mb-4">
                     <img src="/images/profiles/{{$account->user->profileImage->name}}" class="rounded-circle img-fluid rounded-circle me-4" height="100" width="90" alt="...">
                 </div>
                 <div class="align-self-center">
-                    <form class="ps-5" method="POST" action="{{ route('editProfileImage', ['id' => $account->id]) }}" enctype="multipart/form-data">
+                    <form class="ms-5" method="POST" action="{{ route('editProfileImage', ['id' => $account->id]) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         @if ($message = Session::get('success'))

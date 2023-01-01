@@ -49,10 +49,12 @@
     </div>
     @endif
     @if($errors->any())
+    <div class="alert alert-error" role="alert">
     <h4>{{$errors->first()}}</h4>
+    </div>
     @endif
     <section id="content">
-      <div id="notifications">
+      <div id="notifications" style="display:none">
         @include('partials.notifications')
       </div>
       @if(Auth::check() && Auth::user()->isBanned())

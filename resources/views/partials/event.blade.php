@@ -1,5 +1,5 @@
 <div class="row border border m-5 rounded" data-id="{{$event->id}}">
-    <div class="event container">
+    <div class="eventHome container">
         <div class="row row-cols-2 align-items-center">
             <div class="d-flex flex-column col-1 ps-3 align-self-start">
                 @include('partials.form', ['action' => 'up', 'id' => $event->id, 'type' => 'event'])

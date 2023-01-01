@@ -1,5 +1,5 @@
-<section id="settings" class="mb-5">
-        <form class="ps-5" method="POST" action="{{ route('editProfile', ['id' => $account->id]) }}">
+<section id="settings" class="ms-5">
+        <form class="" method="POST" action="{{ route('editProfile', ['id' => $account->id]) }}">
             @method('PUT')
             @csrf
             <div class="row row-cols-2 border border-3 gx-0 py-4 px-3">
