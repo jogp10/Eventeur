@@ -117,14 +117,33 @@ footer {
   height: 100%;
 }
 
-#createEvent {
+#createEvent, .event {
   box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+}
+
+.box {
+  box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
 }
 
 main {
   position: relative;
   width: 100%;
 }
+
+header {
+  background: #f6cdc5;
+}
+
+#button-addon2 {
+  background: white;
+}
+
+#login, #signup {
+  background: white;
+  color: black;
+}
+
+
 
 textarea, .eventHome, .event, #createEvent, #userBar, #content-events, .calendar, .profileDiv, #settings, #security {
   background: white;

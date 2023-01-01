@@ -1,5 +1,5 @@
 <header>
-    <nav class="navbar navbar-expand-lg bg-light">
+    <nav class="navbar navbar-expand-lg">
         <div class="container-fluid d-flex flex-row justify-content-around align-items-center">
             <a class="navbar-brand" href="{{ url('/') }}">
                 <img src="{{ asset('images/logo.png') }}" alt="Logo" width="40" height="40" class="d-inline-block">
@@ -39,8 +39,8 @@
                     <span class="pt-1">{{ Auth::user()->name }}</span></a>
                 <a class="btn btn-ligth" href="{{ url('/logout') }}">Logout</a>
                 @else
-                <a class="btn btn-dark me-3 visually-lg-hidden" style="--bs-btn-padding-y: .60rem; --bs-btn-padding-x: 2rem; --bs-btn-font-size: .90rem;" href="{{ url('/login') }}"> LOG IN</a>
-                <a class="btn btn-secondary visually-lg-hidden" style="--bs-btn-padding-y: .60rem; --bs-btn-padding-x: 2rem; --bs-btn-font-size: .90rem;" href="{{ url('/register') }}"> SIGN UP </a>
+                <a id="login" class="btn me-3 visually-lg-hidden" style="--bs-btn-padding-y: .60rem; --bs-btn-padding-x: 2rem; --bs-btn-font-size: .90rem;" href="{{ url('/login') }}"> LOG IN</a>
+                <a id="signup" class="btn visually-lg-hidden" style="--bs-btn-padding-y: .60rem; --bs-btn-padding-x: 2rem; --bs-btn-font-size: .90rem;" href="{{ url('/register') }}"> SIGN UP </a>
                 @endif
             </div>
         </div>

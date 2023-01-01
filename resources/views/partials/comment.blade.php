@@ -1,5 +1,5 @@
 <div class="comment-section p-2">
-  <div class="border rounded p-3 ps-4 d-flex flex-row justify-content-start" data-id="{{$comment->id}}">
+  <div class="box border rounded p-3 ps-4 d-flex flex-row justify-content-start" data-id="{{$comment->id}}">
     <div class="pe-2">
       <img src="/images/profiles/{{$comment->user->profileImage->name}}" class="rounded-circle img-fluid m-0 p-0" height="80" width="120" alt="...">
     </div>
@@ -69,7 +69,7 @@
       </form>
     </div>
     @foreach ($comment->answers as $reply)
-    <div class="answer border rounded mt-2 p-3 ps-4 d-flex flex-row justify-content-start" data-id="{{$reply['id']}}" style="">
+    <div class="answer box border rounded mt-2 p-3 ps-4 d-flex flex-row justify-content-start" data-id="{{$reply['id']}}" style="">
       <div class="pe-2">
         <img src="/images/profiles/{{$comment->user->profileImage->name}}" class="rounded-circle img-fluid m-0 p-0" height="80" width="120" alt="...">
       </div>

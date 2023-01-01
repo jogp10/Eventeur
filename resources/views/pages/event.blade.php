@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-md d-flex flex-column w-100">
   <div id="{{$event->id}}" class="event d-flex flex-column border m-3 p-2 ps-4 rounded" style="min-height: 500px">
-    <div class="event d-flex flex-row justify-content-between">
+    <div class="d-flex flex-row justify-content-between">
       <div class="pt-1">
         @include('partials.form', ['action' => 'up', 'id' => $event->id, 'type' => 'event'])
         <span class="d-flex justify-content-center">{{ $event->votes->count() }}</span>
