@@ -11,4 +11,6 @@ if (bell) {
             notifications.style.display = "none";
         }
     });
+
+
 }

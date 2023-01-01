@@ -37,6 +37,11 @@ function addEventListeners() {
   if (submitRequest != null) {
     submitRequest.addEventListener('click', sendRequestRequest);
   }
+
+  let notificationButton = document.getElementById("bell");
+  if (notificationButton != null) {
+    notificationButton.addEventListener('click', markAsReadRequest);
+  }
 }
 
 function encodeForAjax(data) {
@@ -108,7 +113,7 @@ function sendRequestRequest(event) {
   // user_id = document.querySelector(".user").id;
   event_id = document.querySelector(".event").id;
 
-  sendAjaxRequest('post', '/api/request_join/', {event_id:event_id }, sendRequestHandler);
+  sendAjaxRequest('post', '/api/request_join/', { event_id: event_id }, sendRequestHandler);
 }
 
 function sendTicketsRequest(event) {
@@ -123,6 +128,15 @@ function sendTicketsRequest(event) {
 
   if (checkedArray.length > 0)
     sendAjaxRequest('post', '/api/ticket/', { ids: checkedArray, event_id: event_id }, sendTicketHandler);
+}
+
+function markAsReadRequest() {
+  let notifications = document.getElementsByClassName("notification");
+  
+  for (let i = 0; i < notifications.length; i++) {
+    let notification_id = notifications[i].id;
+    sendAjaxRequest('put', '/api/markAsRead/' + notification_id, { notification_id: notification_id }, markAsReadHandler);
+  }
 }
 
 
@@ -223,7 +237,7 @@ function sendInviteHandler() {
   let invites = JSON.parse(this.responseText);
 }
 
-function sendRequestHandler(){
+function sendRequestHandler() {
   if (this.status != 200) window.location = '/';
   console.log(this.responseText);
 
@@ -234,6 +248,17 @@ function sendTicketHandler() {
   if (this.status != 200) window.location = '/';
 
   let tickets = JSON.parse(this.responseText);
+}
+
+function markAsReadHandler() {
+  if (this.status != 200) window.location = '/';
+  
+  let notification = JSON.parse(this.responseText);
+
+  if (notification.success == true) {
+    let count = document.querySelector('#notification-count');
+    count.innerHTML = count.innerHTML - 1;
+  }
 }
 
 function createCard(card) {

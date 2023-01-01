@@ -50,13 +50,13 @@
     @endif
     @if($errors->any())
     <div class="alert alert-error" role="alert">
-    <h4>{{$errors->first()}}</h4>
+      <h4>{{$errors->first()}}</h4>
     </div>
     @endif
     <section id="content">
-      <div id="notifications" style="display:none">
+      <table id="notifications" style="display:none">
         @include('partials.notifications')
-      </div>
+      </table>
       @if(Auth::check() && Auth::user()->isBanned())
       @include('partials.banned')
       @else
