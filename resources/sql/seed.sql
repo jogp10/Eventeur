@@ -161,6 +161,7 @@ CREATE TABLE requests (
 
 CREATE TABLE notifications (
     id          SERIAL PRIMARY KEY,
+    user_id     INTEGER NOT NULL,
     content     TEXT,
     seen        BOOLEAN DEFAULT '0',
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -169,6 +170,7 @@ CREATE TABLE notifications (
 
 CREATE TABLE invite_notifications (
     id              SERIAL PRIMARY KEY,
+    user_id         INTEGER NOT NULL,
     notification_id INTEGER NOT NULL,
     invite_id       INTEGER NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -192,6 +194,7 @@ CREATE TABLE comments (
 
 CREATE TABLE comment_notifications (
     id              SERIAL PRIMARY KEY,
+    user_id         INTEGER NOT NULL,
     notification_id INTEGER NOT NULL,
     comment_id      INTEGER NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -284,9 +287,21 @@ CREATE TABLE password_resets (
 CREATE OR REPLACE FUNCTION
     invites_event_notification_function() RETURNS TRIGGER AS $BODY$
     BEGIN
-    	INSERT INTO notifications(content) VALUES ('Invited to event');
+    	INSERT INTO notifications(user_id, content) VALUES (New.user_id, 'Invited to event');
 
-    	INSERT INTO invite_notifications(notification_id, invite_id) VALUES ((select currval(pg_get_serial_sequence('notifications', 'id'))), New.id);
+    	INSERT INTO invite_notifications(user_id, notification_id, invite_id) VALUES (New.user_id, (select currval(pg_get_serial_sequence('notifications', 'id'))), New.id);
+
+        RETURN NEW;
+
+    END;
+$BODY$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION
+    comments_event_notification_function() RETURNS TRIGGER AS $BODY$
+    BEGIN
+    	INSERT INTO notifications(user_id, content) VALUES (New.user_id, 'New comment on event');
+
+    	INSERT INTO comment_notifications(user_id, notification_id, comment_id) VALUES (New.user_id, (select currval(pg_get_serial_sequence('notifications', 'id'))), New.id);
 
         RETURN NEW;
 
@@ -336,41 +351,48 @@ $BODY$
 LANGUAGE plpgsql;
 
 --Triggers
-Drop TRIGGER IF EXISTS invites_event_notification ON invites;
 Drop TRIGGER IF EXISTS check_attendee ON tickets;
 Drop TRIGGER IF EXISTS create_account ON accounts;
 Drop TRIGGER IF EXISTS delete_user ON users;
 Drop TRIGGER IF EXISTS create_event ON events;
+Drop TRIGGER IF EXISTS invites_event_notification ON invites;
+Drop TRIGGER IF EXISTS comments_event_notification ON comments;
 
 -- Trigger 1
-CREATE TRIGGER invites_event_notification_trigger 
-    AFTER INSERT ON invites
-    FOR EACH ROW 
-    EXECUTE PROCEDURE invites_event_notification_function();
-
--- Trigger 2
 CREATE TRIGGER check_attendee
     BEFORE INSERT ON comments
     FOR EACH ROW
     EXECUTE PROCEDURE check_attendee();
 
--- Trigger 3
+-- Trigger 2
 CREATE TRIGGER create_account
     AFTER INSERT ON accounts
     FOR EACH ROW
     EXECUTE PROCEDURE create_account();
 
--- Trigger 4
+-- Trigger 3
 CREATE TRIGGER delete_user
     BEFORE DELETE ON users
     FOR EACH ROW
     EXECUTE PROCEDURE delete_user();
 
--- Trigger 5
+-- Trigger 4
 CREATE TRIGGER create_event
     AFTER INSERT ON events
     FOR EACH ROW
     EXECUTE PROCEDURE create_event();
+
+-- Trigger 5
+CREATE TRIGGER invites_event_notification_trigger 
+    AFTER INSERT ON invites
+    FOR EACH ROW 
+    EXECUTE PROCEDURE invites_event_notification_function();
+
+-- Trigger 6
+CREATE TRIGGER comments_event_notification_trigger 
+    AFTER INSERT ON comments
+    FOR EACH ROW 
+    EXECUTE PROCEDURE comments_event_notification_function();
 
 
 --Indexes

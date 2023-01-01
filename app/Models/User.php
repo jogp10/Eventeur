@@ -34,7 +34,13 @@ class User extends Model
 
     public function reports() { return $this->hasMany(Report::class); }
 
-    public function bans() { return $this->hasMany(Ban::class); }    
+    public function bans() { return $this->hasMany(Ban::class); }
+
+    public function notifications() { return $this->hasMany(Notification::class); }
+
+    public function inviteNotifications() { return $this->hasMany(InviteNotification::class); }
+
+    public function commentNotifications() { return $this->hasMany(CommentNotification::class); }
     
     public function checkIfVotedPoll($id) {
         
