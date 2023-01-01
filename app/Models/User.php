@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Model
 {
-    use Notifiable;
+    use HasFactory;
 
     protected $fillable = [
         'id', 'account_id', 'created_at', 'updated_at'

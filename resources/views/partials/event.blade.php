@@ -1,5 +1,5 @@
 <div class="row border border m-5 rounded" data-id="{{$event->id}}">
-    <div class="container">
+    <div class="event container">
         <div class="row row-cols-2 align-items-center">
             <div class="d-flex flex-column col-1 ps-3 align-self-start">
                 @include('partials.form', ['action' => 'up', 'id' => $event->id, 'type' => 'event'])
@@ -31,7 +31,7 @@
                     </button>
                 </div>
             </div>
-            <div class="col-3 p-0 m-0">
+            <div class="col-3 p-0 pe-1 m-0">
                 <img src="images/events/community-events.jpeg" class="img-fluid m-0 p-0 rounded" height="300" width="400" alt="...">
             </div>
         </div>
