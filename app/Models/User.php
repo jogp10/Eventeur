@@ -41,6 +41,10 @@ class User extends Model
     public function inviteNotifications() { return $this->hasMany(InviteNotification::class); }
 
     public function commentNotifications() { return $this->hasMany(CommentNotification::class); }
+
+    public function latestNotifications() {
+        return $this->notifications()->where('seen', 'false')->orderBy('created_at', 'desc')->get();
+    }
     
     public function checkIfVotedPoll($id) {
         

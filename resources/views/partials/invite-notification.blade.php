@@ -4,10 +4,3 @@
 <td>
     <span>{{ $notification->created_at->diffForHumans() }}</span>
 </td>
-<td>
-    <form action="{{ route('markAsRead', ['notification_id' => $notification->id]) }}" method="POST">
-        @csrf
-        @method('PUT')
-        <button type="submit" class="btn btn-primary">Mark as read</button>
-    </form>
-</td>
