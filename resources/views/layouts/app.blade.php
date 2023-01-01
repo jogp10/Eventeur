@@ -54,9 +54,11 @@
     </div>
     @endif
     <section id="content">
+      @if(Auth::check())
       <table id="notifications" style="display:none">
         @include('partials.notifications')
       </table>
+      @endif
       @if(Auth::check() && Auth::user()->isBanned())
       @include('partials.banned')
       @else
