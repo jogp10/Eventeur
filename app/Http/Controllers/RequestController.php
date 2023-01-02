@@ -106,6 +106,8 @@ class RequestController extends Controller
         $event = $request->event_id;
         $user_id = $request->user_id;
 
+        console_log($event);
+
         $ticket = Ticket::create([
             'user_id' => $user_id,
             'event_id' => $event,

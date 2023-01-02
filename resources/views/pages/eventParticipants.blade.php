@@ -76,10 +76,12 @@
                         <td>
                             <form class="pb-1" action="{{ url('api/accept_join', ['request_id' => $request->id]) }}" method="POST">
                                 @csrf
+                                <input type="hidden" name="event_id" value="{{$request->event->id}}">
                                 <button type="submit" class="btn btn-success">Accept Request</button>
                             </form>
-                            <form class="pb-1" action="{{ url('api/delete_join', ['request_id' => $request->id]) }}" method="POST">
+                            <form class="pb-1" action="{{ url('api/delete_join', ['request_id' => $request->id, 'event_id' => $request->event->id]) }}" method="POST">
                                 @csrf
+                                <input type="hidden" name="event_id" value="{{$request->event->id}}">
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger">Remove Request</button>
                             </form>

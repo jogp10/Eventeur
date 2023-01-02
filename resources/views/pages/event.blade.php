@@ -51,7 +51,7 @@
         <span>{{ $event->start_date }}</span>
       </button>
 
-      @if(Auth::check() & Auth::user()->admin == null)
+      @if(Auth::check() && Auth::user()->admin == null)
       @can('create', [App\Models\Comment::class, $event])
       <button type="button" id="comment-button" class="btn btn-link" style="text-decoration: none; color: black;">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left" viewBox="0 0 16 16">
@@ -79,7 +79,7 @@
         </svg>
         <span>Attendees</span>
       </button>
-      <form action="{{ route('deleteTicket', ['id' => Auth::user()->user->tickets->where('event_id', $event->id)[0]->id]) }}" method="POST">
+      <form action="{{ route('deleteTicket', ['id' => Auth::user()->user->tickets->where('event_id', $event->id)->first()->id]) }}" method="POST">
         @csrf
         @method('DELETE')
         <button type="submit" class="btn btn-secondary text-decoration-none">
@@ -137,21 +137,18 @@
       </form>
     </div>
     @endcan
-    @each('partials.comment', $event->comments, 'comment', )
-
     <div id="poll-form" class="container justify-content-center" style="text-align: center;">
       <form id="form-poll-event" class="w-25" method="GET" action="{{ route('createPoll', ['id' => $event->id]) }}" style="display: inline-block;">
         @csrf
       </form>
       <button class="invisible" id="add-option" type="button">+ Option</button>
     </div>
-
     <div class="container">
       <div class="row-cols-2">
         @each('partials.poll', $event->polls, 'poll')
       </div>
     </div>
-
+    @each('partials.comment', $event->comments, 'comment', )
   </div>
 
 
