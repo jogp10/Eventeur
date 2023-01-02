@@ -9,15 +9,25 @@ use App\Models\Event;
 use App\Models\Ban;
 use App\Models\Tag;
 
+function console_log($output, $with_script_tags = true)
+{
+    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
+        ');';
+    if ($with_script_tags) {
+        $js_code = '<script>' . $js_code . '</script>';
+    }
+    echo $js_code;
+}
+
 class SearchController extends Controller
 {
     //
     public function searchEvent()
     {
-        $search_text = $_GET['query'];            
+        $search_text = $_GET['query'];
         $search_type = $_GET['type'];
 
-        if($search_type == 'name') {
+        if ($search_type == 'name') {
             if (mb_substr($search_text, 0, 1) != "\"") {
                 $events = Event::whereFullText('name', $search_text)->get();
                 $eventsByDescripton = Event::whereFullText('description', $search_text)->get();
@@ -41,15 +51,15 @@ class SearchController extends Controller
                 }
             }
         } else {
-            $events = Array();
-            $tags = Tag::where('name','=', ucfirst($search_text))->get();
-            foreach($tags as $tag) {
-                foreach($tag->events as $event) {
+            $events = array();
+            $tags = Tag::where('name', '=', ucfirst($search_text))->get();
+            foreach ($tags as $tag) {
+                foreach ($tag->events as $event) {
                     array_push($events, $event);
                 }
             }
-        }    
-        
+        }
+
         return view('pages.home', ['events' => $events]);
     }
 
@@ -91,7 +101,7 @@ class SearchController extends Controller
             $events = Event::All();
             $events->shift();
         }
-        
+
         foreach ($events as $event) {
             $event->reports;
             $event->updated_at;
@@ -123,5 +133,67 @@ class SearchController extends Controller
                 $attendees[] = $user;
         }
         return $attendees;
+    }
+
+    public function searchWithFilter(Request $request)
+    {
+        $search_text = $_GET['text'];
+        $search_tag = $_GET['event_tag'];
+        $search_location = $_GET['location'];
+        $search_price = $_GET['ticket'];
+        $search_start_date = $_GET['start_date'];
+        $search_end_date = $_GET['end_date'];
+        $search_sort_by = $_GET['sort_by'];
+        $search_order_by = $_GET['order_by'];
+
+        $events = Event::where('events.id', '>', 0);
+
+
+        if ($search_text != '') {
+            $events = $events->whereRaw('LOWER(name) LIKE ? ', ['%' . strtolower($search_text) . '%']);
+        }
+
+        if ($search_tag != 'Choose category') {
+            $events = $events->join('event_tag', 'events.id', '=', 'event_tag.event_id')
+                            ->where('event_tag.tag_id', '=', $search_tag)
+                            ->select('events.*');
+        }
+
+        if ($search_location != '') {
+            $events = $events->whereRaw('LOWER(location) LIKE ? ', ['%' . strtolower($search_location) . '%']);
+        }
+
+        if ($search_price != '') {
+            $events = $events->where('ticket', '=', $search_price);
+        }
+
+        if ($search_start_date != '') {
+            $events = $events->where('start_date', '>=', $search_start_date);
+        }
+
+        if ($search_end_date != '') {
+            $events = $events->where('end_date', '<=', $search_end_date);
+        }
+
+        if ($search_sort_by != 'Sort by') {
+            if($search_sort_by == 'start_date' || $search_sort_by == 'end_date' || $search_sort_by == 'ticket' || $search_sort_by == 'location' || $search_sort_by == 'name' || $search_sort_by == 'created_at')
+                $events = $events->orderBy($search_sort_by, $search_order_by);
+            else if($search_sort_by == 'comments')
+                $events = $events->leftjoin('comments', 'events.id', '=', 'comments.event_id')
+                                ->select('events.*')
+                                ->orderBy('comments.created_at', $search_order_by);
+            else if($search_sort_by == 'votes')
+                $events = $events->leftjoin('votes', 'events.id', '=', 'votes.event_id')
+                                ->select('events.*')
+                                ->orderBy('votes.created_at', $search_order_by);
+            else if($search_sort_by == 'attendees')
+                $events = $events->leftjoin('tickets', 'events.id', '=', 'tickets.event_id')
+                                ->select('events.*')
+                                ->orderBy('tickets.created_at', $search_order_by);
+        }
+
+        $events = $events->get();
+        console_log($events);
+        return view('pages.home', ['events' => $events]);
     }
 }

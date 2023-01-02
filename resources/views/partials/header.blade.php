@@ -19,6 +19,17 @@
                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                         </svg>
                     </button>
+                    <button class="btn btn-outline-secondary" type="button" id="searchFiltersbtn" data-bs-toggle="modal" data-bs-target="#searchFilterModal">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16">
+                            <path d="M2.5 1a.5.5 0 0 1 .5.5v13a.5.5 0 0 1-1 0v-13a.5.5 0 0 1 .5-.5z" />
+                            <path d="M4.5 1a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-1 0v-9a.5.5 0 0 1 .5-.5z" />
+                            <path d="M6.5 1a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0v-5a.5.5 0 0 1 .5-.5z" />
+                            <path d="M8.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5z" />
+                            <path d="M10.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5z" />
+                            <path d="M12.5 1a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0v-5a.5.5 0 0 1 .5-.5z" />
+                            <path d="M14.5 1a.5.5 0 0 1 .5.5 v9a.5.5 0 0 1-1 0v-9a.5.5 0 0 1 .5-.5z" />
+                        </svg>
+                    </button>
                 </form>
             </div>
             @if (Auth::user() != null)
@@ -45,4 +56,76 @@
             </div>
         </div>
     </nav>
+    <div class="modal fade" id="searchFilterModal" tabindex="-1" role="dialog" aria-labelledby="searchFilterModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchFilterModalLabel">Search Filters</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{route('searchwfilter')}}">
+                    <div class="modal-body">
+                        <label for="searchFilterModalInput" class="col-form-label">Search:</label>
+                        <input name="text" type="text" class="form-control" id="searchFilterModalInput" placeholder="Search for...">
+                        <label for="searchFilterModalSelect" class="col-form-label">Category:</label>
+                        <select name="event_tag" class="form-select" id="searchFilterModalSelect">
+                            <option selected>Choose category</option>
+                            <option value="1">Cultura</option>
+                            <option value="2">Desporto</option>
+                            <option value="3">Outdoor</option>
+                            <option value="4">Indoor</option>
+                            <option value="5">Comédia</option>
+                            <option value="6">Exposição</option>
+                            <option value="7">Música</option>
+                            <option value="8">Para Casal</option>
+                            <option value="9">Conferência</option>
+                            <option value="10">Ciência</option>
+                            <option value="11">Família</option>
+                            <option value="12">Arte</option>
+                            <option value="13">Cinema</option>
+                            <option value="14">Teatro</option>
+                            <option value="15">Dança</option>
+                            <option value="16">Literatura</option>
+                            <option value="17">Festas</option>
+                            <option value="18">Gastronomia</option>
+                            <option value="19">Online</option>
+                            <option value="20">Festivais</option>
+                        </select>
+                        <label for="searchFilterModalSelect" class="col-form-label">Location:</label>
+                        <input name="location" type="text" class="form-control" id="searchFilterModalLocationInput" placeholder="Where... (e.g. Porto)">
+                        <label for="searchFilterModalSelect" class="col-form-label">Price:</label>
+                        <input name="ticket" type="text" class="form-control" id="searchFilterModalPriceInput" placeholder="0€">
+                        <label for="searchFilterModalSelect" class="col-form-label">Start Date after:</label>
+                        <input name="start_date" type="date" class="form-control" id="searchFilterModalStartDateInput">
+                        <label for="searchFilterModalSelect" class="col-form-label">End Date before:</label>
+                        <input name="end_date" type="date" class="form-control" id="searchFilterModalEndDateInput">
+                        <label for="searchFilterModalSelect" class="col-form-label">Sort by:</label>
+                        <select name="sort_by" class="form-select" id="searchFilterModalSortBySelect">
+                            <option selected>Sort by</option>
+                            <option value="created_at">Recent</option>
+                            <option value="votes">Votes</option>
+                            <option value="comments">Comments</option>
+                            <option value="start_date">Start date</option>
+                            <option value="end_date">End date</option>
+                            <option value="ticket">Price</option>
+                            <option value="location">Location</option>
+                            <option value="name">Title</option>
+                            <option value="atteendees">Attendants</option>
+                        </select>
+                        <label for="searchFilterModalSelect" class="col-form-label">Sort order:</label>
+                        <select name="order_by" class="form-select" id="searchFilterModalSortOrderSelect">
+                            <option selected value="asc">Ascending</option>
+                            <option value="desc">Descending</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </header>

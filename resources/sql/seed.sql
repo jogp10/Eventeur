@@ -1456,7 +1456,8 @@ VALUES ('Cultura'),
     ('Literatura'),
     ('Festas'),
     ('Gastronomia'),
-    ('Online');
+    ('Online'),
+    ('Festivais');
 INSERT INTO event_tag (event_id, tag_id)
 VALUES (1, 3),
     (1, 8),

@@ -97,6 +97,7 @@ Route::post('api/request_join', 'RequestController@store');
 Route::delete('api/delete_join/{request_id}', 'RequestController@destroy');
 Route::post('api/accept_join/{request_id}', 'RequestController@update');
 Route::put('api/markAsRead/{notification_id}', 'NotificationController@markAsRead')->name('markAsRead');
+Route::get('api/searchwfilter', 'SearchController@searchWithFilter')->name('searchwfilter');
 
 // OAuth
 Route::get('auth/redirect', 'OAuthController@redirectToProvider')->name('oauth');

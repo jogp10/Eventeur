@@ -153,10 +153,20 @@ header {
   color: black;
 }
 
-textarea, .eventHome, .event, #createEvent, #userBar, #content-events, .calendar, .profileDiv, #settings, #security {
+textarea, .eventHome, .event, #createEvent, #userBar, #content-events, .calendar, .profileDiv, #settings, #security, #searchFiltersbtn {
   background: white;
 }
 
 .alert{
   margin: 0!important;
+}
+
+#button-addon2 {
+  margin-left: -84px;
+}
+
+#type {
+  width: 7vw!important;
+  min-width: 70px!important;
+  max-width: 90px!important;
 }
