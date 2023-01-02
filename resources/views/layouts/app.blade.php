@@ -15,15 +15,12 @@
   <link href="{{ asset('css/milligram.min.css') }}" rel="stylesheet">
   <link href="{{ asset('css/app.css') }}" rel="stylesheet">
   <link href="{{ asset('css/static.css') }}" rel="stylesheet">
+  <link rel="icon" href="{!! asset('/images/logo.png') !!}" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-  <script src="https://kit.fontawesome.com/221bee115b.js" crossorigin="anonymous"></script>
-  <script>
-    // Fix for Firefox autofocus CSS bug
-    // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
-  </script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
   </style>
+  <script src="https://kit.fontawesome.com/221bee115b.js" crossorigin="anonymous"></script>
   <script src={{ asset('js/app.js') }} defer></script>
   <script src={{ asset('js/static.js') }} defer></script>
   <script src={{ asset('js/profile.js') }} defer></script>
@@ -33,7 +30,6 @@
   <script src={{ asset('js/event.js') }} defer></script>
   <script src={{ asset('js/notifications.js') }} defer></script>
 </head>
-<link rel="icon" href="{!! asset('/images/logo.png') !!}" />
 
 <body>
   @include("partials.header")

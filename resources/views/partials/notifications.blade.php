@@ -4,7 +4,8 @@
         <th scope="col">Time</th>
     </tr>
 </thead>
-<tbody @foreach(Auth::user()->user->latestNotifications() as $notification)
+<tbody>
+    @foreach(Auth::user()->user->latestNotifications() as $notification)
     <tr id="{{$notification->id}}" class="notification">
         @if($notification->inviteNotification !== null)
         @include('partials.invite-notification', ['invite' => $notification->inviteNotification->invite, 'notification' => $notification ])
@@ -13,7 +14,6 @@
         @endif
     </tr>
     @endforeach
-    <!-- if there are no notifications -->
     @if(Auth::user()->user->latestNotifications()->count() == 0)
     <tr>
         <td colspan="2">
