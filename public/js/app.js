@@ -382,13 +382,11 @@ function createEventRow(event, url) {
   const csrf = document.querySelector('meta[name="csrf-token"]').content;
   event['updated_at'] = event['updated_at'].substring(0, 10) + ' ' + event['updated_at'].substring(11, 19);
 
-  console.log(event)
-
   let htmlView = '';
   htmlView += '<div class="col card mb-3 me-5" style="max-width: 540px;">';
   htmlView += '  <div class="row g-0">';
   htmlView += '    <div class="col-md-4">';
-  htmlView += '      <img id="event-image" src=""  class="img-fluid" alt="...">';
+  htmlView += '      <img id="event-image" src="/images/events/community-events.jpeg"  class="img-fluid" alt="...">';
   htmlView += '    </div>';
   htmlView += '    <div class="col-md-8 d-flex flex-row">';
   htmlView += '      <div class="card-body col-md-8">';
@@ -409,8 +407,6 @@ function createEventRow(event, url) {
   htmlView += '    </div>';
   htmlView += '  </div>';
   htmlView += '</div>';
-
-  document.getElementById('event-image').src = "/images/events" + event['coverImage']['name'];
 
   return htmlView;
 }
