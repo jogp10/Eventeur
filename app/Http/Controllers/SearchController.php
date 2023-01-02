@@ -50,7 +50,6 @@ class SearchController extends Controller
             }
         }    
         
-
         return view('pages.home', ['events' => $events]);
     }
 
