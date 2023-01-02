@@ -1,14 +1,13 @@
 <div class="row border border m-5 rounded" data-id="{{$event->id}}">
-    <div class="container">
-        <div class="row row-cols-2 align-items-center">
-            <div class="d-flex flex-column col-1 ps-3 align-self-start">
+        <div class="eventHome d-flex align-items-center justify-content-start">
+            <div class="d-flex flex-column align-self-start">
                 @include('partials.form', ['action' => 'up', 'id' => $event->id, 'type' => 'event'])
                 <span class="d-flex justify-content-center">{{ $event->votes->count() }}</span>
                 @include('partials.form', ['action' => 'down', 'id' => $event->id, 'type' => 'event'])
             </div>
-            <div class="col-8">
+            <div class="my-2 d-flex flex-fill flex-column justify-content-between align-self-stretch">
                 <h3><a style="text-decoration: none; color: black;" href="{{ url('/event') . '/' . $event->id }}">{{$event->name}}</a></h3>
-                <p class="mb-5">{{$event->description}}</p>
+                <p class="mb-2">{{strstr($event->description, '.', true)}}</p>
                 <div class="d-flex flex-row justify-content-between align-items-end">
                     <button type="button" class="btn" style="text-decoration: none;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left" viewBox="0 0 16 16">
@@ -31,9 +30,8 @@
                     </button>
                 </div>
             </div>
-            <div class="col-3 p-0 m-0">
-                <img src="images/events/community-events.jpeg" class="img-fluid m-0 p-0 rounded" height="300" width="400" alt="...">
+            <div class="m-2" style="margin-left:auto">
+                <img src="images/events/{{$event->coverImage->name}}" class="img-fluid rounded" height="300" width="400" alt="..." style="max-width:321px">
             </div>
         </div>
-    </div>
 </div>

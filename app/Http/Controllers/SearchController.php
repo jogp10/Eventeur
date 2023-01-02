@@ -97,15 +97,7 @@ class SearchController extends Controller
             $event->reports;
             $event->updated_at;
             $event->manager->account->name;
-            /*
-            $bans = Ban::where('user_id', $user->id)->get();
-            foreach ($bans as $ban) {
-                if ($ban->expired_at == null) {
-                    $user->banned = true;
-                    break;
-                }
-            }
-            */
+            $event->coverImage->name;
         }
         return $events;
     }

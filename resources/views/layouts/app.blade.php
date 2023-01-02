@@ -31,6 +31,7 @@
   <script src={{ asset('js/editProfile.js') }} defer></script>
   <script src={{ asset('js/comment.js') }} defer></script>
   <script src={{ asset('js/event.js') }} defer></script>
+  <script src={{ asset('js/notifications.js') }} defer></script>
 </head>
 <link rel="icon" href="{!! asset('/images/logo.png') !!}" />
 
@@ -48,11 +49,18 @@
     </div>
     @endif
     @if($errors->any())
-    <h4>{{$errors->first()}}</h4>
+    <div class="alert alert-error" role="alert">
+      <h4>{{$errors->first()}}</h4>
+    </div>
     @endif
     <section id="content">
+      @if(Auth::check())
+      <table id="notifications" style="display:none">
+        @include('partials.notifications')
+      </table>
+      @endif
       @if(Auth::check() && Auth::user()->isBanned())
-      @include("partials.banned")
+      @include('partials.banned')
       @else
       @yield('content')
       @endif

@@ -15,7 +15,7 @@
     <h3 class="my-3">Profile</h3>
 
     <div class="row">
-        <div class="col-4 border border-dark text-center m-5 p-0 text-center" style="min-height: 600px;">
+        <div id="userBar" class="col-4 border border-dark text-center m-5 p-0 text-center" style="min-height: 600px;">
             <div class="position-relative">
                 <img src="/images/placeholder.png" class="img-fluid" width="500" height="250" alt="...">
                 <img src="/images/profiles/{{ $account->user->profileImage->name }}" class="img-fluid rounded-circle position-absolute top-100 start-50 translate-middle" width="100" height="230" alt="...">

@@ -8,10 +8,10 @@
 @else
 <div class="container-lg">
   <div class="row row-cols-1 row-cols-lg-2">
-    <div class="col col-lg-9">
+    <div class="col col-lg-10">
       @each('partials.event', $events, 'event')
     </div>
-    <div class="col col-lg-3 border border-grey align-self-start mt-5">
+    <div id="createEvent" class="col col-lg-2 border border-grey align-self-start mt-5">
       <div class="d-flex flex-column p-3">
         <h2>Create an Event</h2>
         <p>Are you going to host an event? Create and share here!</p>

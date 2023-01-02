@@ -3,9 +3,9 @@
 @section('title', '{{$event->name}}')
 
 @section('content')
-<div id="{{$event->id}}" class="event container-md d-flex flex-column w-100">
-  <div class="d-flex flex-column border m-3 p-2 ps-4 rounded" style="min-height: 500px">
-    <div class="event d-flex flex-row justify-content-between">
+<div class="container-md d-flex flex-column w-100">
+  <div id="{{$event->id}}" class="event d-flex flex-column border m-3 p-2 ps-4 rounded" style="min-height: 500px">
+    <div class="d-flex flex-row justify-content-between">
       <div class="pt-1">
         @include('partials.form', ['action' => 'up', 'id' => $event->id, 'type' => 'event'])
         <span class="d-flex justify-content-center">{{ $event->votes->count() }}</span>
@@ -18,12 +18,12 @@
           <div class="badge bg-secondary">{{ $tag->name }}</div>
           @endforeach
         </div>
-        <button type="button" class="btn ps-0 align-self-start text-decoration-none">
+        <a type="button" href="{{route('profile', $event->manager->account->id)}}" class="btn ps-0 align-self-start text-decoration-none">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
             <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
           </svg>
           <span>Posted by {{$event->manager->account->name}}</span>
-        </button>
+        </a>
         <h4 class="text-muted pb-3">{{ strtok($event->description, '.') }}</h4>
         <p class="text-break" style="max-width: 700px"> {{ substr($event->description, strpos($event->description, '.')+2) }}</p>
         @if(Auth::check() && Auth::id() === $event->manager->id)
@@ -50,6 +50,7 @@
         </svg>
         <span>{{ $event->start_date }}</span>
       </button>
+
       @can('create', [App\Models\Comment::class, $event])
       <button type="button" id="comment-button" class="btn btn-link" style="text-decoration: none; color: black;">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left" viewBox="0 0 16 16">
@@ -58,6 +59,11 @@
         <span>Comment</span>
       </button>
       @endcan
+
+      @can('create', [App\Models\Request::class, $event])
+      <button id="requestInvite" type="button" class="btn btn-primary">Request to join</button>
+      @endcan
+      
       @if(Auth::check())
       <button type="button" id="invite" class="btn btn-primary text-decoration-none" data-bs-toggle="modal" data-bs-target="#inviteModal" style="background-color:#d1410c; border-color:#d1410c;">
         <i class="fa-regular fa-share-from-square pe-none"></i>

@@ -93,6 +93,10 @@ Route::post('api/comment', 'CommentController@store')->name('comment');
 Route::delete('api/comment/delete', 'CommentController@destroy')->name('deleteComment');
 Route::post('api/answer', 'CommentController@answer')->name('answer');
 Route::delete('api/answer/delete', 'CommentController@answerDestroy')->name('deleteAnswer');
+Route::post('api/request_join', 'RequestController@store');
+Route::delete('api/delete_join/{request_id}', 'RequestController@destroy');
+Route::post('api/accept_join/{request_id}', 'RequestController@update');
+Route::put('api/markAsRead/{notification_id}', 'NotificationController@markAsRead')->name('markAsRead');
 
 // OAuth
 Route::get('auth/redirect', 'OAuthController@redirectToProvider')->name('oauth');

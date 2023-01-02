@@ -38,6 +38,16 @@ function addEventListeners() {
   if (submitTickets != null) {
     submitTickets.addEventListener('click', sendTicketsRequest);
   }
+
+  let submitRequest = document.getElementById("requestInvite");
+  if (submitRequest != null) {
+    submitRequest.addEventListener('click', sendRequestRequest);
+  }
+
+  let notificationButton = document.getElementById("bell");
+  if (notificationButton != null) {
+    notificationButton.addEventListener('click', markAsReadRequest);
+  }
 }
 
 function encodeForAjax(data) {
@@ -114,6 +124,14 @@ function sendInvitesRequest(event) {
     sendAjaxRequest('post', '/api/invite/', { ids: checkedArray, event_id: event_id }, sendInviteHandler);
 }
 
+function sendRequestRequest(event) {
+  // if (this.status != 200) window.location = '/';
+  // user_id = document.querySelector(".user").id;
+  event_id = document.querySelector(".event").id;
+
+  sendAjaxRequest('post', '/api/request_join/', { event_id: event_id }, sendRequestHandler);
+}
+
 function sendTicketsRequest(event) {
   var checked = document.querySelectorAll("#giveticketModal td div svg:not(.hidden)");
   var event_id = document.querySelector(".event").id;
@@ -126,6 +144,15 @@ function sendTicketsRequest(event) {
 
   if (checkedArray.length > 0)
     sendAjaxRequest('post', '/api/ticket/', { ids: checkedArray, event_id: event_id }, sendTicketHandler);
+}
+
+function markAsReadRequest() {
+  let notifications = document.getElementsByClassName("notification");
+  
+  for (let i = 0; i < notifications.length; i++) {
+    let notification_id = notifications[i].id;
+    sendAjaxRequest('put', '/api/markAsRead/' + notification_id, { notification_id: notification_id }, markAsReadHandler);
+  }
 }
 
 
@@ -279,10 +306,28 @@ function sendInviteHandler() {
   let invites = JSON.parse(this.responseText);
 }
 
+function sendRequestHandler() {
+  if (this.status != 200) window.location = '/';
+  console.log(this.responseText);
+
+  location.reload();
+}
+
 function sendTicketHandler() {
   if (this.status != 200) window.location = '/';
 
   let tickets = JSON.parse(this.responseText);
+}
+
+function markAsReadHandler() {
+  if (this.status != 200) window.location = '/';
+  
+  let notification = JSON.parse(this.responseText);
+
+  if (notification.success == true) {
+    let count = document.querySelector('#notification-count');
+    count.innerHTML = count.innerHTML - 1;
+  }
 }
 
 function createCard(card) {
@@ -343,7 +388,7 @@ function createEventRow(event, url) {
   htmlView += '<div class="col card mb-3 me-5" style="max-width: 540px;">';
   htmlView += '  <div class="row g-0">';
   htmlView += '    <div class="col-md-4">';
-  htmlView += '      <img src="/images/events/community-events.jpeg" class="img-fluid" alt="...">';
+  htmlView += '      <img id="event-image" src=""  class="img-fluid" alt="...">';
   htmlView += '    </div>';
   htmlView += '    <div class="col-md-8 d-flex flex-row">';
   htmlView += '      <div class="card-body col-md-8">';
@@ -364,6 +409,8 @@ function createEventRow(event, url) {
   htmlView += '    </div>';
   htmlView += '  </div>';
   htmlView += '</div>';
+
+  document.getElementById('event-image').src = "/images/events" + event['coverImage']['name'];
 
   return htmlView;
 }

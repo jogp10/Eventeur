@@ -1,5 +1,5 @@
-<section id="security" class="visually-hidden mb-5">
-    <form class="ps-5" method="POST" action="{{ route('editProfilePassword', ['id' => $account->id]) }}">
+<section id="security" class="visually-hidden ms-5">
+    <form class="" method="POST" action="{{ route('editProfilePassword', ['id' => $account->id]) }}">
         @method('PUT')
         @csrf
         <div class="row row-cols-2 border border-3 gx-0 py-4 px-3">
@@ -45,7 +45,7 @@
             </div>
         </div>
     </form>
-    <form class="ps-5" method="POST" action="{{ route('editProfileEmail', ['id' => $account->id]) }}">
+    <form class="" method="POST" action="{{ route('editProfileEmail', ['id' => $account->id]) }}">
         @method('PUT')
         @csrf
         <div class="row row-cols-2 border border-3 gx-0 py-4 px-3">
@@ -80,7 +80,8 @@
             </div>
         </div>
     </form>
-    <div class="Row mt-2 pt-3 pb-4">
+</section>
+<div class="Row mt-2 pt-3 pb-4">
         <div class="Col position-relative">
             <button id="open-popup" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-danger position-absolute bottom-0 end-0"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
@@ -106,4 +107,3 @@
             </div>
         </div>
     </div>
-</section>

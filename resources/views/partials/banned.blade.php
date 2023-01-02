@@ -1,6 +1,6 @@
-<h1>You are banned!</h1>
-<p>Contact us to contest your ban.</p>
 <div class="container-md">
+    <h1 id="title">You are banned!</h1>
+    <p id="subtitle">Contact us to contest your ban.</p>
     <div class="row row-cols-1 row-cols-md-2 flex-column-reverse flex-md-row gx-5">
         <div class="col">
             <form method="POST" action=" {{ route('submitContact') }} ">
@@ -25,7 +25,8 @@
 </div>
 
 <style>
-    h1, p {
+    #title,
+    #subtitle {
         text-align: center;
         margin-top: 50px;
         margin-bottom: 25px;

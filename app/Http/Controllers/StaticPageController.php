@@ -48,7 +48,7 @@ class StaticPageController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|email',
-            'content' => 'required',
+            'content_form' => 'required',
         ]);
 
         $data = array(

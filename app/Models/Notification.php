@@ -10,9 +10,11 @@ class Notification extends Model
     use HasFactory;
 
     protected $fillable = [
-        'content', 'seen'
+        'user_id', 'content', 'seen'
    ];
 
+    public function user() { return $this->belongsTo(User::class); }
+    
     public function inviteNotification() { return $this->hasOne(InviteNotification::class); }
 
     public function commentNotification() { return $this->hasOne(CommentNotification::class); }
