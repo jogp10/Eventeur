@@ -1,7 +1,7 @@
-<thead>
+<thead class="thead-dark">
     <tr>
-        <th>Notification</th>
-        <th>Time</th>
+        <th scope="col">Notification</th>
+        <th scope="col">Time</th>
     </tr>
 </thead>
 <tbody @foreach(Auth::user()->user->latestNotifications() as $notification)
