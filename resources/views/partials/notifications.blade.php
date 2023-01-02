@@ -1,7 +1,7 @@
-<thead class="thead-dark">
-    <tr>
-        <th scope="col">Notification</th>
-        <th scope="col">Time</th>
+<thead class="thead-dark d-flex">
+    <tr class="justify-content-between d-flex flex-fill">
+        <th scope="col" style="width:70%">Notification</th>
+        <th scope="col" style="width:30%">Time</th>
     </tr>
 </thead>
 <tbody>
@@ -17,7 +17,7 @@
     @if(Auth::user()->user->latestNotifications()->count() == 0)
     <tr>
         <td colspan="2">
-            <span>No new notifications</span>
+            <span style="top:50%;left:50%;position:absolute;transform:translate(-50%,-50%)">No new notifications</span>
         </td>
     </tr>
     @endif
