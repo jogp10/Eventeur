@@ -1217,7 +1217,7 @@ Lets play a real-world adventure!',
     (
         16,
         'Spiritus',
-        'See Spiritus, an immersive multimedia experience at Clérigos Church',
+        'See Spiritus, an immersive multimedia experience at Clérigos Church.',
         '2023-01-02 17:30',
         '2023-11-23 23:59',
         'Clerigos Church and Tower',
@@ -1438,47 +1438,60 @@ Ana Rita Mendes é colaboradora da Divisão Municipal de Museus desde 2018.',
         'Public'
     );
 INSERT INTO tags (name)
-VALUES ('diam.'),
-    ('Nullam'),
-    ('Mauris'),
-    ('ligula.'),
-    ('in,'),
-    ('iaculis'),
-    ('dui.'),
-    ('orci,'),
-    ('ac'),
-    ('et,'),
-    ('sapien,'),
-    ('tempor'),
-    ('elit'),
-    ('Ut'),
-    ('egestas.'),
-    ('eget'),
-    ('In'),
-    ('Donec'),
-    ('Vivamus'),
-    ('urna.');
+VALUES ('Cultura'),
+    ('Desporto'),
+    ('Outdoor'),
+    ('Indoor'),
+    ('Comédia'),
+    ('Exposição'),
+    ('Música'),
+    ('Para Casal'),
+    ('Conferência'),
+    ('Ciência'),
+    ('Família'),
+    ('Arte'),
+    ('Cinema'),
+    ('Teatro'),
+    ('Dança'),
+    ('Literatura'),
+    ('Festas'),
+    ('Gastronomia'),
+    ('Online');
 INSERT INTO event_tag (event_id, tag_id)
-VALUES (2, 3),
-    (14, 4),
-    (5, 13),
-    (13, 4),
-    (11, 10),
-    (10, 17),
-    (11, 15),
-    (16, 5),
-    (14, 6),
-    (6, 7),
-    (7, 2),
-    (8, 15),
-    (16, 16),
-    (3, 11),
+VALUES (1, 3),
+    (1, 8),
+    (2, 2),
+    (2, 19),
+    (2, 11),
+    (3, 6),
+    (3, 4),
+    (3, 1),
+    (4, 9),
+    (5, 7),
+    (6, 6),
+    (6, 1),
+    (7, 17),
+    (7, 12),
+    (7, 11),
+    (8, 6),
+    (8, 11),
+    (8, 10),
+    (9, 9),
+    (9, 10),
+    (10, 6),
+    (10, 11),
+    (11, 6),
+    (11, 12),
+    (12, 7),
+    (12, 10),
     (12, 4),
-    (17, 11),
-    (11, 7),
-    (9, 8),
-    (12, 12),
-    (17, 16);
+    (13, 12),
+    (13, 11),
+    (14, 2),
+    (15, 1),
+    (15, 11),
+    (15, 5),
+    (16, 16);
 INSERT INTO tickets (user_id, event_id, num_of_tickets)
 VALUES (3, 1, 5);
 INSERT INTO comments (user_id, event_id, content)
@@ -1491,3 +1504,54 @@ INSERT INTO answers (comment_id, user_id, content)
 VALUES (1, 45, 'Danke!');
 INSERT INTO invites (user_id, event_id)
 VALUES (101, 1);
+UPDATE cover_images
+SET name = 'escape-game.jpeg'
+WHERE event_id = 1;
+UPDATE cover_images
+SET name = 'lionesa.webp'
+WHERE event_id = 2;
+UPDATE cover_images
+SET name = 'spiritus.jpg'
+WHERE event_id = 3;
+UPDATE cover_images
+SET name = 'restarting_life.avif'
+WHERE event_id = 4;
+UPDATE cover_images
+SET name = 'JAZZ-on-SUNDAY-Domingos-Embaixada-do-Porto.jpg'
+WHERE event_id = 5;
+UPDATE cover_images
+SET name = 'berrus-large.png'
+WHERE event_id = 6;
+UPDATE cover_images
+SET name = 'circocoliseu.jpg'
+WHERE event_id = 7;
+UPDATE cover_images
+SET name = 'Sea-life-Porto-Portugal.jpg'
+WHERE event_id = 8;
+UPDATE cover_images
+SET name = 'international-conference.avif'
+WHERE event_id = 9;
+UPDATE cover_images
+SET name = 'DR_Justus_Paulo_Neves_01.webp'
+WHERE event_id = 10;
+UPDATE cover_images
+SET name = 'agenda-expo-walking-maps-fbaup.jpg'
+WHERE event_id = 11;
+UPDATE cover_images
+SET name = 'musicaciencia.jpeg'
+WHERE event_id = 12;
+UPDATE cover_images
+SET name = 'maxresdefault.jpg'
+WHERE event_id = 13;
+UPDATE cover_images
+SET name = '0c0288_535be6562b0e4e4f9aa09179970248d1~mv2.webp'
+WHERE event_id = 14;
+UPDATE cover_images
+SET name = 'b8bc87fac804734c95ab11722c568bc9-large.jpg'
+WHERE event_id = 15;
+UPDATE cover_images
+SET name = '1234803-e7d2f3f8f93c130cf2b97412c7a5702a-r.jpg'
+WHERE event_id = 16;
+UPDATE cover_images
+SET name = 'cerimonia-cha-quickly-travel-interna-910x595.jpg'
+WHERE event_id = 17;

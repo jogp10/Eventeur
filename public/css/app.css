@@ -20,25 +20,31 @@ time, mark, audio, video {
 	font: inherit;
 	vertical-align: baseline;
 }
+
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+
 body {
 	line-height: 1;
 }
+
 ol, ul {
 	list-style: none;
 }
+
 blockquote, q {
 	quotes: none;
 }
+
 blockquote:before, blockquote:after,
 q:before, q:after {
 	content: '';
 	content: none;
 }
+
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
@@ -111,6 +117,10 @@ footer {
   box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
 }
 
+.eventHome h3 {
+  text-align: center;
+}
+
 /* Change this to change background color */
 #content {
   background: white;
@@ -143,8 +153,6 @@ header {
   color: black;
 }
 
-
-
 textarea, .eventHome, .event, #createEvent, #userBar, #content-events, .calendar, .profileDiv, #settings, #security {
   background: white;
 }
@@ -152,4 +160,3 @@ textarea, .eventHome, .event, #createEvent, #userBar, #content-events, .calendar
 .alert{
   margin: 0!important;
 }
-

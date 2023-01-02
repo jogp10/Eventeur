@@ -31,7 +31,7 @@
                 </div>
             </div>
             <div class="m-2" style="margin-left:auto">
-                <img src="images/events/community-events.jpeg" class="img-fluid rounded" height="300" width="400" alt="..." style="max-width:321px">
+                <img src="images/events/{{$event->coverImage->name}}" class="img-fluid rounded" height="300" width="400" alt="..." style="max-width:321px">
             </div>
         </div>
 </div>

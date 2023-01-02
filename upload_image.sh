@@ -6,8 +6,8 @@ set -e
 IMAGE_NAME=git.fe.up.pt:5050/lbaw/lbaw2223/lbaw2224 # Replace with your group's image name
 
 # Ensure that dependencies are available
-php artisan config:clear
 composer install
+php artisan config:clear
 php artisan clear-compiled
 php artisan optimize
 
