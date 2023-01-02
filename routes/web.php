@@ -73,11 +73,14 @@ Route::delete('admin/users/{id}/delete', 'ProfileController@destroy')->name('adm
 Route::post('admin/users/{id}/ban', 'BanController@store')->name('admin.banUser');
 Route::post('admin/users/{id}/unban', 'BanController@update')->name('admin.unbanUser');
 
+Route::delete('admin/event/{id}/delete', 'EventController@destroy')->name('admin.deleteUser');
+Route::get('/admin/event/{id}/event_settings', 'EventController@edit')->name('eventSettings');
 Route::get('/admin/events', 'EventController@manageEvents')->name('admin.events');
 
 //Actions
 Route::get('search', 'SearchController@searchEvent');
 Route::get('api/searchuser', 'SearchController@showUser');
+Route::get('api/searchevent', 'SearchController@showEvent');
 Route::get('api/searchattendee', 'SearchController@showAttendee');
 Route::post('vote', 'VoteController@create')->name('vote');
 

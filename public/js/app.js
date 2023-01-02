@@ -23,6 +23,12 @@ function addEventListeners() {
     searchCard4.addEventListener('input', sendSearchAttendeesRequest);
   }
 
+  let searchCard5 = document.querySelector('#searchevents');
+  if (searchCard5 != null) {
+    window.addEventListener('load', sendSearchEventsRequest);
+    searchCard5.addEventListener('input', sendSearchEventsRequest);
+  }
+
   let submitInvites = document.getElementById("sendInvite");
   if (submitInvites != null) {
     submitInvites.addEventListener('click', sendInvitesRequest);
@@ -73,6 +79,16 @@ function sendSearchUsersRequest() {
   else search = "";
 
   sendAjaxRequest('get', '/api/searchuser?search=' + search, { search: search }, searchUsersHandler);
+}
+
+function sendSearchEventsRequest() {
+  let search;
+  if (this.value) search = this.value;
+  else search = "";
+
+  console.log(search)
+
+  sendAjaxRequest('get', '/api/searchevent?search=' + search, { search: search }, searchEventsHandler);
 }
 
 function sendSearchAttendeesRequest() {
@@ -196,9 +212,62 @@ function searchUsersHandler() {
   }
 
   let sections = document.querySelector('#cards');
+  sections.classList.add('row')
+  sections.classList.add('row-cols-2')
+  sections.classList.add('justify-content-center')
 
   if (users.length == 0) {
     sections.innerHTML = '<div><h3>No users found</h3></div>';
+  } else {
+    sections.innerHTML = new_rows;
+  }
+}
+
+function searchUsersHandler() {
+  if (this.status != 200) window.location = '/';
+
+  let users = JSON.parse(this.responseText);
+  let new_rows = [];
+
+  let url = window.location.href;
+  url = url.substring(0, url.indexOf('/'));
+
+  for (let i = 0; i < users.length; i++) {
+    new_rows += createUserRow(users[i], url);
+  }
+
+  let sections = document.querySelector('#cards');
+  sections.classList.add('row')
+  sections.classList.add('row-cols-2')
+  sections.classList.add('justify-content-center')
+
+  if (users.length == 0) {
+    sections.innerHTML = '<div><h3>No users found</h3></div>';
+  } else {
+    sections.innerHTML = new_rows;
+  }
+}
+
+function searchEventsHandler() {
+  if (this.status != 200) window.location = '/';
+
+  let events = JSON.parse(this.responseText);
+  let new_rows = [];
+
+  let url = window.location.href;
+  url = url.substring(0, url.indexOf('/'));
+
+  for (let i = 0; i < events.length; i++) {
+    new_rows += createEventRow(events[i], url);
+  }
+
+  let sections = document.querySelector('#cards');
+  sections.classList.add('row')
+  sections.classList.add('row-cols-2')
+  sections.classList.add('justify-content-center')
+
+  if (events.length == 0) {
+    sections.innerHTML = '<div><h3>No events found</h3></div>';
   } else {
     sections.innerHTML = new_rows;
   }
@@ -241,8 +310,6 @@ function createCard(card) {
 }
 
 
-
-
 function createRow(user) {
   let htmlView = '';
   htmlView += '<tr class="d-flex flex-row btn pb-1" id="' + user['id'] + '">';
@@ -261,7 +328,42 @@ function createRow(user) {
   htmlView += '    </svg>';
   htmlView += '  </div>';
   htmlView += ' </td>';
-  htmlView += '</tr >';
+  htmlView += '</tr>';
+
+  return htmlView;
+}
+
+function createEventRow(event, url) {
+  const csrf = document.querySelector('meta[name="csrf-token"]').content;
+  event['updated_at'] = event['updated_at'].substring(0, 10) + ' ' + event['updated_at'].substring(11, 19);
+
+  console.log(event)
+
+  let htmlView = '';
+  htmlView += '<div class="col card mb-3 me-5" style="max-width: 540px;">';
+  htmlView += '  <div class="row g-0">';
+  htmlView += '    <div class="col-md-4">';
+  htmlView += '      <img src="/images/events/community-events.jpeg" class="img-fluid" alt="...">';
+  htmlView += '    </div>';
+  htmlView += '    <div class="col-md-8 d-flex flex-row">';
+  htmlView += '      <div class="card-body col-md-8">';
+  htmlView += '        <a href="' + url + '/event/' + event['id'] + '">';
+  htmlView += '        <h5 class="card-title">' + event['name'] + '</h5></a>';
+  htmlView += '        <p class="card-text">' + 'Created by ' + event['manager']['account']['name'] + '</p>';
+  htmlView += '        <p class="card-text"><small class="text-muted">Last updated ' + event['updated_at'] + '</small></p>';
+  htmlView += '      </div>';
+  htmlView += '      <div class="col-md-4 mt-3 d-flex flex-column">';
+  htmlView += '         <p>Reports: ' + event['reports'].length + '</p>';
+  htmlView += '         <form class="pb-1" action="' + url + '/admin/event/' + event['id'] + '/event_settings" method="GET">'
+  htmlView += '         <button type="submit" class="btn btn-warning">Edit</button></form>'
+  htmlView += '         <form class="pb-1 mt-3 " action="' + url + '/admin/event/' + event['id'] + '/delete" method="POST">'
+  htmlView += '           <input type="hidden" name="_method" value="DELETE">'
+  htmlView += '           <input type="hidden" name="_token" value="' + csrf + '">'
+  htmlView += '           <button type="submit" class="btn btn-danger">Delete</button></form>'
+  htmlView += '      </div>';
+  htmlView += '    </div>';
+  htmlView += '  </div>';
+  htmlView += '</div>';
 
   return htmlView;
 }
@@ -271,7 +373,7 @@ function createUserRow(user, url) {
   user['updated_at'] = user['updated_at'].substring(0, 10) + ' ' + user['updated_at'].substring(11, 19);
 
   let htmlView = '';
-  htmlView += '<div class="card mb-3" style="max-width: 540px;">';
+  htmlView += '<div class="col card mb-3 me-5" style="max-width: 540px;">';
   htmlView += '  <div class="row g-0">';
   htmlView += '    <div class="col-md-4">';
   htmlView += '      <img src="/images/profiles/perfil.png" class="rounded-circle img-fluid rounded-start" alt="...">';

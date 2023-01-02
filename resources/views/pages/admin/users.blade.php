@@ -18,10 +18,8 @@
         </form>
     </div>
 
-    <section id="cards" class="container">
-        <div class="row row-cols-2 justify-content-center">
-        @each('partials.user', $users->slice(0, 2), 'user')
-        </div>
+    <section id="cards" class="container row row-cols-2 justify-content-center">
+        @each('partials.user', $users, 'user')
     </section>
 </div>
 

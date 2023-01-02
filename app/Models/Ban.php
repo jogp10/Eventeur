@@ -10,7 +10,7 @@ class Ban extends Model
     use HasFactory;
 
     protected $fillable = [
-        'admin_id', 'user_id', 'reason', 'created_at', 'updated_at', 'expired_at'
+        'admin_id', 'user_id', 'event_id', 'reason', 'created_at', 'updated_at', 'expired_at'
     ];
 
     public function user() { return $this->belongsTo(User::class); }
