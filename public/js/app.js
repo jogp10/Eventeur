@@ -235,6 +235,8 @@ function sendInviteHandler() {
   if (this.status != 200) window.location = '/';
 
   let invites = JSON.parse(this.responseText);
+
+  window.reload();
 }
 
 function sendRequestHandler() {

@@ -55,7 +55,7 @@
     @endif
     <section id="content">
       @if(Auth::check())
-      <table id="notifications" style="display:none">
+      <table class="table table-striped table-hover table-responsive" id="notifications" style="display:none">
         @include('partials.notifications')
       </table>
       @endif

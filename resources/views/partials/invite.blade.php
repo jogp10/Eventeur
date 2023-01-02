@@ -6,14 +6,14 @@
                 <h3><a class="fs-5" style="text-decoration: none; color: black;" href="{{ url('/event') . '/' . $event->id }}">{{$event->name}}</a></h3>
             </div>
             <div class="col-8 m-0">
-                <p id="invite-event-description" class="fs-6 mb-0">{{$event->description}}</p>
+                <p id="invite-event-description" class="fs-6 mb-0">{{strstr($event->description, '.', true)}}</p>
             </div>
             @else
             <div class="col-4 align-self-center m-0">
                 <h3><a class="fs-5" style="text-decoration: none; color: black;" href="{{ url('/event') . '/' . $event->id }}">{{$event->name}}</a></h3>
             </div>
             <div class="col-6 align-self-center m-0">
-                <p id="invite-event-description" class="fs-6 align-self-center mb-0">{{$event->description}}</p>
+                <p id="invite-event-description" class="fs-6 align-self-center mb-0">{{strstr($event->description, '.', true)}}</p>
             </div>
             <div class="col-2 align-self-center m-0">
                 @if(isset($invite_id))
