@@ -12,18 +12,17 @@
         <div>
           @if(Auth::user()->user->checkVotedOption($option->id))
           <input class="form-check-input" type="radio" name="pollOption" value="{{ $option->id }}" id="radioExample1" disable checked />
-          @elseif(Auth::user()->user->checkIfVotedPoll($poll->id) || Auth::id() === $poll->event->manager->id)
+          @elseif(Auth::user()->user->checkIfVotedPoll($poll->id) || Auth::id() === $poll->event->manager->id || !$poll->event->checkIfUserParticipateEvent(Auth::id()))
           <input class="form-check-input" type="radio" name="pollOption" value="{{ $option->id }}" id="radioExample1" disabled />
           @else
           <input class="form-check-input" type="radio" name="pollOption" value="{{ $option->id }}" id="radioExample1" />
           @endif
-          <label class="form-check-label" for="radioExample1">
-          </label>
+          <label class="form-check-label" for="radioExample1">{{ $option->description }}</label>
         </div>
         <p>{{ $option->votes }}</p>
       </div>
       @endforeach 
-      @if(Auth::id() !== $poll->event->manager->id && !Auth::user()->user->checkIfVotedPoll($poll->id))
+      @if(Auth::id() !== $poll->event->manager->id && !Auth::user()->user->checkIfVotedPoll($poll->id) && $poll->event->checkIfUserParticipateEvent(Auth::id()))
       <div id='${$poll->event->id}' class="text-end mb-2">
         <button id="submit-poll-vote" type="submit" class="btn btn-primary">Submit</button>
       </div>

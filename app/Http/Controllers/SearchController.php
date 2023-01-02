@@ -82,6 +82,26 @@ class SearchController extends Controller
         return $users;
     }
 
+    public function showEvent(Request $request)
+    {
+        if ($_GET['search'] != '') {
+            $events = Event::whereRaw('LOWER(name) LIKE ? ', ['%' . strtolower($_GET['search']) . '%'])
+                ->where('id', '<>', 1)
+                ->get();
+        } else {
+            $events = Event::All();
+            $events->shift();
+        }
+        
+        foreach ($events as $event) {
+            $event->reports;
+            $event->updated_at;
+            $event->manager->account->name;
+            $event->coverImage->name;
+        }
+        return $events;
+    }
+
     public function showAttendee(Request $request)
     {
         if ($_GET['search'] != '') {
