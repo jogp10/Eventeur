@@ -236,7 +236,7 @@ function sendInviteHandler() {
 
   let invites = JSON.parse(this.responseText);
 
-  window.reload();
+  location.reload();
 }
 
 function sendRequestHandler() {
