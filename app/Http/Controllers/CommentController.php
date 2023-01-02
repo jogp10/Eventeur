@@ -98,7 +98,6 @@ class CommentController extends Controller
     public function destroy(Request $request)
     {
         $id = $request->comment_id;
-        console_log($id);
         $comment = Comment::find($id);
 
         $this->authorize('delete', $comment);
