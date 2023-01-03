@@ -72,10 +72,12 @@ class SearchController extends Controller
         if ($_GET['search'] != '') {
             $users = Account::whereRaw('LOWER(name) LIKE ? ', ['%' . strtolower($_GET['search']) . '%'])
                 ->where('id', '<>', 1)
+                ->where('id', '<>', 102) // admin user
                 ->get();
         } else {
             $users = Account::All();
             $users->shift();
+            $users->where('id', '<>', 102); // admin user
         }
         foreach ($users as $user) {
             $user->user;
