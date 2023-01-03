@@ -22,26 +22,26 @@
 
     <div class="row mt-5 ps-2">
         <div class="container">
-            <form method="POST" action="{{ route( 'editEvent', $event->id) }}">
+            <form method="POST" action="{{ route( 'editEvent', $event->id) }}" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-3">
                     <label for="exampleFormControlInput1" class="form-label">Name</label>
                     <input type="text" name="name" class="form-control" id="exampleFormControlInput1" value="{{$event->name}}">
                 </div>
                 @foreach($tags as $tag)
-                    @if($event->checkIfEventHasTag($tag->name))
-                    <div class="form-check">
-                        <input class="form-check-input" name="tags[]" type="checkbox" value="{{ $tag->name }}" id="flexCheckDefault" checked>
-                        <label class="form-check-label" for="flexCheckDefault">{{ $tag->name }}</label>
-                    </div>
-                    @else
-                    <div class="form-check">
-                        <input class="form-check-input" name="tags[]" type="checkbox" value="{{ $tag->name }}" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">{{ $tag->name }}</label>
-                    </div>
-                    @endif
+                @if($event->checkIfEventHasTag($tag->name))
+                <div class="form-check">
+                    <input class="form-check-input" name="tags[]" type="checkbox" value="{{ $tag->name }}" id="flexCheckDefault" checked>
+                    <label class="form-check-label" for="flexCheckDefault">{{ $tag->name }}</label>
+                </div>
+                @else
+                <div class="form-check">
+                    <input class="form-check-input" name="tags[]" type="checkbox" value="{{ $tag->name }}" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">{{ $tag->name }}</label>
+                </div>
+                @endif
                 @endforeach
-        
+
                 <div class="mt-4 form-check form-switch">
                     <label class="form-check-label" for="flexSwitchCheckDefault">{{ $event->privacy }}</label>
                     <input class="form-check-input" name="privacy" type="checkbox" role="switch" id="flexSwitchCheckDefault" @if($event->privacy=='Private') checked @endif>
@@ -51,7 +51,12 @@
                     <label for="exampleFormControlTextarea1" name="description" class="form-label">Description</label>
                     <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="13">{{$event->description}}</textarea>
                 </div>
-                
+
+                <div class="form-group mb-3">
+                    <label for="image">Image</label>
+                    <input type="file" class="form-control-file" id="image" name="image">
+                </div>
+
                 <div class="clearfix mb-3">
                     <button type="submit" class="btn btn-primary btn-lg float-end">Save Settings</button>
                 </div>
