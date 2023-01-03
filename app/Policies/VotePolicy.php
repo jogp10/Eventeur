@@ -11,6 +11,20 @@ class VotePolicy
     use HandlesAuthorization;
 
     /**
+     * Perform pre-authorization checks.
+     *
+     * @param  \App\Models\Account  $account
+     * @param  string  $ability
+     * @return void|bool
+     */
+    public function before(Account $account)
+    {
+        if ($account->isBanned())
+            return False;
+        return null;
+    }
+    
+    /**
      * Determine whether the user can view any models.
      *
      * @param  \App\Models\Account  $account

@@ -1,5 +1,8 @@
 @extends('layouts.app')
 
+@section('title', '- Create User')
+
+
 @section('content')
 <div class="container-sm">
     <h3 class="my-5">Settings</h3>

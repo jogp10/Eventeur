@@ -13,7 +13,6 @@ function addEventListeners() {
 
   let searchCard3 = document.querySelector('#searchusers');
   if (searchCard3 != null) {
-    window.addEventListener('load', sendSearchUsersRequest);
     searchCard3.addEventListener('input', sendSearchUsersRequest);
   }
 
@@ -25,7 +24,6 @@ function addEventListeners() {
 
   let searchCard5 = document.querySelector('#searchevents');
   if (searchCard5 != null) {
-    window.addEventListener('load', sendSearchEventsRequest);
     searchCard5.addEventListener('input', sendSearchEventsRequest);
   }
 
@@ -274,8 +272,8 @@ function searchUsersHandler() {
 }
 
 function searchEventsHandler() {
-  if (this.status != 200) window.location = '/';
-
+  //if (this.status != 200) window.location = '/';
+  console.log(this.responseText)
   let events = JSON.parse(this.responseText);
   let new_rows = [];
 

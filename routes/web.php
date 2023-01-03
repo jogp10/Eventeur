@@ -73,6 +73,8 @@ Route::delete('admin/users/{id}/delete', 'ProfileController@destroy')->name('adm
 Route::post('admin/users/{id}/ban', 'BanController@store')->name('admin.banUser');
 Route::post('admin/users/{id}/unban', 'BanController@update')->name('admin.unbanUser');
 
+Route::get('admin/createEvent', 'AdminController@createEvent');
+Route::post('admin/createEvent', 'AdminController@storeEvent')->name('admin.storeEvent');
 Route::delete('admin/event/{id}/delete', 'EventController@destroy')->name('admin.deleteEvent');
 Route::get('/admin/event/{id}/event_settings', 'EventController@edit')->name('admin.eventSettings');
 Route::get('/admin/events', 'EventController@manageEvents')->name('admin.events');

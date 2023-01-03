@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@section('title', '- Event Participants')
 
 @section('content')
 <div class="container-md">

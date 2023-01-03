@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Admin Events')
+@section('title', '- Admin Events')
 
 @section('content')
 
 <div class="container-md">
-    <h1 class="text-center ms-5">Admin - Events <a href="{{ url('/admin/create') }}" class="ms-5 btn btn-primary">Create Account</a></h1>
+    <h1 class="text-center ms-5">Admin - Events <a href="{{ url('/admin/createEvent') }}" class="ms-5 btn btn-primary">Create Event</a></h1>
 
     <div class="m-2">
         <form class="d-none d-sm-flex w-20 align-self-center form-inline w-100">

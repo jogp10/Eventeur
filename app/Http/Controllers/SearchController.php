@@ -79,6 +79,7 @@ class SearchController extends Controller
             $users->shift();
             $users->where('id', '<>', 102); // admin user
         }
+        
         foreach ($users as $user) {
             $user->user;
             $user->admin;
@@ -104,8 +105,8 @@ class SearchController extends Controller
                 ->where('id', '<>', 1)
                 ->get();
         } else {
-            $events = Event::where('privacy', 'Public');
-            $events->shift();
+            console_log('search is empty');
+            $events = Event::All();
         }
 
         foreach ($events as $event) {

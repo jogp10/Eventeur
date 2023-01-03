@@ -7,19 +7,23 @@ use App\Models\Request;
 use App\Models\Event;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-function console_log($output, $with_script_tags = true)
-{
-    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
-        ');';
-    if ($with_script_tags) {
-        $js_code = '<script>' . $js_code . '</script>';
-    }
-    echo $js_code;
-}
-
 class RequestPolicy
 {
     use HandlesAuthorization;
+
+    /**
+     * Perform pre-authorization checks.
+     *
+     * @param  \App\Models\Account  $account
+     * @param  string  $ability
+     * @return void|bool
+     */
+    public function before(Account $account)
+    {
+        if ($account->isBanned())
+            return False;
+        return null;
+    }
 
     /**
      * Determine whether the user can view any models.
@@ -27,7 +31,7 @@ class RequestPolicy
      * @param  \App\Models\Account  $account
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    
+
     public function viewAny(Account $account)
     {
         if ($account->admin) return True;
@@ -44,10 +48,9 @@ class RequestPolicy
     public function view(Account $account, Request $request)
     {
         if ($account->admin) return True;
-        if($request->event->manager->id == $account->id) {
+        if ($request->event->manager->id == $account->id) {
             return True;
-        }
-        else {
+        } else {
             return False;
         }
     }
@@ -59,9 +62,9 @@ class RequestPolicy
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function create(Account $account, Event $event)
-    {        
+    {
         if ($account->admin) return False;
-        if($event->tickets->where('user_id', $account->id)->count() > 0) {
+        if ($event->tickets->where('user_id', $account->id)->count() > 0) {
             return False;
         } else if (Request::where('event_id', $event->id)->exists() && Request::where('event_id', $event->id)->where('user_id', $account->id)->count() > 0) {
             return False;
@@ -84,8 +87,7 @@ class RequestPolicy
         if ($account->admin) return True;
         if ($request->user->id == $account->id) {
             return True;
-        }
-        else {
+        } else {
             return False;
         }
     }
@@ -100,10 +102,9 @@ class RequestPolicy
     public function delete(Account $account, Request $request)
     {
         if ($account->admin) return True;
-        if($request->event->manager->id == $account->id) {
+        if ($request->event->manager->id == $account->id) {
             return True;
-        }
-        else {
+        } else {
             return False;
         }
     }

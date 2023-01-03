@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', '{{$event->name}}')
+@section('title', '- {{$event->name}}')
 
 @section('content')
 <div class="container-md d-flex flex-column w-100">
