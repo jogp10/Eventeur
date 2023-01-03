@@ -66,7 +66,7 @@
       <button id="requestInvite" type="button" class="btn btn-primary">Request to join</button>
       @endcan
 
-      @if(Auth::check())
+      @if(Auth::check() && $event->checkIfUserParticipateEvent(Auth::id()))
       <button type="button" id="invite" class="btn btn-primary text-decoration-none" data-bs-toggle="modal" data-bs-target="#inviteModal" style="background-color:#d1410c; border-color:#d1410c;">
         <i class="fa-regular fa-share-from-square pe-none"></i>
         <span>Invite</span>
