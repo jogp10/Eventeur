@@ -124,7 +124,6 @@ footer {
 /* Change this to change background color */
 #content {
   background: white;
-  height: 100%;
 }
 
 #createEvent, .event {
