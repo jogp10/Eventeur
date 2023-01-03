@@ -6,8 +6,8 @@
 
 <div class="container-md">
     <h1>Admin</h1>
-    <a href="{{ url('/admin/users') }}">Users</a>
-    <a href="{{ url('/admin/events') }}">Events</a>
+    <p><a href="{{ url('/admin/users') }}">Users</a></p>
+    <p><a href="{{ url('/admin/events') }}">Events</a></p>
 </div>
 
 @endsection

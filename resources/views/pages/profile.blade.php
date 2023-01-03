@@ -33,6 +33,7 @@
         </div>
         <div class="col-8 d-flex flex-column m-5 p-0 w-50">
             @if(Auth::id() == $account->id)
+            @if(Auth::user()->admin == null)
             <div class="">
                 <a id="see-invites-button" type="button" class="btn btn-link fs-5 ms-0 ps-0" style="text-decoration: none; color: black;">Invites</a>
                 <a id="see-tickets-button" type="button" class="btn btn-link fs-5" style="text-decoration: none; color:grey;">Tickets</a>
@@ -59,6 +60,7 @@
                     @include('partials.tickets', ['tickets' => $account->user->tickets])
                 </div>
             </div>
+            @endif
             <div class="border border-grey m-0 mt-5 p-0">
                 <div class="calendar">
                     <div class="d-flex flex-row justify-content-around align-items-center text-center month">
