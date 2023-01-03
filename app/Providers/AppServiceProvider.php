@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\View;
+use App\Models\Tag;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -33,5 +35,9 @@ class AppServiceProvider extends ServiceProvider
             $schema = explode(':', $app_url)[0];
             URL::forceScheme($schema);
         }
+
+        View::composer('*', function ($view) {
+            $view->with('tags', Tag::all());
+        });
     }
 }

@@ -43,13 +43,13 @@
       </div>
     </div>
     <div class="d-flex flex-row mt-auto justify-content-between align-items-end pb-3 ps-4 pe-4">
-      <button type="button" class="btn btn-link" style="text-decoration: none; color: black;">
+      <div style="text-decoration: none; color: black;">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">
           <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
           <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
         </svg>
         <span>{{ $event->start_date }}</span>
-      </button>
+      </div>
 
       @if(Auth::check() && Auth::user()->admin == null)
       @can('create', [App\Models\Comment::class, $event])
@@ -65,7 +65,7 @@
       @can('create', [App\Models\Request::class, $event])
       <button id="requestInvite" type="button" class="btn btn-primary">Request to join</button>
       @endcan
-      
+
       @if(Auth::check())
       <button type="button" id="invite" class="btn btn-primary text-decoration-none" data-bs-toggle="modal" data-bs-target="#inviteModal" style="background-color:#d1410c; border-color:#d1410c;">
         <i class="fa-regular fa-share-from-square pe-none"></i>
@@ -150,10 +150,9 @@
     </div>
     @each('partials.comment', $event->comments, 'comment', )
   </div>
-
-
 </div>
-<div class="modal fade" tabindex="-1" id="inviteModal" aria-hidden="true">
+
+<div class="modal fade" tabindex="-2" id="inviteModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header d-flex flex-row">
@@ -182,7 +181,8 @@
     </div>
   </div>
 </div>
-<div class="modal fade" tabindex="-1" id="giveticketModal" aria-hidden="true">
+
+<div class="modal fade" tabindex="-3" id="giveticketModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header d-flex flex-row">
@@ -212,8 +212,7 @@
   </div>
 </div>
 
-</div>
-<div class="modal fade" tabindex="-1" id="attendeeModal" aria-hidden="true">
+<div class="modal fade" tabindex="-4" id="attendeeModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header d-flex flex-row">
@@ -239,29 +238,4 @@
     </div>
   </div>
 </div>
-<style>
-  .textarea-container {
-    position: relative;
-  }
-
-  .textarea-container textarea {
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-  }
-
-  .textarea-container button {
-    position: absolute;
-    top: 100%;
-    right: 1%;
-    transform: translateY(-110%);
-  }
-
-  /*
-  .poll-submit-button {
-    background-color: green;
-    border-radius: 50%;
-  }
-  */
-</style>
 @endsection

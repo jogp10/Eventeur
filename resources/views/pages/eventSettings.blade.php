@@ -28,17 +28,16 @@
                     <label for="exampleFormControlInput1" class="form-label">Name</label>
                     <input type="text" name="name" class="form-control" id="exampleFormControlInput1" value="{{$event->name}}">
                 </div>
-
-                @foreach($event->getTagTypes() as $type)
-                    @if($event->checkIfEventHasTag($type))
+                @foreach($tags as $tag)
+                    @if($event->checkIfEventHasTag($tag->name))
                     <div class="form-check">
-                        <input class="form-check-input" name="tags[]" type="checkbox" value="{{ $type }}" id="flexCheckDefault" checked>
-                        <label class="form-check-label" for="flexCheckDefault">{{ $type }}</label>
+                        <input class="form-check-input" name="tags[]" type="checkbox" value="{{ $tag->name }}" id="flexCheckDefault" checked>
+                        <label class="form-check-label" for="flexCheckDefault">{{ $tag->name }}</label>
                     </div>
                     @else
                     <div class="form-check">
-                        <input class="form-check-input" name="tags[]" type="checkbox" value="{{ $type }}" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">{{ $type }}</label>
+                        <input class="form-check-input" name="tags[]" type="checkbox" value="{{ $tag->name }}" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">{{ $tag->name }}</label>
                     </div>
                     @endif
                 @endforeach
