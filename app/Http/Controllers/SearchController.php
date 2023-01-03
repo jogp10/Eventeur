@@ -105,7 +105,6 @@ class SearchController extends Controller
                 ->where('id', '<>', 1)
                 ->get();
         } else {
-            console_log('search is empty');
             $events = Event::All();
         }
 
@@ -115,6 +114,7 @@ class SearchController extends Controller
             $event->manager->account->name;
             $event->coverImage->name;
         }
+
         return $events;
     }
 

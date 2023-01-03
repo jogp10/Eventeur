@@ -19,7 +19,7 @@
     </div>
 
     <section id="cards" class="container row row-cols-2 justify-content-center">
-        @each('pages.admin.event', $events, 'event')
+        @each('pages.admin.partials.event', $events, 'event')
     </section>
 </div>
 
