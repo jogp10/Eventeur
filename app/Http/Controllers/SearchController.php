@@ -30,8 +30,8 @@ class SearchController extends Controller
         if ($search_type == 'name') {
             if (mb_substr($search_text, 0, 1) != "\"") {
                 $events = Event::whereFullText('name', $search_text)->where('privacy', 'Public')->get();
-                $eventsByDescripton = Event::whereFullText('description', $search_text)->get();
-                $eventsByLocation = Event::whereFullText('location', $search_text)->get();
+                $eventsByDescripton = Event::whereFullText('description', $search_text)->where('privacy', 'Public')->get();
+                $eventsByLocation = Event::whereFullText('location', $search_text)->where('privacy', 'Public')->get();
                 foreach ($eventsByDescripton as $value) {
                     if (!$events->contains('id', $value->id)) {
                         $events->add($value);
