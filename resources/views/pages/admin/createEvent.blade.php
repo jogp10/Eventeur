@@ -12,7 +12,7 @@
     </div>
     <!-- form to create event -->
     <div class="m-2">
-        <form action="{{ route('storeEvent') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.storeEvent') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-group mb-3">
                 <label for="name">Event Name</label>

@@ -47,13 +47,9 @@ Route::get('event/{id}/event_participants', 'EventController@showParticipantsEve
 Route::post('event/{id}/event_settings', 'EventController@update')->name('editEvent');
 Route::delete('event/{id}/delete_event', 'EventController@destroy')->name('deleteEvent');
 Route::get('create_event', 'EventController@create')->name('createEvent');
-Route::put('create_event', 'EventController@store')->name('storeEvent');
+Route::post('create_event', 'EventController@store')->name('storeEvent');
 Route::get('event/{id}/create_poll', 'PollController@createPoll')->name('createPoll');
 Route::post('event/{id}/answer_poll','PollController@votePoll')->name('votePoll');
-
-
-//Comment
-
 
 //Static Pages
 Route::get('about', 'StaticPageController@about');
@@ -72,7 +68,6 @@ Route::put('admin/users/{id}/edit', 'ProfileController@update')->name('admin.upd
 Route::delete('admin/users/{id}/delete', 'ProfileController@destroy')->name('admin.deleteUser');
 Route::post('admin/users/{id}/ban', 'BanController@store')->name('admin.banUser');
 Route::post('admin/users/{id}/unban', 'BanController@update')->name('admin.unbanUser');
-
 Route::get('admin/createEvent', 'AdminController@createEvent');
 Route::post('admin/createEvent', 'AdminController@storeEvent')->name('admin.storeEvent');
 Route::delete('admin/event/{id}/delete', 'EventController@destroy')->name('admin.deleteEvent');
