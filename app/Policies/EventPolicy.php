@@ -11,18 +11,6 @@ class EventPolicy
     use HandlesAuthorization;
 
     /**
-     * Perform pre-authorization checks.
-     *
-     * @param  \App\Models\Account  $account
-     * @param  string  $ability
-     * @return void|bool
-     */
-    public function before(Account $account)
-    {
-        return $account->admin ? true : null;
-    }
-
-    /**
      * Determine whether the user can view any models.
      *
      * @param  \App\Models\Account  $account
@@ -31,6 +19,7 @@ class EventPolicy
     public function viewAny(Account $account)
     {
         //
+        if ($account->admin) return True;
         return False;
     }
 
@@ -46,6 +35,7 @@ class EventPolicy
         //
         if ($event->privacy == 'Public') return True;
         if ($account == null) return False;
+        if ($account->admin) return True;
         if ($account->id == $event->manager->id) return True;
         if ($account->user->invites()->where('event_id', $event->id)->first() != null) return True;
         if ($account->user->tickets()->where('event_id', $event->id)->first()) return True;
@@ -61,6 +51,7 @@ class EventPolicy
     public function create(Account $account)
     {
         //
+        if ($account->admin) return False;
         return True;
     }
 
@@ -74,7 +65,7 @@ class EventPolicy
     public function update(Account $account, Event $event)
     {
         //
-
+        if ($account->admin) return True;
         return $event->manager->id == $account->id;
     }
 
@@ -88,6 +79,7 @@ class EventPolicy
     public function delete(Account $account, Event $event)
     {
         //
+        if ($account->admin) return True;
         return $event->manager->id == $account->id;
     }
 
@@ -101,6 +93,7 @@ class EventPolicy
     public function restore(Account $account, Event $event)
     {
         //
+        if ($account->admin) return True;
         return False;
     }
 
@@ -114,6 +107,7 @@ class EventPolicy
     public function forceDelete(Account $account, Event $event)
     {
         //
+        if ($account->admin) return True;
         return False;
     }
 }

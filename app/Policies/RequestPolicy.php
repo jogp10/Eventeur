@@ -21,12 +21,6 @@ class RequestPolicy
 {
     use HandlesAuthorization;
 
-
-    public function before(Account $account)
-    {
-        return $account->admin ? true : null;
-    }
-
     /**
      * Determine whether the user can view any models.
      *
@@ -36,6 +30,7 @@ class RequestPolicy
     
     public function viewAny(Account $account)
     {
+        if ($account->admin) return True;
         return True;
     }
 
@@ -48,6 +43,7 @@ class RequestPolicy
      */
     public function view(Account $account, Request $request)
     {
+        if ($account->admin) return True;
         if($request->event->manager->id == $account->id) {
             return True;
         }
@@ -64,7 +60,7 @@ class RequestPolicy
      */
     public function create(Account $account, Event $event)
     {        
-        // Fix this
+        if ($account->admin) return False;
         if($event->tickets->where('user_id', $account->id)->count() > 0) {
             return False;
         } else if (Request::where('event_id', $event->id)->exists() && Request::where('event_id', $event->id)->where('user_id', $account->id)->count() > 0) {
@@ -85,6 +81,7 @@ class RequestPolicy
      */
     public function update(Account $account, Request $request)
     {
+        if ($account->admin) return True;
         if ($request->user->id == $account->id) {
             return True;
         }
@@ -102,6 +99,7 @@ class RequestPolicy
      */
     public function delete(Account $account, Request $request)
     {
+        if ($account->admin) return True;
         if($request->event->manager->id == $account->id) {
             return True;
         }
@@ -119,6 +117,7 @@ class RequestPolicy
      */
     public function restore(Account $account, Request $request)
     {
+        if ($account->admin) return True;
         return False;
     }
 
@@ -131,6 +130,7 @@ class RequestPolicy
      */
     public function forceDelete(Account $account, Request $request)
     {
+        if ($account->admin) return True;
         return False;
     }
 }

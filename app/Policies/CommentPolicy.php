@@ -13,19 +13,6 @@ class CommentPolicy
     use HandlesAuthorization;
 
     /**
-     * Perform pre-authorization checks.
-     *
-     * @param  \App\Models\Account  $account
-     * @param  string  $ability
-     * @return void|bool
-     */
-    public function before(Account $account)
-    {
-        return $account->admin ? true : null;
-    }
-
-
-    /**
      * Determine whether the user can view any models.
      *
      * @param  \App\Models\Account  $account
@@ -34,6 +21,7 @@ class CommentPolicy
     public function viewAny(Account $account)
     {
         //
+        if ($account->admin) return True;
         return True;
     }
 
@@ -47,6 +35,7 @@ class CommentPolicy
     public function view(Account $account, Comment $comment)
     {
         //
+        if ($account->admin) return True;
         return True;
     }
 
@@ -59,6 +48,7 @@ class CommentPolicy
     public function create(Account $account, Event $event)
     {
         //
+        if ($account->admin) return False;
         return $account->user->tickets->where('event_id', $event->id)->first() != null || $account->id == $event->manager->id;
     }
 
@@ -72,6 +62,7 @@ class CommentPolicy
     public function update(Account $account, Comment $comment)
     {
         //
+        if ($account->admin) return True;
         return $account->id == $comment->user->id;
     }
 
@@ -85,6 +76,7 @@ class CommentPolicy
     public function delete(Account $account, Comment $comment)
     {
         //
+        if ($account->admin) return True;
         return $account->id == $comment->user->id;
     }
 
@@ -98,6 +90,7 @@ class CommentPolicy
     public function restore(Account $account, Comment $comment)
     {
         //
+        if ($account->admin) return True;
         return False;
     }
 
@@ -111,6 +104,7 @@ class CommentPolicy
     public function forceDelete(Account $account, Comment $comment)
     {
         //
+        if ($account->admin) return True;
         return False;
     }
 }

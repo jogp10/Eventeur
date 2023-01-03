@@ -11,18 +11,6 @@ class VotePolicy
     use HandlesAuthorization;
 
     /**
-     * Perform pre-authorization checks.
-     *
-     * @param  \App\Models\Account  $account
-     * @param  string  $ability
-     * @return void|bool
-     */
-    public function before(Account $account)
-    {
-        return $account->admin ? true : null;
-    }
-
-    /**
      * Determine whether the user can view any models.
      *
      * @param  \App\Models\Account  $account
@@ -31,6 +19,7 @@ class VotePolicy
     public function viewAny(?Account $account)
     {
         //
+        if ($account->admin) return True;
         return True;
     }
 
@@ -44,6 +33,7 @@ class VotePolicy
     public function view(?Account $account, Vote $vote)
     {
         //
+        if ($account->admin) return True;
         return True;
     }
 
@@ -56,6 +46,7 @@ class VotePolicy
     public function create(Account $account)
     {
         //
+        if ($account->admin) return False;
         return True;
     }
 
@@ -69,6 +60,7 @@ class VotePolicy
     public function update(Account $account, Vote $vote)
     {
         //
+        if ($account->admin) return True;
         return $account->id == $vote->account_id;
     }
 
@@ -82,6 +74,7 @@ class VotePolicy
     public function delete(Account $account, Vote $vote)
     {
         //
+        if ($account->admin) return True;
         return $account->id == $vote->account_id;
     }
 
@@ -95,6 +88,7 @@ class VotePolicy
     public function restore(Account $account, Vote $vote)
     {
         //
+        if ($account->admin) return True;
         return False;
     }
 
@@ -108,6 +102,7 @@ class VotePolicy
     public function forceDelete(Account $account, Vote $vote)
     {
         //
+        if ($account->admin) return True;
         return False;
     }
 }

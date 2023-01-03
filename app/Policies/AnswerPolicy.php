@@ -12,18 +12,6 @@ class AnswerPolicy
     use HandlesAuthorization;
 
     /**
-     * Perform pre-authorization checks.
-     *
-     * @param  \App\Models\Account  $account
-     * @param  string  $ability
-     * @return void|bool
-     */
-    public function before(Account $account)
-    {
-        return $account->admin ? true : null;
-    }
-
-    /**
      * Determine whether the user can view any models.
      *
      * @param  \App\Models\Account  $account
@@ -32,6 +20,7 @@ class AnswerPolicy
     public function viewAny(Account $account)
     {
         //
+        if ($account->admin) return True;
         return True;
     }
 
@@ -45,6 +34,7 @@ class AnswerPolicy
     public function view(Account $account, Answer $answer)
     {
         //
+        if ($account->admin) return True;
         return True;
     }
 
@@ -57,6 +47,7 @@ class AnswerPolicy
     public function create(Account $account, Event $event)
     {
         //
+        if ($account->admin) return False;
         return $account->user->tickets->where('event_id', $event->id)->first() != null || $account->id == $event->manager->id;
     }
 
@@ -70,6 +61,7 @@ class AnswerPolicy
     public function update(Account $account, Answer $answer)
     {
         //
+        if ($account->admin) return True;
         return $account->id == $answer->user->id;
     }
 
@@ -83,6 +75,7 @@ class AnswerPolicy
     public function delete(Account $account, Answer $answer)
     {
         //
+        if ($account->admin) return True;
         return $account->id == $answer->user->id;
     }
 
@@ -96,6 +89,7 @@ class AnswerPolicy
     public function restore(Account $account, Answer $answer)
     {
         //
+        if ($account->admin) return True;
         return False;
     }
 
@@ -109,6 +103,7 @@ class AnswerPolicy
     public function forceDelete(Account $account, Answer $answer)
     {
         //
+        if ($account->admin) return True;
         return False;
     }
 }
