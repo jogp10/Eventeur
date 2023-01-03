@@ -1,7 +1,8 @@
 // Get the modal
-var modal = document.getElementsByClassName("modal")[0];
-var modal2 = document.getElementsByClassName("modal")[1];
-var modal3 = document.getElementsByClassName("modal")[2];
+var modal = document.getElementById("inviteModal");
+var modal2 = document.getElementById("giveticketModal");
+var modal3 = document.getElementsByClassName("attendeeModal");
+var modal4 = document.getElementsByClassName("searchFilterModal");
 
 // Get the button that opens the modal
 var btn = document.getElementById("invite");
@@ -9,6 +10,8 @@ var btn2 = document.getElementById("giveticket");
 var btn3 = document.getElementById("attendees");
 var sbmt1 = document.getElementById("sendInvite");
 var sbmt2 = document.getElementById("sendTicket");
+var btn4 = document.getElementById("searchFiltersbtn");
+
 
 // Get the <span> element that closes the modal
 // var span = document.getElementsByClassName("close")[0];
@@ -29,6 +32,12 @@ if (btn2 != null) {
 if (btn3 != null) {
   btn3.onclick = function () {
     modal3.style.display = "block";
+  }
+}
+
+if (btn4 != null) {
+  btn4.onclick = function () {
+    modal4.style.display = "block";
   }
 }
 
