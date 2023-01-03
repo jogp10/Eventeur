@@ -9,16 +9,6 @@ use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-function console_log($output, $with_script_tags = true)
-{
-    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
-        ');';
-    if ($with_script_tags) {
-        $js_code = '<script>' . $js_code . '</script>';
-    }
-    echo $js_code;
-}
-
 class RequestController extends Controller
 {
     /**
@@ -105,8 +95,6 @@ class RequestController extends Controller
 
         $event = $request->event_id;
         $user_id = $request->user_id;
-
-        console_log($event);
 
         $ticket = Ticket::create([
             'user_id' => $user_id,

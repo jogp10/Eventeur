@@ -9,16 +9,6 @@ use App\Models\Event;
 use App\Models\Ban;
 use App\Models\Tag;
 
-function console_log($output, $with_script_tags = true)
-{
-    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
-        ');';
-    if ($with_script_tags) {
-        $js_code = '<script>' . $js_code . '</script>';
-    }
-    echo $js_code;
-}
-
 class SearchController extends Controller
 {
     //
@@ -200,7 +190,6 @@ class SearchController extends Controller
         }
 
         $events = $events->get();
-        console_log($events);
         return view('pages.home', ['events' => $events]);
     }
 }

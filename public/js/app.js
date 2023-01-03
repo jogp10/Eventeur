@@ -272,8 +272,8 @@ function searchUsersHandler() {
 }
 
 function searchEventsHandler() {
-  //if (this.status != 200) window.location = '/';
-  console.log(this.responseText)
+  if (this.status != 200) window.location = '/';
+  
   let events = JSON.parse(this.responseText);
   let new_rows = [];
 
@@ -306,7 +306,6 @@ function sendInviteHandler() {
 
 function sendRequestHandler() {
   if (this.status != 200) window.location = '/';
-  console.log(this.responseText);
 
   location.reload();
 }
