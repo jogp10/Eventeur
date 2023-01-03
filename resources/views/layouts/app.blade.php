@@ -9,7 +9,7 @@
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <title>{{ config('app.name', 'Laravel') }}</title>
+  <title>{{ config('app.name', 'Laravel') }} @yield('title')</title>
 
   <!-- Styles -->
   <link href="{{ asset('css/milligram.min.css') }}" rel="stylesheet">
@@ -40,12 +40,12 @@
     </div>
     @endif
     @if( Session::has('error'))
-    <div class="alert alert-error" role="alert">
+    <div class="alert alert-danger" role="alert">
       {{ Session::get('error')}}
     </div>
     @endif
     @if($errors->any())
-    <div class="alert alert-error" role="alert">
+    <div class="alert alert-danger" role="alert">
       <h4>{{$errors->first()}}</h4>
     </div>
     @endif

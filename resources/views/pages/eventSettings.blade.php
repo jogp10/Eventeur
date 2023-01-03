@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@section('title', '- Event Settings')
 
 @section('content')
 <div class="container-md">

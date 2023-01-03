@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', '{{$event->name}}')
+@section('title', '- '.$event->name)
 
 @section('content')
 <div class="container-md d-flex flex-column w-100">
@@ -152,7 +152,7 @@
   </div>
 </div>
 
-<div class="modal fade" tabindex="-2" id="inviteModal" aria-hidden="true">
+<div class="modal fade" tabindex="-1" id="inviteModal" role="dialog" aria-labelledby="searchFilterModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header d-flex flex-row">
@@ -182,7 +182,7 @@
   </div>
 </div>
 
-<div class="modal fade" tabindex="-3" id="giveticketModal" aria-hidden="true">
+<div class="modal fade" tabindex="-1" id="giveticketModal" role="dialog" aria-labelledby="searchFilterModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header d-flex flex-row">
@@ -212,7 +212,7 @@
   </div>
 </div>
 
-<div class="modal fade" tabindex="-4" id="attendeeModal" aria-hidden="true">
+<div class="modal fade" tabindex="-1" id="attendeeModal" role="dialog" aria-labelledby="searchFilterModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header d-flex flex-row">

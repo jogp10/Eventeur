@@ -19,6 +19,8 @@ class InvitePolicy
      */
     public function before(Account $account)
     {
+        if ($account->isBanned())
+            return False;
         return $account->admin ? true : null;
     }
 

@@ -79,6 +79,7 @@ class SearchController extends Controller
             $users->shift();
             $users->where('id', '<>', 102); // admin user
         }
+        
         foreach ($users as $user) {
             $user->user;
             $user->admin;
@@ -104,8 +105,7 @@ class SearchController extends Controller
                 ->where('id', '<>', 1)
                 ->get();
         } else {
-            $events = Event::where('privacy', 'Public');
-            $events->shift();
+            $events = Event::All();
         }
 
         foreach ($events as $event) {
@@ -114,6 +114,7 @@ class SearchController extends Controller
             $event->manager->account->name;
             $event->coverImage->name;
         }
+
         return $events;
     }
 

@@ -36,25 +36,9 @@ class EventController extends Controller
 
     public function manageEvents()
     {
-        Auth::user();
         $this->authorize('viewAny', Account::class);
 
         $events = Event::all();
-        $events->shift();
-
-        // Check if users are banned
-
-        /*
-        foreach ($users as $user) {
-            $bans = Ban::where('user_id', $user->id)->get();
-            foreach ($bans as $ban) {
-                if ($ban->expired_at == null) {
-                    $user->banned = true;
-                    break;
-                }
-            }
-        }
-        */
 
         if (Auth::user()->admin) return view('pages.admin.events', ['events' => $events]);
         return redirect()->route('home');
