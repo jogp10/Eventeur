@@ -1,11 +1,8 @@
 @extends('layouts.app')
 
+@section('title', '- Profile')
+
 @section('content')
-@if( Session::has('message'))
-    <div class="alert alert-success" role="alert">
-      {{ Session::get('message')}}
-    </div>
-@endif
 <div class="container">
 
     @if (Auth::user() && $account->id === Auth::user()->id)
@@ -20,10 +17,10 @@
     <h3 class="my-3">Profile</h3>
 
     <div class="row">
-        <div class="col-4 border border-dark text-center m-5 p-0 text-center" style="min-height: 600px;">
+        <div id="userBar" class="col-4 border border-dark text-center m-5 p-0 text-center" style="min-height: 600px;">
             <div class="position-relative">
                 <img src="/images/placeholder.png" class="img-fluid" width="500" height="250" alt="...">
-                <img src="/images/perfil.png" class="img-fluid rounded-circle position-absolute top-100 start-50 translate-middle" width="100" height="230" alt="...">
+                <img src="/images/profiles/{{ $account->user->profileImage->name }}" class="img-fluid rounded-circle position-absolute top-100 start-50 translate-middle" width="100" height="230" alt="...">
             </div>
             <h4 class="mt-5 pt-5">{{$account->name}}</h4>
             <hr class="px-5 mx-5">
@@ -38,6 +35,7 @@
         </div>
         <div class="col-8 d-flex flex-column m-5 p-0 w-50">
             @if(Auth::id() == $account->id)
+            @if(Auth::user()->admin == null)
             <div class="">
                 <a id="see-invites-button" type="button" class="btn btn-link fs-5 ms-0 ps-0" style="text-decoration: none; color: black;">Invites</a>
                 <a id="see-tickets-button" type="button" class="btn btn-link fs-5" style="text-decoration: none; color:grey;">Tickets</a>
@@ -64,6 +62,7 @@
                     @include('partials.tickets', ['tickets' => $account->user->tickets])
                 </div>
             </div>
+            @endif
             <div class="border border-grey m-0 mt-5 p-0">
                 <div class="calendar">
                     <div class="d-flex flex-row justify-content-around align-items-center text-center month">

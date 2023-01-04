@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', '{{$event->name}}')
+@section('title', '- '.$event->name)
 
 @section('content')
-<div id="{{$event->id}}" class="event container-md d-flex flex-column w-100">
-  <div class="d-flex flex-column border m-3 p-2 ps-4 rounded" style="min-height: 500px">
-    <div class="event d-flex flex-row justify-content-between">
+<div class="container-md d-flex flex-column w-100">
+  <div id="{{$event->id}}" class="event d-flex flex-column border m-3 p-2 ps-4 rounded" style="min-height: 500px">
+    <div class="d-flex flex-row justify-content-between">
       <div class="pt-1">
         @include('partials.form', ['action' => 'up', 'id' => $event->id, 'type' => 'event'])
         <span class="d-flex justify-content-center">{{ $event->votes->count() }}</span>
@@ -18,17 +18,20 @@
           <div class="badge bg-secondary">{{ $tag->name }}</div>
           @endforeach
         </div>
-        <button type="button" class="btn ps-0 align-self-start text-decoration-none">
+        <a href="{{route('profile', $event->manager->account->id)}}" class="btn ps-0 align-self-start text-decoration-none">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
             <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
           </svg>
           <span>Posted by {{$event->manager->account->name}}</span>
-        </button>
+        </a>
         <h4 class="text-muted pb-3">{{ strtok($event->description, '.') }}</h4>
         <p class="text-break" style="max-width: 700px"> {{ substr($event->description, strpos($event->description, '.')+2) }}</p>
+        @if(Auth::check() && Auth::id() === $event->manager->id)
+        <button id="add-poll" type="button" class="btn btn-primary w-25">Create Poll</button>
+        @endif
       </div>
       <div class="p-3 justify-content-center d-flex flex-column">
-        <img src="/images/community-events.jpeg" class="rounded img-fluid m-0 p-0" height="300" width="400" alt="...">
+        <img src="/images/events/{{$event->coverImage->name}}" class="rounded img-fluid m-0 p-0" height="300" width="400" alt="...">
         <div class="pt-2">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
             <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z" />
@@ -40,13 +43,15 @@
       </div>
     </div>
     <div class="d-flex flex-row mt-auto justify-content-between align-items-end pb-3 ps-4 pe-4">
-      <button type="button" class="btn btn-link" style="text-decoration: none; color: black;">
+      <div style="text-decoration: none; color: black;">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">
           <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
           <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
         </svg>
         <span>{{ $event->start_date }}</span>
-      </button>
+      </div>
+
+      @if(Auth::check() && Auth::user()->admin == null)
       @can('create', [App\Models\Comment::class, $event])
       <button type="button" id="comment-button" class="btn btn-link" style="text-decoration: none; color: black;">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left" viewBox="0 0 16 16">
@@ -55,14 +60,26 @@
         <span>Comment</span>
       </button>
       @endcan
-      @if(Auth::check())
+      @endif
+
+      @can('create', [App\Models\Request::class, $event])
+      <button id="requestInvite" type="button" class="btn btn-primary">Request to join</button>
+      @endcan
+
+      @if(Auth::check() && $event->checkIfUserParticipateEvent(Auth::id()))
       <button type="button" id="invite" class="btn btn-primary text-decoration-none" data-bs-toggle="modal" data-bs-target="#inviteModal" style="background-color:#d1410c; border-color:#d1410c;">
-        <i class="fa-regular fa-share-from-square"></i>
+        <i class="fa-regular fa-share-from-square pe-none"></i>
         <span>Invite</span>
       </button>
       @endif
       @if(Auth::check() && Auth::user()->user->tickets->where('event_id', $event->id)->count() > 0)
-      <form action="{{ route('deleteTicket', ['id' => Auth::user()->user->tickets->where('event_id', $event->id)[0]->id]) }}" method="POST">
+      <button type="button" id="attendees" class="btn btn-primary text-decoration-none" data-bs-toggle="modal" data-bs-target="#attendeeModal">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+          <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z" />
+        </svg>
+        <span>Attendees</span>
+      </button>
+      <form action="{{ route('deleteTicket', ['id' => Auth::user()->user->tickets->where('event_id', $event->id)->first()->id]) }}" method="POST">
         @csrf
         @method('DELETE')
         <button type="submit" class="btn btn-secondary text-decoration-none">
@@ -82,7 +99,7 @@
         </svg>
         <span>Give Ticket</span>
       </button>
-      <a href="{{ route( 'eventSettings', $event->id ) }}" type="button" class="btn btn-link" style="text-decoration: none; color: black;">
+      <a href="{{ route( 'eventSettings', $event->id ) }}" class="btn btn-link" style="text-decoration: none; color: black;">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25 " fill="currentColor" class="bi bi-gear " viewBox="0 0 16 16">
           <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z" />
           <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z" />
@@ -109,7 +126,7 @@
       @endcan
     </div>
   </div>
-  <div id="comments" class="m-3 " style="margin-left: 7rem !important">
+  <div id="comments" class="m-3 position-relative" style="margin-left: 7rem !important">
     @can('create', [App\Models\Comment::class, $event])
     <div id="comment_form" class="textarea-container comment-form m-2 d-none">
       <form method="POST" action="{{ route( 'comment' ) }}" class="d-flex flex-column align-items-end">
@@ -120,16 +137,28 @@
       </form>
     </div>
     @endcan
+    <div id="poll-form" class="container justify-content-center" style="text-align: center;">
+      <form id="form-poll-event" class="w-25" method="GET" action="{{ route('createPoll', ['id' => $event->id]) }}" style="display: inline-block;">
+        @csrf
+      </form>
+      <button class="invisible" id="add-option" type="button">+ Option</button>
+    </div>
+    <div class="container">
+      <div class="row-cols-2">
+        @each('partials.poll', $event->polls, 'poll')
+      </div>
+    </div>
     @each('partials.comment', $event->comments, 'comment', )
   </div>
 </div>
-<div class="modal fade" tabindex="-1" id="inviteModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+<div class="modal fade" tabindex="-1" id="inviteModal" role="dialog" aria-labelledby="searchFilterModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header d-flex flex-row">
         <form class="d-none d-sm-flex w-20 align-self-center form-inline w-100">
-          <input type="text" class="form-control" id="searchuser_invite" name="query" placeholder="Search people" aria-label="Search" aria-describedby="button-addon2" value="">
-          <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
+          <input type="text" class="form-control searchUser" id="searchuser_invite" name="query" placeholder="Search people" aria-label="Search" aria-describedby="button-addon5" value="">
+          <button class="btn btn-outline-secondary" type="button" id="button-addon5">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
               <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
             </svg>
@@ -152,13 +181,14 @@
     </div>
   </div>
 </div>
-<div class="modal fade" tabindex="-1" id="giveticketModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+<div class="modal fade" tabindex="-1" id="giveticketModal" role="dialog" aria-labelledby="searchFilterModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header d-flex flex-row">
         <form class="d-none d-sm-flex w-20 align-self-center form-inline w-100">
-          <input type="text" class="form-control" id="searchuser_ticket" name="query" placeholder="Search people" aria-label="Search" aria-describedby="button-addon2" value="">
-          <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
+          <input type="text" class="form-control searchUser" id="searchuser_ticket" name="query" placeholder="Search people" aria-label="Search" aria-describedby="button-addon3" value="">
+          <button class="btn btn-outline-secondary" type="button" id="button-addon3">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
               <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
             </svg>
@@ -176,28 +206,36 @@
         </div>
       </div>
       <div class="modal-footer p-0">
-        <button id="sendTicket" type="button" class="btn btn-primary align-self-end m-1" data-bs-dismiss="modal">Send Tickets</button>
+        <button id="sendTicket" type="button" class="btn btn-primary align-self-end m-1" data-bs-dismiss="modal">Send Invites</button>
       </div>
     </div>
   </div>
 </div>
 
-<style>
-  .textarea-container {
-    position: relative;
-  }
-
-  .textarea-container textarea {
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-  }
-
-  .textarea-container button {
-    position: absolute;
-    top: 100%;
-    right: 1%;
-    transform: translateY(-110%);
-  }
-</style>
+<div class="modal fade" tabindex="-1" id="attendeeModal" role="dialog" aria-labelledby="searchFilterModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header d-flex flex-row">
+        <form class="d-none d-sm-flex w-20 align-self-center form-inline w-100">
+          <input type="text" class="form-control searchUser" id="searchattendee" name="query" placeholder="Search people" aria-label="Search" aria-describedby="button-addon4" value="">
+          <button class="btn btn-outline-secondary" type="button" id="button-addon4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+            </svg>
+          </button>
+        </form>
+      </div>
+      <div class="modal-body p-1 d-flex flex-column flex-1" style="overflow: auto; max-height:400px">
+        <div class="d-flex flex-column" style="min-height:min-content">
+          <div class="userCard d-flex flex-row p-0 pb-1">
+            <table class="w-100">
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection

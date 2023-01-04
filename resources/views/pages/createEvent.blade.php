@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', '- Create Event')
+
 @section('content')
 <div class="container-md">
     <!-- header create event -->
@@ -12,7 +14,6 @@
     <div class="m-2">
         <form action="{{ route('storeEvent') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            @method('PUT')
             <div class="form-group mb-3">
                 <label for="name">Event Name</label>
                 <input type="text" class="form-control" id="name" name="name" placeholder="Enter event name" required>

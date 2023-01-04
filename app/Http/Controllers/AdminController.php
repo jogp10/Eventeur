@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Account;
 use App\Models\Admin;
+use App\Models\User;
+use App\Models\Event;
+use App\Models\CoverImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Ban;
 
 class AdminController extends Controller
 {
@@ -14,7 +18,7 @@ class AdminController extends Controller
 
     public function index()
     {
-        $this->authorize('viewAny', Account::class);
+        if($this->authorize('viewAny', Account::class));
 
         if (Auth::user()->admin) {
             return view('pages.admin.home');
@@ -29,6 +33,17 @@ class AdminController extends Controller
 
         if (Auth::user()->admin) {
             return view('pages.admin.createAccount');
+        } else {
+            return redirect()->route('home');
+        }
+    }
+
+    public function createEvent()
+    {
+        $this->authorize('create', Event::class);
+
+        if (Auth::user()->admin) {
+            return view('pages.admin.createEvent');
         } else {
             return redirect()->route('home');
         }
@@ -65,6 +80,48 @@ class AdminController extends Controller
 
         return redirect()->route('admin.users');
     }
+
+    public function storeEvent(Request $request)
+    {
+
+        $this->authorize('create', Event::class);
+
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'name' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'privacy' => 'required',
+        ]);
+        $validator->validate();
+
+        $event = new Event();
+
+        $event->name = $request->name;
+        $event->description = $request->description;
+        $event->location = $request->location;
+        $event->start_date = $request->start_date;
+        $event->end_date = $request->end_date;
+        $event->capacity = $request->capacity;
+        $event->privacy = $request->privacy;
+        $event->user_id = Auth::user()->id;
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $file->move('/images/events/', $filename);
+            $coverImage = CoverImage::create([
+                'name' => $filename,
+                'event_id' => $event->id
+            ]);
+        }
+
+        $event->save();
+
+        return redirect()->route('admin.events');
+    }
+
 
 
     /**

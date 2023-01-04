@@ -20,7 +20,9 @@ class AnswerPolicy
      */
     public function before(Account $account)
     {
-        return $account->admin ? true : null;
+        if ($account->isBanned())
+            return False;
+        return null;
     }
 
     /**
@@ -32,6 +34,7 @@ class AnswerPolicy
     public function viewAny(Account $account)
     {
         //
+        if ($account->admin) return True;
         return True;
     }
 
@@ -45,6 +48,7 @@ class AnswerPolicy
     public function view(Account $account, Answer $answer)
     {
         //
+        if ($account->admin) return True;
         return True;
     }
 
@@ -57,6 +61,7 @@ class AnswerPolicy
     public function create(Account $account, Event $event)
     {
         //
+        if ($account->admin) return False;
         return $account->user->tickets->where('event_id', $event->id)->first() != null || $account->id == $event->manager->id;
     }
 
@@ -70,6 +75,7 @@ class AnswerPolicy
     public function update(Account $account, Answer $answer)
     {
         //
+        if ($account->admin) return True;
         return $account->id == $answer->user->id;
     }
 
@@ -83,6 +89,7 @@ class AnswerPolicy
     public function delete(Account $account, Answer $answer)
     {
         //
+        if ($account->admin) return True;
         return $account->id == $answer->user->id;
     }
 
@@ -96,6 +103,7 @@ class AnswerPolicy
     public function restore(Account $account, Answer $answer)
     {
         //
+        if ($account->admin) return True;
         return False;
     }
 
@@ -109,6 +117,7 @@ class AnswerPolicy
     public function forceDelete(Account $account, Answer $answer)
     {
         //
+        if ($account->admin) return True;
         return False;
     }
 }

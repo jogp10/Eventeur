@@ -26,18 +26,24 @@
                         </span>
                     @endif
                </div>
+                <div class="mb-3">
+                     <a href="{{ route('password.request') }}">Forgot your password?</a>
+                </div>
                <div class="mb-3">
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
                         <label class="form-check-label">Remember Me</label>
                     </div>
                </div>
-               <button type="submit" class="btn btn-primary">Submit</button>
+                <div class="mb-3">
+                     <button type="submit" class="btn btn-primary">Log In</button>
+                     <a href="{{ route('oauth') }}"><img src="/images/google/1x/btn_google_signin_dark_normal_web.png" style="max-width:205px; max-height:100px"></a>
+                </div>
            </form>
        </div>
        <div class="col d-flex justify-content-center align-self-center text-center">
            <div class="p-5 m-5">
-               <img src="images/logo_big.png" class="img-fluid mb-3" width="400" height="300" alt="...">
+               <img src="/images/logo_big.png" class="img-fluid mb-3" width="400" height="300" alt="...">
                <h3>Welcome to Eventeur!</h3>
                <p class="fs-4 text-black-50"><small>The newest platform where you can find all the events you're looking for.</small></p>
                <p>Don't have an account already?<a class="ms-2" href="{{ url('/register') }}">Sign up</a></p>

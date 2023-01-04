@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Admin Users')
+@section('title', '- Admin Users')
 
 @section('content')
 
@@ -18,7 +18,7 @@
         </form>
     </div>
 
-    <section id="cards" class="container-md">
+    <section id="cards" class="container row row-cols-2 justify-content-center">
         @each('partials.user', $users, 'user')
     </section>
 </div>

@@ -43,6 +43,8 @@ return [
             'password' => env('MAIL_PASSWORD'),
             'timeout' => null,
             'auth_mode' => null,
+            'verify_peer' => false,
+            'verify_peer_name' => false,
         ],
 
         'ses' => [
@@ -84,8 +86,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'noreply@eventeur.com'),
+        'name' => env('MAIL_FROM_NAME', 'Eventeur'),
     ],
 
     /*

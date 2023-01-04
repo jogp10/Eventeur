@@ -2,7 +2,6 @@ let date = new Date();
 var d = document.querySelector('.days');
 
 if (d != null) {
-    console.log(d)
     //var days_aux = document.querySelector('.days').childNodes;
     //
     //localStorage.setItem("days_aux", days_aux)
@@ -77,8 +76,6 @@ if (d != null) {
 
             monhtDays.innerHTML = days
         }
-
-        console.log(monhtDays)
     }
 
     let monhtDays = document.querySelector('.days')

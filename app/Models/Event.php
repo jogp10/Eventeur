@@ -11,13 +11,6 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model {
     use HasFactory;
 
-    protected $types = [
-        'Fitness',
-        'Nature',
-        'Sports',
-        'Geography'
-    ];
-
     protected $fillable = [
         'name', 'description', 'start_date', 'end_date', 'location', 'capacity', 'privacy', 'user_id', 'ticket', 'created_at', 'updated_at', 'tsvectors'
     ];
@@ -31,6 +24,8 @@ class Event extends Model {
     public function tickets() { return $this->hasMany(Ticket::class); }
 
     public function invites() { return $this->hasMany(Invite::class); }
+
+    public function requests() { return $this->hasMany(Request::class); }
 
     public function comments() { return $this->hasMany(Comment::class); }
 
@@ -47,8 +42,25 @@ class Event extends Model {
         return $date_array[2];
     }
 
-    public function getTagTypes() {
+    public function checkIfEventHasTag($tagName) {
 
-        return $this->types;
+        foreach($this->tags as $tag) {
+            if($tag->name === $tagName) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function checkIfUserParticipateEvent($id) {
+        
+        foreach($this->tickets as $ticket) {
+            if($ticket->user->id === $id) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }

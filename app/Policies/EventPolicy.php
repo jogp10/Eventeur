@@ -6,16 +6,6 @@ use App\Models\Account;
 use App\Models\Event;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-function console_log($output, $with_script_tags = true)
-{
-    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
-        ');';
-    if ($with_script_tags) {
-        $js_code = '<script>' . $js_code . '</script>';
-    }
-    echo $js_code;
-}
-
 class EventPolicy
 {
     use HandlesAuthorization;
@@ -29,7 +19,9 @@ class EventPolicy
      */
     public function before(Account $account)
     {
-        return $account->admin ? true : null;
+        if ($account->isBanned())
+            return False;
+        return null;
     }
 
     /**
@@ -41,6 +33,7 @@ class EventPolicy
     public function viewAny(Account $account)
     {
         //
+        if ($account->admin) return True;
         return False;
     }
 
@@ -56,10 +49,10 @@ class EventPolicy
         //
         if ($event->privacy == 'Public') return True;
         if ($account == null) return False;
+        if ($account->admin) return True;
         if ($account->id == $event->manager->id) return True;
         if ($account->user->invites()->where('event_id', $event->id)->first() != null) return True;
         if ($account->user->tickets()->where('event_id', $event->id)->first()) return True;
-        
         return False;
     }
 
@@ -85,7 +78,7 @@ class EventPolicy
     public function update(Account $account, Event $event)
     {
         //
-
+        if ($account->admin) return True;
         return $event->manager->id == $account->id;
     }
 
@@ -99,6 +92,7 @@ class EventPolicy
     public function delete(Account $account, Event $event)
     {
         //
+        if ($account->admin) return True;
         return $event->manager->id == $account->id;
     }
 
@@ -112,6 +106,7 @@ class EventPolicy
     public function restore(Account $account, Event $event)
     {
         //
+        if ($account->admin) return True;
         return False;
     }
 
@@ -125,6 +120,7 @@ class EventPolicy
     public function forceDelete(Account $account, Event $event)
     {
         //
+        if ($account->admin) return True;
         return False;
     }
 }

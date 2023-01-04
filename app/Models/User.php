@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Model
 {
-    use Notifiable;
+    use HasFactory;
 
     protected $fillable = [
         'id', 'account_id', 'created_at', 'updated_at'
@@ -22,6 +22,8 @@ class User extends Model
 
     public function tickets() { return $this->hasMany(Ticket::class); }
 
+    public function requests() { return $this->hasMany(Request::class); }
+
     public function invites() { return $this->hasMany(Invite::class); }
 
     public function comments() { return $this->hasMany(Comment::class); }
@@ -32,5 +34,39 @@ class User extends Model
 
     public function reports() { return $this->hasMany(Report::class); }
 
-    public function ban() { return $this->hasOne(Ban::class); }    
+    public function bans() { return $this->hasMany(Ban::class); }
+
+    public function notifications() { return $this->hasMany(Notification::class); }
+
+    public function inviteNotifications() { return $this->hasMany(InviteNotification::class); }
+
+    public function commentNotifications() { return $this->hasMany(CommentNotification::class); }
+
+    public function latestNotifications() {
+        return $this->notifications()->where('seen', 'false')->orderBy('created_at', 'desc')->get();
+    }
+    
+    public function checkIfVotedPoll($id) {
+        
+        foreach($this->votes as $vote) {
+            $pollOption = PollOption::where('id', '=', $vote->poll_option_id)->first();
+            if($pollOption->poll_id === $id){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function checkVotedOption($id) {
+
+        foreach($this->votes as $vote) {
+            $pollOption = PollOption::where('id', '=', $vote->poll_option_id)->first();
+            if($pollOption->id === $id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

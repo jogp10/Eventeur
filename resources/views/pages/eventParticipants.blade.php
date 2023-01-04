@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@section('title', '- Event Participants')
 
 @section('content')
 <div class="container-md">
@@ -54,6 +55,44 @@
             </table>
             @else
             <p class="p-3 fs-5">No tickets bought yet.</p>
+            @endif
+        </div>
+        <div>
+            <h5>Join Requests</h5>
+            @if($event->requests->count() != 0)
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Event Name</th>
+                        <th scope="col">Updated at </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($event->requests as $request)
+                    <tr>
+                        <td>{{$request->user->account->name}}</td>
+                        <td>{{$request->event->name}}</td>
+                        <td>{{$request->updated_at}}</td>
+                        <td>
+                            <form class="pb-1" action="{{ url('api/accept_join', ['request_id' => $request->id]) }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="event_id" value="{{$request->event->id}}">
+                                <button type="submit" class="btn btn-success">Accept Request</button>
+                            </form>
+                            <form class="pb-1" action="{{ url('api/delete_join', ['request_id' => $request->id, 'event_id' => $request->event->id]) }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="event_id" value="{{$request->event->id}}">
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Remove Request</button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            @else
+            <p class="p-3 fs-5">No requests.</p>
             @endif
         </div>
         @if($event->invites->count() != 0)

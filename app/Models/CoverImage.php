@@ -10,7 +10,7 @@ class CoverImage extends Model
     use HasFactory;
 
     protected $fillable = [
-        'event_id', 'path', 'created_at', 'updated_at'
+        'event_id', 'name', 'created_at', 'updated_at'
    ];
 
     public function event() { return $this->belongsTo(Event::class); }
